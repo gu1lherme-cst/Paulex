@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mente Curiosa</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topo">
+    <div class="container nav-container">
+      <a href="#inicio" class="logo">Mente Curiosa</a>
+
+      <div class="nav-direita">
+        <button class="tema-btn" id="tema-btn" aria-label="Alternar tema">
+          🌙
+        </button>
+
+        <nav class="menu" id="menu">
+          <a href="#inicio">Início</a>
+          <a href="#curiosidades">Curiosidades</a>
+          <a href="#categorias">Categorias</a>
+          <a href="#sobre">Sobre</a>
+          <a href="#contato">Contato</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero reveal" id="inicio">
+    <div class="container hero-conteudo">
+      <div class="hero-texto">
+        <span class="tag">🧠 Conhecimento de um jeito leve</span>
+        <h1>Descubra fatos incríveis e alimente sua curiosidade</h1>
+        <p>
+          O Mente Curiosa é um espaço para quem ama aprender coisas novas,
+          explorar mistérios do mundo e se surpreender com informações
+          interessantes de forma leve e divertida.
+        </p>
+
+        <div class="hero-botoes">
+          <a href="#curiosidades" class="btn btn-principal">Explorar agora</a>
+          <a href="#sobre" class="btn btn-secundario">Saiba mais</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <h2>✨ Curiosidade aleatória</h2>
+        <p id="curiosidade-texto">
+          O coração de uma baleia-azul pode pesar mais de 180 kg.
+        </p>
+        <button class="btn-curiosidade" id="nova-curiosidade">Gerar outra</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao reveal" id="curiosidades">
+    <div class="container">
+      <div class="titulo-secao">
+        <h2>Curiosidades em destaque</h2>
+        <p>Explore fatos fascinantes sobre o universo, a natureza, a história e muito mais.</p>
+      </div>
+
+      <div class="barra-busca">
+        <input
+          type="text"
+          id="campo-busca"
+          placeholder="Buscar curiosidade por tema ou palavra..."
+        />
+      </div>
+
+      <div class="filtros">
+        <button class="filtro-btn ativo" data-filtro="todos">Todos</button>
+        <button class="filtro-btn" data-filtro="espaco">Espaço</button>
+        <button class="filtro-btn" data-filtro="animais">Animais</button>
+        <button class="filtro-btn" data-filtro="corpo">Corpo Humano</button>
+        <button class="filtro-btn" data-filtro="tecnologia">Tecnologia</button>
+        <button class="filtro-btn" data-filtro="natureza">Natureza</button>
+        <button class="filtro-btn" data-filtro="historia">História</button>
+      </div>
+
+      <div class="grid-cards" id="grid-cards">
+        <article class="card reveal" data-categoria="espaco">
+          <img
+            src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1200&q=80"
+            alt="Planeta e nave no espaço"
+            class="card-img"
+          />
+          <div class="card-conteudo">
+            <div class="icone-card">🚀</div>
+            <h3>Espaço</h3>
+            <p>
+              Um dia em Vênus dura cerca de 243 dias terrestres, enquanto um ano no planeta
+              dura aproximadamente 225 dias. Isso acontece porque Vênus gira extremamente devagar
+              em torno de si mesmo, o que torna sua rotação mais lenta do que sua translação ao redor do Sol.
+            </p>
+            <a href="#" class="card-link">Ler mais</a>
+          </div>
+        </article>
+
+        <article class="card reveal" data-categoria="animais">
+          <img
+            src="https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?auto=format&fit=crop&w=1200&q=80"
+            alt="Polvo no fundo do mar"
+            class="card-img"
+          />
+          <div class="card-conteudo">
+            <div class="icone-card">🐙</div>
+            <h3>Animais</h3>
+            <p>
+              Os polvos possuem três corações e sangue azul. Dois corações bombeiam sangue
+              para as brânquias, enquanto o terceiro envia o sangue para o resto do corpo.
+              Seu sangue tem essa cor por causa da hemocianina, uma proteína rica em cobre.
+            </p>
+            <a href="#" class="card-link">Ler mais</a>
+          </div>
+        </article>
+
+        <article class="card reveal" data-categoria="corpo">
+          <img
+            src="https://images.unsplash.com/photo-1530210124550-912dc1381cb8?auto=format&fit=crop&w=1200&q=80"
+            alt="Representação do cérebro humano"
+            class="card-img"
+          />
+          <div class="card-conteudo">
+            <div class="icone-card">🧠</div>
+            <h3>Corpo Humano</h3>
+            <p>
+              O cérebro humano é um dos órgãos mais impressionantes do corpo.
+              Mesmo representando uma pequena parte do peso corporal, ele consome
+              cerca de 20% da energia total do organismo para manter memória,
+              emoções, pensamentos e movimentos funcionando.
+            </p>
+            <a href="#" class="card-link">Ler mais</a>
+          </div>
+        </article>
+
+        <article class="card reveal" data-categoria="tecnologia">
+          <img
+            src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80"
+            alt="Placa eletrônica representando tecnologia"
+            class="card-img"
+          />
+          <div class="card-conteudo">
+            <div class="icone-card">💻</div>
+            <h3>Tecnologia</h3>
+            <p>
+              Os primeiros computadores ocupavam salas inteiras, consumiam muita energia
+              e realizavam tarefas bem limitadas. Hoje, um celular no bolso consegue executar
+              processos muito mais complexos, mostrando como a tecnologia evoluiu em poucas décadas.
+            </p>
+            <a href="#" class="card-link">Ler mais</a>
+          </div>
+        </article>
+
+        <article class="card reveal" data-categoria="natureza">
+          <img
+            src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80"
+            alt="Floresta representando a natureza"
+            class="card-img"
+          />
+          <div class="card-conteudo">
+            <div class="icone-card">🌿</div>
+            <h3>Natureza</h3>
+            <p>
+              Algumas árvores conseguem compartilhar nutrientes e sinais químicos
+              por meio de redes subterrâneas formadas por fungos. Esse sistema natural
+              é tão impressionante que muitos cientistas o comparam a uma espécie de
+              internet da floresta.
+            </p>
+            <a href="#" class="card-link">Ler mais</a>
+          </div>
+        </article>
+
+        <article class="card reveal" data-categoria="historia">
+          <img
+            src="https://images.unsplash.com/photo-1568322445389-f64ac2515020?auto=format&fit=crop&w=1200&q=80"
+            alt="Pirâmides do Egito"
+            class="card-img"
+          />
+          <div class="card-conteudo">
+            <div class="icone-card">📜</div>
+            <h3>História</h3>
+            <p>
+              Cleópatra viveu em uma época muito mais próxima da era moderna do que muita gente imagina.
+              Historicamente, ela está mais perto da invenção do iPhone do que da construção das grandes
+              pirâmides do Egito, que já eram antigas em seu tempo.
+            </p>
+            <a href="#" class="card-link">Ler mais</a>
+          </div>
+        </article>
+      </div>
+
+      <p id="mensagem-sem-resultado" class="mensagem-sem-resultado"></p>
+    </div>
+  </section>
+
+  <section class="secao secao-clara reveal" id="categorias">
+    <div class="container">
+      <div class="titulo-secao">
+        <h2>Categorias</h2>
+        <p>Escolha o assunto que mais combina com você.</p>
+      </div>
+
+      <div class="categorias">
+        <div class="categoria">Ciência</div>
+        <div class="categoria">Universo</div>
+        <div class="categoria">Animais</div>
+        <div class="categoria">História</div>
+        <div class="categoria">Tecnologia</div>
+        <div class="categoria">Corpo Humano</div>
+        <div class="categoria">Mistérios</div>
+        <div class="categoria">Natureza</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao reveal" id="sobre">
+    <div class="container sobre">
+      <div class="sobre-texto">
+        <h2>Sobre o Mente Curiosa</h2>
+        <p>
+          O objetivo do Mente Curiosa é compartilhar curiosidades, fatos
+          interessantes e conhecimentos rápidos de forma simples e acessível.
+        </p>
+        <p>
+          O site foi criado para pessoas que gostam de aprender algo novo
+          todos os dias, seja sobre o universo, o corpo humano, a história,
+          os animais ou a tecnologia.
+        </p>
+      </div>
+
+      <div class="sobre-box">
+        <h3>Missão</h3>
+        <p>
+          Tornar o aprendizado mais divertido, leve e inspirador para todos.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao newsletter reveal">
+    <div class="container">
+      <div class="newsletter-box">
+        <h2>Receba novas curiosidades</h2>
+        <p>Cadastre seu e-mail e fique por dentro de conteúdos incríveis.</p>
+
+        <form class="form-newsletter" id="form-newsletter">
+          <input type="email" id="email" placeholder="Digite seu e-mail" required />
+          <button type="submit">Cadastrar</button>
+        </form>
+
+        <p class="mensagem-form" id="mensagem-form"></p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="rodape reveal" id="contato">
+    <div class="container rodape-conteudo">
+      <div>
+        <h3>Mente Curiosa</h3>
+        <p>Um site para quem ama descobrir coisas novas.</p>
+      </div>
+
+      <div>
+        <h4>Contato</h4>
+        <p>Email: contato@mentecuriosa.com</p>
+      </div>
+
+      <div>
+        <h4>Redes</h4>
+        <p>Instagram | YouTube | GitHub</p>
+      </div>
+    </div>
+
+    <div class="rodape-final">
+      <p>© 2026 Mente Curiosa - Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
