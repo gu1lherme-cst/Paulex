@@ -250,10 +250,12 @@ const ICON_CART = icon('<path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1
 
 /* ---------- Estado ---------- */
 let cart = JSON.parse(localStorage.getItem("paulex_cart") || "{}");
+let favs = new Set(JSON.parse(localStorage.getItem("paulex_favs") || "[]"));
 let logged = localStorage.getItem("paulex_logged") === "1";
 let currentProduct = null;
 let productQty = 1;
-const historyStack = [];
+let currentListKind = "";
+let currentSort = "relevancia";
 
 const $ = (sel) => document.querySelector(sel);
 const money = (v) =>
@@ -266,8 +268,11 @@ function unitPrice(p, qty) {
   return tier ? tier.preco : p.preco;
 }
 
-/* ---------- Navegação ---------- */
-function show(id) {
+/* ============================================================
+   ROTEAMENTO — URLs reais (#/produto/caneta-bic), com suporte
+   ao botão voltar/avançar do navegador e links compartilháveis
+   ============================================================ */
+function showScreen(id) {
   document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
   const el = document.getElementById("screen-" + id);
   el.classList.add("active");
@@ -284,18 +289,38 @@ function show(id) {
   );
 }
 
-function go(id, push = true) {
-  // Áreas pessoais exigem login (evita exibir dados de demonstração)
-  if (["conta", "pedidos", "enderecos"].includes(id) && !logged) id = "login";
-  const current = document.querySelector(".screen.active");
-  if (push && current) historyStack.push(current.id.replace("screen-", ""));
-  show(id);
+function setRoute(r) {
+  if (location.hash === "#" + r) route();
+  else location.hash = r;
 }
 
+function go(id) { setRoute("/" + id); }
+function openList(kind) { setRoute("/lista/" + encodeURIComponent(kind)); }
+function openProduct(id) { setRoute("/produto/" + id); }
+
 function back() {
-  const prev = historyStack.pop() || "home";
-  show(prev);
+  if (history.length > 1 && location.hash) history.back();
+  else go("home");
 }
+
+function route() {
+  const h = location.hash.replace(/^#\/?/, "");
+  const [base, param] = h.split("/");
+
+  if (!base) return showScreen("home");
+  if (base === "produto" && PRODUCTS.some((p) => p.id === param)) return renderProduct(param);
+  if (base === "lista") return renderList(decodeURIComponent(param || "maisvendidos"));
+
+  const telas = ["home", "categorias", "carrinho", "club", "login", "conta", "pedidos", "enderecos"];
+  if (telas.includes(base)) {
+    let id = base;
+    // Áreas pessoais exigem login (evita exibir dados de demonstração)
+    if (["conta", "pedidos", "enderecos"].includes(id) && !logged) id = "login";
+    return showScreen(id);
+  }
+  showScreen("home");
+}
+window.addEventListener("hashchange", route);
 
 document.querySelectorAll("[data-go]").forEach((b) =>
   b.addEventListener("click", () => go(b.dataset.go))
@@ -350,46 +375,105 @@ function productCard(p) {
     </div>`;
 }
 
-function renderHome(filter = "") {
-  const term = filter.trim().toLowerCase();
-  const list = term
-    ? PRODUCTS.filter((p) => p.nome.toLowerCase().includes(term))
-    : PRODUCTS.filter((p) => p.maisVendido);
-  $("#home-grid").innerHTML = list.length
-    ? list.map(productCard).join("")
-    : `<p class="empty" style="grid-column:1/-1">Nenhum produto encontrado.</p>`;
+function renderHome() {
+  $("#home-grid").innerHTML =
+    PRODUCTS.filter((p) => p.maisVendido).map(productCard).join("");
+  $("#promo-grid").innerHTML =
+    PRODUCTS.filter((p) => p.promo).slice(0, 4).map(productCard).join("");
 }
 
-$("#search-input").addEventListener("input", (e) => renderHome(e.target.value));
+/* ---------- Busca com sugestões instantâneas ---------- */
+const searchInput = $("#search-input");
+const suggest = $("#suggest");
 
-/* ---------- Lista (categoria / ofertas / etc.) ---------- */
-function openList(kind) {
-  let title = "Produtos";
-  let list = PRODUCTS;
+function renderSuggest(term) {
+  const q = term.trim().toLowerCase();
+  if (q.length < 2) { suggest.hidden = true; return; }
+  const hits = PRODUCTS.filter((p) => p.nome.toLowerCase().includes(q)).slice(0, 6);
+  if (!hits.length) {
+    suggest.innerHTML = `<div class="sug-empty">Nenhum produto encontrado para “${term}”.</div>`;
+  } else {
+    suggest.innerHTML = hits.map((p) => `
+      <button class="sug" onclick="suggestGo('${p.id}')">
+        <span class="sug-art">${p.art}</span>
+        <span class="sug-name">${p.nome}</span>
+        <span class="sug-price">${money(p.preco)}</span>
+      </button>`).join("");
+  }
+  suggest.hidden = false;
+}
 
+function suggestGo(id) {
+  suggest.hidden = true;
+  searchInput.value = "";
+  openProduct(id);
+}
+
+searchInput.addEventListener("input", (e) => renderSuggest(e.target.value));
+searchInput.addEventListener("focus", (e) => renderSuggest(e.target.value));
+searchInput.addEventListener("keydown", (e) => { if (e.key === "Escape") suggest.hidden = true; });
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".search-wrap")) suggest.hidden = true;
+});
+
+/* ---------- Lista (categoria / ofertas / favoritos) ---------- */
+function listFor(kind) {
   if (kind.startsWith("cat:")) {
     const cat = CATEGORIES.find((c) => c.id === kind.slice(4));
-    title = cat.nome;
-    list = PRODUCTS.filter((p) => p.cat === cat.id);
-  } else if (kind === "promocoes" || kind === "ofertas") {
-    title = "Promoções";
-    list = PRODUCTS.filter((p) => p.promo);
-  } else if (kind === "maisvendidos") {
-    title = "Mais vendidos";
-    list = PRODUCTS.filter((p) => p.maisVendido);
-  } else if (kind === "novidades") {
-    title = "Novidades";
-    list = PRODUCTS.filter((p) => p.novidade);
+    return { title: cat ? cat.nome : "Produtos", list: PRODUCTS.filter((p) => p.cat === (cat && cat.id)) };
   }
+  if (kind === "promocoes" || kind === "ofertas")
+    return { title: "Promoções", list: PRODUCTS.filter((p) => p.promo) };
+  if (kind === "novidades")
+    return { title: "Novidades", list: PRODUCTS.filter((p) => p.novidade) };
+  if (kind === "favoritos")
+    return { title: "Favoritos", list: PRODUCTS.filter((p) => favs.has(p.id)) };
+  return { title: "Mais vendidos", list: PRODUCTS.filter((p) => p.maisVendido) };
+}
 
+function sortedList(list) {
+  const l = [...list];
+  if (currentSort === "menor") l.sort((a, b) => a.preco - b.preco);
+  if (currentSort === "maior") l.sort((a, b) => b.preco - a.preco);
+  if (currentSort === "avaliados") l.sort((a, b) => b.avaliacoes - a.avaliacoes);
+  return l;
+}
+
+function renderList(kind) {
+  if (kind !== currentListKind) currentSort = "relevancia";
+  currentListKind = kind;
+
+  const { title, list } = listFor(kind);
   $("#list-title").textContent = title;
-  $("#list-grid").innerHTML = list.map(productCard).join("");
+  $("#list-grid").innerHTML = sortedList(list).map(productCard).join("");
   $("#list-empty").hidden = list.length > 0;
-  go("list");
+  $("#sort-row").hidden = list.length < 2;
+  $("#sort-row").querySelectorAll(".sort").forEach((b) =>
+    b.classList.toggle("active", b.dataset.sort === currentSort)
+  );
+  showScreen("list");
+}
+
+function sortBy(btn) {
+  currentSort = btn.dataset.sort;
+  renderList(currentListKind);
+}
+
+/* ---------- Favoritos ---------- */
+function toggleFav() {
+  const id = currentProduct.id;
+  if (favs.has(id)) { favs.delete(id); toast("Removido dos favoritos"); }
+  else { favs.add(id); toast("Salvo nos favoritos ❤"); }
+  localStorage.setItem("paulex_favs", JSON.stringify([...favs]));
+  updateFavBtn();
+}
+
+function updateFavBtn() {
+  $("#p-fav").classList.toggle("fav-on", !!currentProduct && favs.has(currentProduct.id));
 }
 
 /* ---------- Produto ---------- */
-function openProduct(id) {
+function renderProduct(id) {
   currentProduct = PRODUCTS.find((p) => p.id === id);
   productQty = 1;
   const p = currentProduct;
@@ -427,8 +511,9 @@ function openProduct(id) {
   $("#p-related-wrap").hidden = rel.length === 0;
   $("#p-related").innerHTML = rel.map(productCard).join("");
 
+  updateFavBtn();
   updateProductTotal();
-  go("produto");
+  showScreen("produto");
 }
 
 function pQty(delta) {
@@ -618,14 +703,14 @@ function doLogin(e) {
   logged = true;
   localStorage.setItem("paulex_logged", "1");
   toast("Bem-vindo à Paulex!");
-  show("conta");
+  setRoute("/conta");
 }
 
 function logout() {
   logged = false;
   localStorage.removeItem("paulex_logged");
   toast("Você saiu da sua conta");
-  show("login");
+  setRoute("/login");
 }
 
 /* ---------- Toast ---------- */
@@ -638,11 +723,25 @@ function toast(msg) {
   toastTimer = setTimeout(() => el.classList.remove("show"), 2200);
 }
 
+/* ---------- Revelação suave ao rolar ---------- */
+if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in"); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".section, .trust, .footer").forEach((el) => {
+    el.classList.add("reveal");
+    obs.observe(el);
+  });
+}
+
 /* ---------- Init ---------- */
 renderCategories();
 renderHome();
 renderCart();
 renderOrders();
 updateBadges();
+route();
 
 setTimeout(() => $("#splash").classList.add("hide"), 1800);
