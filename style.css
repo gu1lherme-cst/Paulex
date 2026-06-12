@@ -68,15 +68,11 @@ input { font: inherit; }
 @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
 /* ---------- Logo ---------- */
-.logo {
-  font-family: "Pacifico", cursive;
-  font-weight: 400;
-  color: var(--blue);
-  line-height: 1.4;
-}
-.logo .lx { color: var(--red); }
-.logo-xl { font-size: 52px; }
-.logo-top { font-size: 24px; }
+.logo-img { display: block; height: auto; }
+.logo-img-xl { width: min(220px, 56vw); margin: 0 auto; }
+.logo-img-top { height: 28px; width: auto; }
+.logo-img-desk { height: 30px; width: auto; }
+.home-logo { display: flex; align-items: center; }
 .desde {
   font-size: 10px; letter-spacing: 4px; font-weight: 600;
   color: var(--muted); margin-top: 12px; text-align: center;
@@ -735,10 +731,16 @@ input { font: inherit; }
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* ---------- Telas intermediárias (560–767px) ---------- */
+@media (min-width: 560px) and (max-width: 767px) {
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+  .cat-row { grid-template-columns: repeat(6, 1fr); }
+}
+
 /* ============================================================
-   COMPUTADOR (≥ 900px)
+   COMPUTADOR E TABLET (≥ 768px)
    ============================================================ */
-@media (min-width: 900px) {
+@media (min-width: 768px) {
   .app { padding-bottom: 0; }
   .bottom-nav { display: none; }
 
@@ -755,7 +757,7 @@ input { font: inherit; }
     display: flex; align-items: center; justify-content: space-between;
     height: 52px;
   }
-  .desk-logo .logo { font-size: 22px; }
+  .desk-logo { display: flex; align-items: center; }
   .desk-nav { display: flex; align-items: center; gap: 4px; }
   .desk-nav button {
     padding: 8px 16px;

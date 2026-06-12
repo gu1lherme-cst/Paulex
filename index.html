@@ -8,7 +8,9 @@
   <title>Paulex — Atacado e varejo desde 1984</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="apple-touch-icon" href="img/logo.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,7 +18,7 @@
 <!-- ===== SPLASH ===== -->
 <div class="splash" id="splash">
   <div class="splash-inner">
-    <h1 class="logo logo-xl">Paul<span class="lx">ex</span></h1>
+    <img src="img/logo.png" alt="Paulex" class="logo-img logo-img-xl">
     <div class="desde">DESDE 1984</div>
   </div>
   <div class="splash-bar"><span></span></div>
@@ -28,7 +30,7 @@
   <header class="desk-header">
     <div class="wrap desk-wrap">
       <button class="desk-logo" onclick="go('home')" aria-label="Início">
-        <span class="logo">Paul<span class="lx">ex</span></span>
+        <img src="img/logo.png" alt="Paulex" class="logo-img logo-img-desk">
       </button>
       <nav class="desk-nav">
         <button data-go="home" class="active">Início</button>
@@ -49,7 +51,7 @@
       <button class="icon-btn" aria-label="Menu" onclick="go('categorias')">
         <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
-      <h1 class="logo logo-top">Paul<span class="lx">ex</span></h1>
+      <h1 class="home-logo"><img src="img/logo.png" alt="Paulex" class="logo-img logo-img-top"></h1>
       <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
         <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
         <span class="badge cart-badge">0</span>
