@@ -1,6 +1,6 @@
 /* ============ Paulex — Atacado e varejo desde 1984 ============ */
 
-const WHATSAPP_NUMBER = "5511999999999"; // troque pelo número da loja
+const WHATSAPP_NUMBER = "5521987578187"; // WhatsApp da loja (55 + DDD + número)
 const FRETE_GRATIS_MIN = 99; // valor mínimo para frete grátis
 
 /* Ilustrações de produto — duotone azul Paulex */
