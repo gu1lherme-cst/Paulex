@@ -29,6 +29,19 @@
 const WHATSAPP_NUMBER = "5521987578187"; // WhatsApp da loja (55 + DDD + número)
 const FRETE_GRATIS_MIN = 99; // valor mínimo para frete grátis
 
+/* LOGIN COM GOOGLE (opcional)
+   O botão "Entrar com Google" só aparece depois que você criar uma
+   credencial gratuita e colar o ID abaixo. Passo a passo:
+   1. Acesse https://console.cloud.google.com/apis/credentials
+      (entre com a conta Google da loja e crie um projeto, se pedir)
+   2. Clique em "Criar credenciais" > "ID do cliente OAuth"
+   3. Tipo de aplicativo: "Aplicativo da Web"
+   4. Em "Origens JavaScript autorizadas", adicione:
+      https://gu1lherme-cst.github.io
+   5. Copie o "ID do cliente" gerado (termina com
+      .apps.googleusercontent.com) e cole entre as aspas abaixo. */
+const GOOGLE_CLIENT_ID = "";
+
 /* Ilustrações de produto — duotone azul Paulex */
 const art = (inner) =>
   `<svg viewBox="0 0 64 64" fill="none" stroke="#0B3BA7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" role="img">${inner}</svg>`;

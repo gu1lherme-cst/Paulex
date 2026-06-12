@@ -588,6 +588,7 @@ input { font: inherit; }
 .or { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; }
 .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--hairline); }
 .g-logo { font-weight: 700; color: #EA4335; }
+.google-slot { display: flex; justify-content: center; min-height: 44px; }
 
 .account-head { display: flex; align-items: center; gap: 14px; padding: 16px 0 22px; }
 .avatar {
