@@ -46,7 +46,7 @@
   <link rel="icon" type="image/png" href="img/logo.png">
   <link rel="apple-touch-icon" href="img/logo.png">
   <link rel="preload" as="image" href="img/logo.png">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
 
@@ -359,6 +359,18 @@
           <h3>Especificações</h3>
           <dl id="p-specs-body"></dl>
         </div>
+
+        <div class="p-reviews">
+          <h3>Avaliações</h3>
+          <div class="rev-summary">
+            <div class="rev-score">
+              <strong id="p-rev-score">4,5</strong>
+              <span class="stars" id="p-rev-stars"></span>
+              <small class="muted" id="p-rev-count"></small>
+            </div>
+            <div class="rev-bars" id="p-rev-bars"></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -403,6 +415,11 @@
           Finalizar pelo WhatsApp
         </button>
         <small class="pay-note">Pagamento online em breve — Cartão, Pix e boleto</small>
+      </div>
+
+      <div class="cart-suggest" id="cart-suggest" hidden>
+        <h3>Continue comprando</h3>
+        <div class="suggest-row" id="cart-suggest-row"></div>
       </div>
     </div>
   </section>
@@ -684,6 +701,7 @@
   <div class="toast" id="toast" role="status"></div>
 </div>
 
-<script src="script.js?v=9"></script>
+<script src="produtos.js?v=10"></script>
+<script src="script.js?v=10"></script>
 </body>
 </html>
