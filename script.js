@@ -514,14 +514,71 @@ function doLogin(e) {
   logged = true;
   localStorage.setItem("paulex_logged", "1");
   toast("Bem-vindo à Paulex!");
+  renderUser();
   setRoute("/conta");
 }
 
 function logout() {
   logged = false;
   localStorage.removeItem("paulex_logged");
+  localStorage.removeItem("paulex_user");
   toast("Você saiu da sua conta");
+  renderUser();
   setRoute("/login");
+}
+
+/* ---------- Login com Google (Google Identity Services) ----------
+   Só é ativado quando GOOGLE_CLIENT_ID está preenchido em produtos.js */
+function initGoogle() {
+  if (typeof GOOGLE_CLIENT_ID === "undefined" || !GOOGLE_CLIENT_ID) return;
+  const s = document.createElement("script");
+  s.src = "https://accounts.google.com/gsi/client";
+  s.async = true;
+  s.defer = true;
+  s.onload = () => {
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: onGoogleCredential,
+    });
+    const slot = $("#google-btn-slot");
+    slot.hidden = false;
+    $("#or-row").hidden = false;
+    google.accounts.id.renderButton(slot, {
+      theme: "outline",
+      size: "large",
+      shape: "pill",
+      text: "signin_with",
+      locale: "pt-BR",
+      width: 300,
+    });
+  };
+  document.head.appendChild(s);
+}
+
+function onGoogleCredential(resp) {
+  try {
+    // decodifica o payload do JWT (base64url -> UTF-8)
+    const b64 = resp.credential.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    const json = decodeURIComponent(
+      Array.prototype.map
+        .call(atob(b64), (c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    const dados = JSON.parse(json);
+    localStorage.setItem("paulex_user", JSON.stringify({ nome: dados.name, email: dados.email }));
+  } catch (_) { /* segue com login genérico */ }
+  logged = true;
+  localStorage.setItem("paulex_logged", "1");
+  renderUser();
+  const u = JSON.parse(localStorage.getItem("paulex_user") || "null");
+  toast(u ? `Bem-vindo, ${u.nome.split(" ")[0]}!` : "Bem-vindo à Paulex!");
+  setRoute("/conta");
+}
+
+function renderUser() {
+  const u = JSON.parse(localStorage.getItem("paulex_user") || "null");
+  $("#account-name").textContent = u ? `Olá, ${u.nome.split(" ")[0]}!` : "Olá, cliente Paulex!";
+  $("#account-sub").textContent = u ? u.email : "Cliente Paulex Club · Prata";
 }
 
 /* ---------- Toast ---------- */
@@ -553,6 +610,8 @@ renderHome();
 renderCart();
 renderOrders();
 updateBadges();
+renderUser();
+initGoogle();
 route();
 
 setTimeout(() => $("#splash").classList.add("hide"), 1800);

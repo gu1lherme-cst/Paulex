@@ -46,7 +46,7 @@
   <link rel="icon" type="image/png" href="img/logo.png">
   <link rel="apple-touch-icon" href="img/logo.png">
   <link rel="preload" as="image" href="img/logo.png">
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
 
@@ -543,10 +543,8 @@
         </label>
         <button type="button" class="link right">Esqueceu sua senha?</button>
         <button class="pill pill-blue pill-lg" type="submit">Entrar</button>
-        <div class="or"><span>ou</span></div>
-        <button type="button" class="pill pill-outline pill-lg" onclick="doLogin(event)">
-          <span class="g-logo">G</span> Entrar com Google
-        </button>
+        <div class="or" id="or-row" hidden><span>ou</span></div>
+        <div class="google-slot" id="google-btn-slot" hidden></div>
       </form>
 
       <form class="form" id="form-cadastrar" hidden onsubmit="doLogin(event)">
@@ -573,7 +571,7 @@
         <span class="avatar">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
         </span>
-        <div><strong>Olá, cliente Paulex!</strong><small class="muted">Cliente Paulex Club · Prata</small></div>
+        <div><strong id="account-name">Olá, cliente Paulex!</strong><small class="muted" id="account-sub">Cliente Paulex Club · Prata</small></div>
       </div>
 
       <div class="menu">
@@ -701,7 +699,7 @@
   <div class="toast" id="toast" role="status"></div>
 </div>
 
-<script src="produtos.js?v=10"></script>
-<script src="script.js?v=10"></script>
+<script src="produtos.js?v=11"></script>
+<script src="script.js?v=11"></script>
 </body>
 </html>
