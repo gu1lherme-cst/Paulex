@@ -25,6 +25,25 @@
 
 <div class="app" id="app">
 
+  <!-- ===== CABEÇALHO (desktop) ===== -->
+  <header class="desk-header">
+    <button class="desk-logo" onclick="go('home')">
+      <span class="logo">Paulex</span>
+      <small>DESDE 1984</small>
+    </button>
+    <nav class="desk-nav">
+      <button data-go="home" class="active">Início</button>
+      <button data-go="categorias">Categorias</button>
+      <button data-go="club">Paulex Club</button>
+      <button data-go="conta">Conta</button>
+      <button data-go="carrinho" class="desk-cart" aria-label="Carrinho">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+        Carrinho
+        <span class="badge cart-badge">0</span>
+      </button>
+    </nav>
+  </header>
+
   <!-- ===== INÍCIO ===== -->
   <section class="screen active" id="screen-home" data-nav="home">
     <header class="topbar">
@@ -54,7 +73,7 @@
     <!-- Hero -->
     <div class="hero">
       <div class="hero-text">
-        <h2>Tudo o que você<br>precisa em um<br><span class="red">só lugar.</span></h2>
+        <h2>Tudo o que você <br>precisa em um <br><span class="red">só lugar.</span></h2>
         <ul>
           <li>Qualidade</li>
           <li>Confiança</li>
