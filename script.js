@@ -114,7 +114,7 @@ function show(id) {
   window.scrollTo(0, 0);
 
   const nav = el.dataset.nav;
-  document.querySelectorAll(".bottom-nav button").forEach((b) =>
+  document.querySelectorAll("[data-go]").forEach((b) =>
     b.classList.toggle("active", b.dataset.go === nav)
   );
 }
@@ -131,7 +131,7 @@ function back() {
   show(prev);
 }
 
-document.querySelectorAll(".bottom-nav button").forEach((b) =>
+document.querySelectorAll("[data-go]").forEach((b) =>
   b.addEventListener("click", () => go(b.dataset.go))
 );
 

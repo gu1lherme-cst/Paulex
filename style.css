@@ -617,6 +617,154 @@ input { font: inherit; }
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-@media (min-width: 480px) {
-  body { padding: 0; }
+/* ---------- Cabeçalho desktop ---------- */
+.desk-header { display: none; }
+
+/* ============================================================
+   VERSÃO PARA COMPUTADOR (≥ 900px)
+   ============================================================ */
+@media (min-width: 900px) {
+  body { background: #efedea; }
+
+  .app {
+    max-width: 1140px;
+    padding-bottom: 48px;
+    border-radius: 0;
+  }
+
+  .bottom-nav { display: none; }
+
+  /* Cabeçalho fixo com navegação */
+  .desk-header {
+    position: sticky; top: 0; z-index: 30;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px;
+    padding: 14px 40px;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+  }
+  .desk-logo { display: flex; flex-direction: column; align-items: center; }
+  .desk-logo .logo { font-size: 34px; }
+  .desk-logo small { font-size: 8.5px; letter-spacing: 3px; font-weight: 700; }
+  .desk-nav { display: flex; align-items: center; gap: 6px; }
+  .desk-nav button {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: 14px; font-weight: 600;
+    color: var(--muted);
+  }
+  .desk-nav button:hover { background: var(--bg-soft); color: var(--ink); }
+  .desk-nav button.active { background: var(--black); color: #fff; }
+  .desk-nav button svg { width: 18px; height: 18px; }
+  .desk-cart { position: relative; }
+  .desk-cart .badge { position: static; margin-left: 2px; border: 0; }
+
+  /* No desktop, o topo mobile da home sai (o cabeçalho assume) */
+  #screen-home > .topbar { display: none; }
+  .topbar { background: transparent; position: static; padding: 22px 40px 10px; }
+  .topbar-title h2 { font-size: 22px; }
+
+  .search-wrap { max-width: 680px; margin: 18px auto 6px; padding: 0 40px 14px; }
+
+  /* Home */
+  .hero {
+    margin: 8px 40px 0;
+    padding: 52px 56px;
+    border-radius: 24px;
+  }
+  .hero h2 { font-size: 38px; }
+  .hero h2 br { display: none; }
+  .hero ul { font-size: 15px; margin: 16px 0 22px; }
+  .hero .btn { padding: 14px 28px; font-size: 15px; }
+  .hero-art { font-size: 170px; margin-right: 24px; }
+
+  .shortcuts { padding: 26px 40px 6px; gap: 16px; }
+  .shortcut { flex-direction: row; gap: 14px; text-align: left; padding: 16px 18px; }
+  .shortcut strong { font-size: 14px; display: block; }
+  .shortcut small { font-size: 11.5px; }
+  .shortcut-icon { width: 44px; height: 44px; }
+
+  .section-head { padding: 30px 40px 16px; }
+  .section-head h3 { font-size: 20px; }
+
+  .cat-row { padding: 2px 40px 8px; gap: 0; justify-content: space-between; }
+  .cat-chip { width: 92px; font-size: 12px; }
+  .cat-chip span { width: 72px; height: 72px; font-size: 32px; border-radius: 20px; }
+
+  .product-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 0 40px; }
+  .card .ph { height: 150px; font-size: 56px; }
+  .card .name { font-size: 13.5px; }
+  .card .price { font-size: 16px; }
+
+  .trust { grid-template-columns: repeat(3, 1fr); margin-top: 36px; }
+  .trust-item { padding: 26px 18px; }
+  .trust-item strong { font-size: 13px; }
+  .trust-item small { font-size: 11.5px; }
+
+  /* Categorias em duas colunas */
+  .cat-list {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    max-width: 880px; margin: 0 auto;
+    padding: 8px 40px;
+  }
+  .cat-card { padding: 20px; }
+
+  /* Lista de produtos */
+  #screen-list .product-grid { padding-top: 8px; }
+
+  /* Produto em duas colunas */
+  #screen-produto.active {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 0 40px;
+    align-items: start;
+    padding: 0 40px 32px;
+  }
+  #screen-produto .topbar { grid-column: 1 / -1; padding: 22px 0 10px; }
+  .p-photo { grid-column: 1; grid-row: 2; margin: 0; height: 440px; font-size: 160px; }
+  #screen-produto .dots { grid-column: 1; grid-row: 3; }
+  .p-body { grid-column: 2; grid-row: 2 / span 2; padding: 6px 0 24px; }
+  .p-body h2 { font-size: 26px; }
+  .p-price { font-size: 32px; }
+
+  /* Carrinho: itens à esquerda, resumo à direita */
+  #screen-carrinho.active {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 0 28px;
+    align-items: start;
+    padding: 0 40px 32px;
+  }
+  #screen-carrinho .topbar { grid-column: 1 / -1; padding: 22px 0 10px; }
+  #cart-items { grid-column: 1; padding: 8px 0; }
+  .cart-summary {
+    grid-column: 2; grid-row: 2 / span 2;
+    border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: var(--shadow);
+    margin-top: 8px;
+    padding: 22px;
+    position: sticky; top: 96px;
+  }
+  .cart-empty { grid-column: 1 / -1; }
+
+  /* Paulex Club centralizado */
+  .club-card, .club-grid, .club-panel {
+    width: min(720px, calc(100% - 80px));
+    margin-left: auto; margin-right: auto;
+  }
+  .club-grid { padding: 14px 0; }
+  .club-panel { margin-bottom: 14px; }
+
+  /* Conta, login, pedidos e endereços centralizados */
+  .tabs, .form, .menu, .orders, .addresses, .account-head,
+  #screen-pedidos .empty, #screen-list .empty {
+    width: min(560px, calc(100% - 80px));
+    margin-left: auto; margin-right: auto;
+    padding-left: 0; padding-right: 0;
+  }
+  .tabs { margin-top: 16px; margin-bottom: 16px; }
+
+  .toast { bottom: 48px; }
 }
