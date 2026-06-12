@@ -1,6 +1,7 @@
 /* ============ Paulex — Papelaria desde 1984 ============ */
 
 const WHATSAPP_NUMBER = "5511999999999"; // troque pelo número da loja
+const FRETE_GRATIS_MIN = 99; // valor mínimo para frete grátis
 
 const CATEGORIES = [
   { id: "papelaria",    nome: "Papelaria",    desc: "Cadernos, canetas, lápis e muito mais", emoji: "✏️" },
@@ -120,7 +121,8 @@ function show(id) {
 }
 
 function go(id, push = true) {
-  if (id === "conta") id = logged ? "conta" : "login";
+  // Áreas pessoais exigem login (evita exibir dados de demonstração)
+  if (["conta", "club", "pedidos", "enderecos"].includes(id) && !logged) id = "login";
   const current = document.querySelector(".screen.active");
   if (push && current) historyStack.push(current.id.replace("screen-", ""));
   show(id);
@@ -168,7 +170,7 @@ function productCard(p) {
       <div class="info">
         <span class="name">${p.nome}</span>
         ${old}
-        <span class="price">${money(p.preco)}</span>
+        <span class="price${p.precoAntigo ? " red" : ""}">${money(p.preco)}</span>
         <button class="add" aria-label="Adicionar ${p.nome}"
           onclick="event.stopPropagation(); quickAdd('${p.id}')">+</button>
       </div>
@@ -228,6 +230,7 @@ function openProduct(id) {
     ` <small>(${p.avaliacoes.toLocaleString("pt-BR")} avaliações)</small>`;
   $("#p-price").innerHTML =
     money(p.preco) + (p.precoAntigo ? `<small>${money(p.precoAntigo)}</small>` : "");
+  $("#p-price").classList.toggle("red", !!p.precoAntigo);
   $("#p-stock").innerHTML =
     `● Em estoque <span>· ${p.estoque} unidades disponíveis</span>`;
 
@@ -358,6 +361,21 @@ function renderCart() {
     $("#cart-discount-row").style.display = t.desconto > 0.005 ? "" : "none";
     $("#cart-discount").textContent = "-" + money(t.desconto);
     $("#cart-total").textContent = money(t.total);
+
+    const gratis = t.total >= FRETE_GRATIS_MIN;
+    const falta = FRETE_GRATIS_MIN - t.total;
+    const msg = $("#ship-msg");
+    const fill = $("#ship-fill");
+    msg.textContent = gratis
+      ? "🎉 Você ganhou frete grátis!"
+      : `Faltam ${money(falta)} para o frete grátis`;
+    msg.classList.toggle("done", gratis);
+    fill.classList.toggle("done", gratis);
+    fill.style.width = Math.min(100, (t.total / FRETE_GRATIS_MIN) * 100) + "%";
+
+    const frete = $("#cart-frete");
+    frete.textContent = gratis ? "Grátis" : "A calcular";
+    frete.className = gratis ? "green" : "muted";
   }
 }
 
@@ -368,14 +386,6 @@ function cartMessage() {
   });
   const t = cartTotals();
   return `Olá, Paulex! Quero fazer um pedido:\n\n${linhas.join("\n")}\n\nTotal: ${money(t.total)}`;
-}
-
-function checkout() {
-  if (!Object.keys(cart).length) return toast("Seu carrinho está vazio");
-  toast("Pedido recebido! Obrigado 🖤");
-  cart = {};
-  saveCart();
-  renderCart();
 }
 
 function checkoutWhatsApp() {
@@ -425,7 +435,7 @@ function doLogin(e) {
   e.preventDefault();
   logged = true;
   localStorage.setItem("paulex_logged", "1");
-  toast("Bem-vindo à Paulex! 🖤");
+  toast("Bem-vindo à Paulex! 💙");
   show("conta");
 }
 

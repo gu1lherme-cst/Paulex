@@ -1,15 +1,17 @@
 /* ============ Paulex — Papelaria desde 1984 ============ */
 :root {
-  --black: #111111;
-  --ink: #1a1a1a;
-  --red: #d92b2b;
+  --blue: #002D8F;
+  --blue-dark: #001E63;
+  --ink: #2D2D2D;
+  --red: #FF0A18;       /* só para ofertas e urgência (fundos, selos) */
+  --red-text: #D90712;  /* variante com contraste para texto */
   --green: #1da34a;
   --wa: #25d366;
   --gold: #e8b53a;
   --purple: #7b3ff2;
   --muted: #8a8a8a;
   --line: #ececec;
-  --bg-soft: #f6f6f6;
+  --bg-soft: #F5F7FA;
   --radius: 14px;
   --shadow: 0 1px 3px rgba(0, 0, 0, .06);
 }
@@ -36,7 +38,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 [hidden] { display: none !important; }
 input { font: inherit; }
 
-.red { color: var(--red); }
+.red { color: var(--red-text); }
 .green { color: var(--green); }
 .gold { color: var(--gold); }
 .purple { color: var(--purple); }
@@ -61,13 +63,14 @@ input { font: inherit; }
 
 /* ---------- Logo ---------- */
 .logo {
-  font-family: "Yellowtail", cursive;
+  font-family: "Pacifico", cursive;
   font-weight: 400;
-  color: var(--black);
-  line-height: 1;
+  color: var(--blue);
+  line-height: 1.3;
 }
-.logo-xl { font-size: 64px; }
-.logo-top { font-size: 30px; }
+.logo .lx { color: var(--red); }
+.logo-xl { font-size: 56px; }
+.logo-top { font-size: 26px; }
 .desde {
   font-size: 11px; letter-spacing: 3px; font-weight: 600;
   color: var(--ink); margin-top: 10px;
@@ -90,7 +93,7 @@ input { font: inherit; }
 }
 .splash-bar span {
   display: block; height: 100%; width: 40%;
-  background: var(--black); border-radius: 4px;
+  background: var(--blue); border-radius: 4px;
   animation: load 1.4s ease forwards;
 }
 @keyframes load { to { width: 100%; } }
@@ -118,7 +121,7 @@ input { font: inherit; }
   position: absolute; top: 2px; right: 0;
   min-width: 17px; height: 17px; padding: 0 4px;
   border-radius: 9px;
-  background: var(--red); color: #fff;
+  background: var(--red-text); color: #fff;
   font-size: 10px; font-weight: 700;
   display: inline-flex; align-items: center; justify-content: center;
   border: 2px solid #fff;
@@ -143,7 +146,7 @@ input { font: inherit; }
 /* ---------- Hero ---------- */
 .hero {
   margin: 0 16px;
-  background: linear-gradient(120deg, #141414, #2b2b2b);
+  background: linear-gradient(120deg, #001E63, #003BB8);
   border-radius: 18px;
   color: #fff;
   padding: 22px 20px;
@@ -151,15 +154,15 @@ input { font: inherit; }
   overflow: hidden;
 }
 .hero h2 { font-size: 21px; line-height: 1.25; font-weight: 800; }
-.hero h2 .red { color: #ff5a5a; }
-.hero ul { list-style: none; margin: 12px 0 16px; font-size: 13px; color: #d8d8d8; }
+.hero h2 .red { color: #ff8a90; }
+.hero ul { list-style: none; margin: 12px 0 16px; font-size: 13px; color: #c9d5f5; }
 .hero li::before { content: "• "; }
 .hero li + li { margin-top: 3px; }
 .hero-art { font-size: 84px; filter: drop-shadow(0 10px 16px rgba(0,0,0,.5)); }
 
 .dots { display: flex; gap: 6px; justify-content: center; padding: 12px 0 4px; }
 .dots span { width: 6px; height: 6px; border-radius: 50%; background: #d6d6d6; }
-.dots .on { width: 18px; border-radius: 4px; background: var(--black); }
+.dots .on { width: 18px; border-radius: 4px; background: var(--blue); }
 
 /* ---------- Botões ---------- */
 .btn {
@@ -171,9 +174,9 @@ input { font: inherit; }
 }
 .btn:active { transform: scale(.98); }
 .btn svg { width: 18px; height: 18px; }
-.btn-white { background: #fff; color: var(--black); }
-.btn-black { background: var(--black); color: #fff; }
-.btn-outline { background: #fff; color: var(--black); border: 1.5px solid var(--black); }
+.btn-white { background: #fff; color: var(--blue); }
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-outline { background: #fff; color: var(--blue); border: 1.5px solid var(--blue); }
 .btn-wa { background: #fff; color: var(--green); border: 1.5px solid var(--green); width: 100%; }
 .btn-lg { width: 100%; padding: 15px; border-radius: 13px; }
 
@@ -198,7 +201,7 @@ input { font: inherit; }
   background: var(--bg-soft);
   font-weight: 800;
 }
-.shortcut-icon.red-icon { background: #fdeaea; color: var(--red); border: 1.5px dashed var(--red); }
+.shortcut-icon.red-icon { background: #FFF0F1; color: var(--red-text); border: 1.5px dashed var(--red-text); }
 
 /* ---------- Seções ---------- */
 .section-head {
@@ -277,7 +280,7 @@ input { font: inherit; }
   font-size: 10px; font-weight: 700;
   padding: 3px 7px; border-radius: 6px;
 }
-.card .tag.new { background: var(--black); }
+.card .tag.new { background: var(--blue); }
 .card .info { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 3px; flex: 1; }
 .card .name { font-size: 12.5px; font-weight: 600; line-height: 1.3; }
 .card .old { font-size: 11px; color: var(--muted); text-decoration: line-through; }
@@ -286,7 +289,7 @@ input { font: inherit; }
   margin-top: auto;
   align-self: flex-end;
   width: 30px; height: 30px; border-radius: 10px;
-  background: var(--black); color: #fff;
+  background: var(--blue); color: #fff;
   font-size: 18px; font-weight: 700;
   display: inline-flex; align-items: center; justify-content: center;
 }
@@ -320,7 +323,7 @@ input { font: inherit; }
 .tiers table { width: 100%; margin-top: 8px; border-collapse: collapse; }
 .tiers th { text-align: left; font-size: 11px; color: var(--muted); font-weight: 600; padding: 4px 0; }
 .tiers td { padding: 6px 0; border-top: 1px solid #f3dcdc; }
-.tiers .off { color: var(--red); font-weight: 700; font-size: 12px; text-align: right; }
+.tiers .off { color: var(--red-text); font-weight: 700; font-size: 12px; text-align: right; }
 
 .qty-row {
   display: flex; align-items: center; justify-content: space-between;
@@ -378,6 +381,28 @@ input { font: inherit; }
 .cart-item .line-price { grid-area: price; font-weight: 800; font-size: 14.5px; text-align: right; }
 
 .cart-summary { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.ship-progress {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 4px;
+}
+.ship-progress small { font-size: 12px; font-weight: 600; display: block; margin-bottom: 8px; }
+.ship-progress small.done { color: var(--green); }
+.ship-bar { height: 7px; border-radius: 6px; background: #e2e7f2; overflow: hidden; }
+.ship-bar span {
+  display: block; height: 100%; border-radius: 6px;
+  background: linear-gradient(90deg, var(--blue), #2f63d8);
+  transition: width .35s ease;
+}
+.ship-bar span.done { background: var(--green); }
+.btn-wa-solid { background: var(--wa); color: #fff; }
+.pay-note {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-size: 11.5px; color: var(--muted);
+}
+.pay-note svg { width: 14px; height: 14px; }
 .cart-summary .row { display: flex; justify-content: space-between; font-size: 14px; color: #444; }
 .cart-summary .row.total {
   border-top: 1px solid var(--line);
@@ -393,17 +418,17 @@ input { font: inherit; }
 /* ---------- Paulex Club ---------- */
 .club-card {
   margin: 8px 16px;
-  background: linear-gradient(135deg, #101010, #2e2e2e);
+  background: linear-gradient(135deg, #001A54, #002D8F);
   border-radius: 20px;
   color: #fff;
   padding: 22px 20px;
   position: relative;
 }
 .club-crown { position: absolute; top: 18px; right: 20px; font-size: 40px; }
-.club-card > small { color: #bdbdbd; font-size: 12px; }
+.club-card > small { color: #aebde8; font-size: 12px; }
 .club-card > strong { display: block; font-size: 34px; font-weight: 800; margin: 2px 0 4px; }
-.club-card > strong span { font-size: 16px; font-weight: 600; color: #cfcfcf; }
-.club-next { font-size: 11.5px; color: #bdbdbd; }
+.club-card > strong span { font-size: 16px; font-weight: 600; color: #c2cdf0; }
+.club-next { font-size: 11.5px; color: #aebde8; }
 .club-progress {
   margin-top: 14px;
   height: 8px; border-radius: 6px;
@@ -415,7 +440,7 @@ input { font: inherit; }
   border-radius: 6px;
   background: linear-gradient(90deg, #f4c842, #e8a020);
 }
-.club-levels { display: flex; justify-content: space-between; font-size: 11px; color: #cfcfcf; margin-top: 8px; }
+.club-levels { display: flex; justify-content: space-between; font-size: 11px; color: #c2cdf0; margin-top: 8px; }
 
 .club-grid {
   display: grid; grid-template-columns: repeat(4, 1fr);
@@ -540,7 +565,7 @@ input { font: inherit; }
 }
 .status.entregue { background: #e3f5e9; color: var(--green); }
 .status.transporte { background: #eef1ff; color: #4a5bd8; }
-.status.cancelado { background: #fdeaea; color: var(--red); }
+.status.cancelado { background: #fdeaea; color: var(--red-text); }
 
 /* ---------- Endereços ---------- */
 .addresses { padding: 8px 16px; display: flex; flex-direction: column; gap: 12px; }
@@ -597,7 +622,7 @@ input { font: inherit; }
   color: var(--muted);
 }
 .bottom-nav button svg { width: 22px; height: 22px; }
-.bottom-nav button.active { color: var(--black); }
+.bottom-nav button.active { color: var(--blue); }
 .bottom-nav button.active svg { stroke-width: 2.4; }
 .bottom-nav .badge { top: -4px; right: calc(50% - 20px); }
 
@@ -606,7 +631,7 @@ input { font: inherit; }
   position: fixed;
   bottom: 96px; left: 50%;
   transform: translateX(-50%) translateY(16px);
-  background: var(--black); color: #fff;
+  background: var(--blue); color: #fff;
   font-size: 13px; font-weight: 600;
   padding: 12px 20px;
   border-radius: 999px;
@@ -644,7 +669,7 @@ input { font: inherit; }
     border-bottom: 1px solid var(--line);
   }
   .desk-logo { display: flex; flex-direction: column; align-items: center; }
-  .desk-logo .logo { font-size: 34px; }
+  .desk-logo .logo { font-size: 28px; }
   .desk-logo small { font-size: 8.5px; letter-spacing: 3px; font-weight: 700; }
   .desk-nav { display: flex; align-items: center; gap: 6px; }
   .desk-nav button {
@@ -655,7 +680,7 @@ input { font: inherit; }
     color: var(--muted);
   }
   .desk-nav button:hover { background: var(--bg-soft); color: var(--ink); }
-  .desk-nav button.active { background: var(--black); color: #fff; }
+  .desk-nav button.active { background: var(--blue); color: #fff; }
   .desk-nav button svg { width: 18px; height: 18px; }
   .desk-cart { position: relative; }
   .desk-cart .badge { position: static; margin-left: 2px; border: 0; }
