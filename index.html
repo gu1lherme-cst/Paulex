@@ -1,283 +1,486 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mente Curiosa</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Paulex — Papelaria e utilidades desde 1984. Tudo o que você precisa, em um só lugar.">
+  <title>Paulex — Tudo o que você precisa, em um só lugar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Yellowtail&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="topo">
-    <div class="container nav-container">
-      <a href="#inicio" class="logo">Mente Curiosa</a>
 
-      <div class="nav-direita">
-        <button class="tema-btn" id="tema-btn" aria-label="Alternar tema">
-          🌙
+<!-- ===== SPLASH ===== -->
+<div class="splash" id="splash">
+  <div class="splash-inner">
+    <h1 class="logo logo-xl">Paulex</h1>
+    <div class="desde">— DESDE 1984 —</div>
+    <p class="splash-tagline">Tudo o que você precisa,<br>em <span class="red">um só lugar.</span></p>
+  </div>
+  <div class="splash-bar"><span></span></div>
+</div>
+
+<div class="app" id="app">
+
+  <!-- ===== INÍCIO ===== -->
+  <section class="screen active" id="screen-home" data-nav="home">
+    <header class="topbar">
+      <button class="icon-btn" aria-label="Menu" onclick="go('categorias')">
+        <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <h1 class="logo logo-top">Paulex</h1>
+      <div class="topbar-actions">
+        <button class="icon-btn has-badge" aria-label="Notificações">
+          <svg viewBox="0 0 24 24"><path d="M18 16v-5a6 6 0 1 0-12 0v5l-2 2h16l-2-2zM10 20a2 2 0 0 0 4 0"/></svg>
+          <span class="badge">2</span>
         </button>
+        <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
+          <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+          <span class="badge cart-badge">0</span>
+        </button>
+      </div>
+    </header>
 
-        <nav class="menu" id="menu">
-          <a href="#inicio">Início</a>
-          <a href="#curiosidades">Curiosidades</a>
-          <a href="#categorias">Categorias</a>
-          <a href="#sobre">Sobre</a>
-          <a href="#contato">Contato</a>
-        </nav>
+    <div class="search-wrap">
+      <div class="search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <input type="search" id="search-input" placeholder="O que você está procurando?" autocomplete="off">
       </div>
     </div>
-  </header>
 
-  <section class="hero reveal" id="inicio">
-    <div class="container hero-conteudo">
-      <div class="hero-texto">
-        <span class="tag">🧠 Conhecimento de um jeito leve</span>
-        <h1>Descubra fatos incríveis e alimente sua curiosidade</h1>
-        <p>
-          O Mente Curiosa é um espaço para quem ama aprender coisas novas,
-          explorar mistérios do mundo e se surpreender com informações
-          interessantes de forma leve e divertida.
-        </p>
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-text">
+        <h2>Tudo o que você<br>precisa em um<br><span class="red">só lugar.</span></h2>
+        <ul>
+          <li>Qualidade</li>
+          <li>Confiança</li>
+          <li>Tradição desde 1984</li>
+        </ul>
+        <button class="btn btn-white" onclick="openList('ofertas')">Ver ofertas</button>
+      </div>
+      <div class="hero-art" aria-hidden="true">🧺</div>
+    </div>
+    <div class="dots" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span></div>
 
-        <div class="hero-botoes">
-          <a href="#curiosidades" class="btn btn-principal">Explorar agora</a>
-          <a href="#sobre" class="btn btn-secundario">Saiba mais</a>
+    <!-- Atalhos -->
+    <div class="shortcuts">
+      <button class="shortcut" onclick="openList('promocoes')">
+        <span class="shortcut-icon red-icon">%</span>
+        <strong>Promoções</strong><small>Até 50% OFF</small>
+      </button>
+      <button class="shortcut" onclick="openList('maisvendidos')">
+        <span class="shortcut-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14" transform="rotate(180 12 12)"/><path d="M5 21h14"/></svg>
+        </span>
+        <strong>Mais vendidos</strong><small>Os favoritos</small>
+      </button>
+      <button class="shortcut" onclick="openList('novidades')">
+        <span class="shortcut-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4L12 3z"/><path d="M19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9L19 14z"/></svg>
+        </span>
+        <strong>Novidades</strong><small>Chegaram agora</small>
+      </button>
+      <button class="shortcut" onclick="go('club')">
+        <span class="shortcut-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1 11H5L4 8z"/></svg>
+        </span>
+        <strong>Paulex Club</strong><small>Seus benefícios</small>
+      </button>
+    </div>
+
+    <!-- Categorias -->
+    <div class="section-head">
+      <h3>Categorias</h3>
+      <button class="link" onclick="go('categorias')">Ver todas</button>
+    </div>
+    <div class="cat-row" id="cat-row"></div>
+
+    <!-- Mais vendidos -->
+    <div class="section-head">
+      <h3>Mais vendidos</h3>
+      <button class="link" onclick="openList('maisvendidos')">Ver todas</button>
+    </div>
+    <div class="product-grid" id="home-grid"></div>
+
+    <!-- Selos de confiança -->
+    <div class="trust">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="m9 12 2 2 4-4"/></svg>
+        <strong>Compra 100% segura</strong><small>Seus dados protegidos</small>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>
+        <strong>Entrega rápida para todo o Brasil</strong><small>Consulte o prazo</small>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
+        <strong>Atendimento pelo WhatsApp</strong><small>Fale com a gente</small>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="6"/><path d="m9 15-1.5 6L12 18.5 16.5 21 15 15"/><path d="m12 7 .9 1.9 2.1.3-1.5 1.5.4 2.1L12 11.8l-1.9 1 .4-2.1L9 9.2l2.1-.3L12 7z"/></svg>
+        <strong>Qualidade garantida</strong><small>Produtos originais e de qualidade</small>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>
+        <strong>Pague como quiser</strong><small>Cartão, Pix, boleto e muito mais</small>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M4 9h16v11H4zM2 9l2-4h16l2 4M9 13h6"/></svg>
+        <strong>Tradição e confiança Desde 1984</strong><small>Faz parte da sua história</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CATEGORIAS ===== -->
+  <section class="screen" id="screen-categorias" data-nav="categorias">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Categorias</h2>
+      <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+        <span class="badge cart-badge">0</span>
+      </button>
+    </header>
+    <div class="cat-list" id="cat-list"></div>
+  </section>
+
+  <!-- ===== LISTA (categoria / ofertas / busca) ===== -->
+  <section class="screen" id="screen-list">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2 id="list-title">Produtos</h2>
+      <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+        <span class="badge cart-badge">0</span>
+      </button>
+    </header>
+    <div class="product-grid pad" id="list-grid"></div>
+    <p class="empty" id="list-empty" hidden>Nenhum produto encontrado.</p>
+  </section>
+
+  <!-- ===== PRODUTO ===== -->
+  <section class="screen" id="screen-produto">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2></h2>
+      <div class="topbar-actions">
+        <button class="icon-btn" aria-label="Compartilhar">
+          <svg viewBox="0 0 24 24"><path d="M12 3v12M12 3 8 7m4-4 4 4"/><path d="M5 12v8h14v-8"/></svg>
+        </button>
+        <button class="icon-btn" aria-label="Favoritar">
+          <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9-9c-1.2-2.8.6-6 3.8-6C9 5 10.5 6.5 12 8.5 13.5 6.5 15 5 17.2 5c3.2 0 5 3.2 3.8 6-2 4.5-9 9-9 9z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="p-photo" id="p-photo">🖊️</div>
+    <div class="dots" aria-hidden="true"><span class="on"></span><span></span><span></span></div>
+
+    <div class="p-body">
+      <h2 id="p-name">Produto</h2>
+      <small class="muted" id="p-unit">Unidade</small>
+      <div class="stars" id="p-stars"></div>
+      <div class="p-price" id="p-price"></div>
+      <div class="stock" id="p-stock"></div>
+
+      <div class="tiers" id="p-tiers" hidden>
+        <strong class="red">Compre mais e economize!</strong>
+        <table>
+          <thead><tr><th>Quantidade</th><th>Preço unitário</th><th></th></tr></thead>
+          <tbody id="p-tiers-body"></tbody>
+        </table>
+      </div>
+
+      <div class="qty-row">
+        <span>Quantidade</span>
+        <div class="stepper">
+          <button onclick="pQty(-1)" aria-label="Diminuir">−</button>
+          <output id="p-qty">1</output>
+          <button onclick="pQty(1)" aria-label="Aumentar">+</button>
+        </div>
+      </div>
+      <div class="qty-total">
+        <span id="p-total-label">Total (1 unidade)</span>
+        <div>
+          <strong id="p-total">R$ 0,00</strong>
+          <small class="green" id="p-save" hidden></small>
         </div>
       </div>
 
-      <div class="hero-card">
-        <h2>✨ Curiosidade aleatória</h2>
-        <p id="curiosidade-texto">
-          O coração de uma baleia-azul pode pesar mais de 180 kg.
-        </p>
-        <button class="btn-curiosidade" id="nova-curiosidade">Gerar outra</button>
+      <div class="p-actions">
+        <button class="btn btn-outline" onclick="addToCart()">
+          <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+          Adicionar ao carrinho
+        </button>
+        <button class="btn btn-black" onclick="buyNow()">Comprar agora</button>
       </div>
     </div>
   </section>
 
-  <section class="secao reveal" id="curiosidades">
-    <div class="container">
-      <div class="titulo-secao">
-        <h2>Curiosidades em destaque</h2>
-        <p>Explore fatos fascinantes sobre o universo, a natureza, a história e muito mais.</p>
-      </div>
+  <!-- ===== CARRINHO ===== -->
+  <section class="screen" id="screen-carrinho" data-nav="carrinho">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Meu Carrinho</h2>
+      <button class="link" onclick="clearCart()">Editar</button>
+    </header>
 
-      <div class="barra-busca">
-        <input
-          type="text"
-          id="campo-busca"
-          placeholder="Buscar curiosidade por tema ou palavra..."
-        />
-      </div>
+    <div id="cart-items"></div>
 
-      <div class="filtros">
-        <button class="filtro-btn ativo" data-filtro="todos">Todos</button>
-        <button class="filtro-btn" data-filtro="espaco">Espaço</button>
-        <button class="filtro-btn" data-filtro="animais">Animais</button>
-        <button class="filtro-btn" data-filtro="corpo">Corpo Humano</button>
-        <button class="filtro-btn" data-filtro="tecnologia">Tecnologia</button>
-        <button class="filtro-btn" data-filtro="natureza">Natureza</button>
-        <button class="filtro-btn" data-filtro="historia">História</button>
-      </div>
+    <div class="cart-empty" id="cart-empty" hidden>
+      <span>🛒</span>
+      <p>Seu carrinho está vazio.</p>
+      <button class="btn btn-black" onclick="go('home')">Ver produtos</button>
+    </div>
 
-      <div class="grid-cards" id="grid-cards">
-        <article class="card reveal" data-categoria="espaco">
-          <img
-            src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1200&q=80"
-            alt="Planeta e nave no espaço"
-            class="card-img"
-          />
-          <div class="card-conteudo">
-            <div class="icone-card">🚀</div>
-            <h3>Espaço</h3>
-            <p>
-              Um dia em Vênus dura cerca de 243 dias terrestres, enquanto um ano no planeta
-              dura aproximadamente 225 dias. Isso acontece porque Vênus gira extremamente devagar
-              em torno de si mesmo, o que torna sua rotação mais lenta do que sua translação ao redor do Sol.
-            </p>
-            <a href="#" class="card-link">Ler mais</a>
-          </div>
-        </article>
-
-        <article class="card reveal" data-categoria="animais">
-          <img
-            src="https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?auto=format&fit=crop&w=1200&q=80"
-            alt="Polvo no fundo do mar"
-            class="card-img"
-          />
-          <div class="card-conteudo">
-            <div class="icone-card">🐙</div>
-            <h3>Animais</h3>
-            <p>
-              Os polvos possuem três corações e sangue azul. Dois corações bombeiam sangue
-              para as brânquias, enquanto o terceiro envia o sangue para o resto do corpo.
-              Seu sangue tem essa cor por causa da hemocianina, uma proteína rica em cobre.
-            </p>
-            <a href="#" class="card-link">Ler mais</a>
-          </div>
-        </article>
-
-        <article class="card reveal" data-categoria="corpo">
-          <img
-            src="https://images.unsplash.com/photo-1530210124550-912dc1381cb8?auto=format&fit=crop&w=1200&q=80"
-            alt="Representação do cérebro humano"
-            class="card-img"
-          />
-          <div class="card-conteudo">
-            <div class="icone-card">🧠</div>
-            <h3>Corpo Humano</h3>
-            <p>
-              O cérebro humano é um dos órgãos mais impressionantes do corpo.
-              Mesmo representando uma pequena parte do peso corporal, ele consome
-              cerca de 20% da energia total do organismo para manter memória,
-              emoções, pensamentos e movimentos funcionando.
-            </p>
-            <a href="#" class="card-link">Ler mais</a>
-          </div>
-        </article>
-
-        <article class="card reveal" data-categoria="tecnologia">
-          <img
-            src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80"
-            alt="Placa eletrônica representando tecnologia"
-            class="card-img"
-          />
-          <div class="card-conteudo">
-            <div class="icone-card">💻</div>
-            <h3>Tecnologia</h3>
-            <p>
-              Os primeiros computadores ocupavam salas inteiras, consumiam muita energia
-              e realizavam tarefas bem limitadas. Hoje, um celular no bolso consegue executar
-              processos muito mais complexos, mostrando como a tecnologia evoluiu em poucas décadas.
-            </p>
-            <a href="#" class="card-link">Ler mais</a>
-          </div>
-        </article>
-
-        <article class="card reveal" data-categoria="natureza">
-          <img
-            src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80"
-            alt="Floresta representando a natureza"
-            class="card-img"
-          />
-          <div class="card-conteudo">
-            <div class="icone-card">🌿</div>
-            <h3>Natureza</h3>
-            <p>
-              Algumas árvores conseguem compartilhar nutrientes e sinais químicos
-              por meio de redes subterrâneas formadas por fungos. Esse sistema natural
-              é tão impressionante que muitos cientistas o comparam a uma espécie de
-              internet da floresta.
-            </p>
-            <a href="#" class="card-link">Ler mais</a>
-          </div>
-        </article>
-
-        <article class="card reveal" data-categoria="historia">
-          <img
-            src="https://images.unsplash.com/photo-1568322445389-f64ac2515020?auto=format&fit=crop&w=1200&q=80"
-            alt="Pirâmides do Egito"
-            class="card-img"
-          />
-          <div class="card-conteudo">
-            <div class="icone-card">📜</div>
-            <h3>História</h3>
-            <p>
-              Cleópatra viveu em uma época muito mais próxima da era moderna do que muita gente imagina.
-              Historicamente, ela está mais perto da invenção do iPhone do que da construção das grandes
-              pirâmides do Egito, que já eram antigas em seu tempo.
-            </p>
-            <a href="#" class="card-link">Ler mais</a>
-          </div>
-        </article>
-      </div>
-
-      <p id="mensagem-sem-resultado" class="mensagem-sem-resultado"></p>
+    <div class="cart-summary" id="cart-summary">
+      <div class="row"><span id="cart-subtotal-label">Subtotal</span><span id="cart-subtotal"></span></div>
+      <div class="row" id="cart-discount-row"><span>Desconto por quantidade</span><span class="red" id="cart-discount"></span></div>
+      <div class="row"><span>Frete</span><span class="green">Grátis</span></div>
+      <div class="row total"><span>Total</span><strong id="cart-total"></strong></div>
+      <button class="btn btn-black btn-lg" onclick="checkout()">
+        <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        Finalizar compra
+      </button>
+      <button class="btn btn-wa" onclick="checkoutWhatsApp()">
+        <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
+        Comprar pelo WhatsApp
+      </button>
     </div>
   </section>
 
-  <section class="secao secao-clara reveal" id="categorias">
-    <div class="container">
-      <div class="titulo-secao">
-        <h2>Categorias</h2>
-        <p>Escolha o assunto que mais combina com você.</p>
-      </div>
+  <!-- ===== PAULEX CLUB ===== -->
+  <section class="screen" id="screen-club" data-nav="club">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Paulex Club</h2>
+      <button class="icon-btn" aria-label="Informações">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+      </button>
+    </header>
 
-      <div class="categorias">
-        <div class="categoria">Ciência</div>
-        <div class="categoria">Universo</div>
-        <div class="categoria">Animais</div>
-        <div class="categoria">História</div>
-        <div class="categoria">Tecnologia</div>
-        <div class="categoria">Corpo Humano</div>
-        <div class="categoria">Mistérios</div>
-        <div class="categoria">Natureza</div>
+    <div class="club-card">
+      <div class="club-crown">👑</div>
+      <small>Seus pontos</small>
+      <strong>2.450 <span>pts</span></strong>
+      <small class="club-next">Faltam 550 pts para o nível Prata</small>
+      <div class="club-progress"><span style="width:82%"></span></div>
+      <div class="club-levels"><span>Bronze</span><span>Prata</span></div>
+    </div>
+
+    <div class="club-grid">
+      <button class="club-item"><span class="red">🎟️</span><strong>Cupons</strong><small>12 disponíveis</small></button>
+      <button class="club-item"><span class="green">💲</span><strong>Cashback</strong><small>R$ 35,60</small></button>
+      <button class="club-item"><span class="gold">⭐</span><strong>Meus pontos</strong><small>Histórico</small></button>
+      <button class="club-item"><span class="purple">💎</span><strong>Benefícios</strong><small>Exclusivos</small></button>
+    </div>
+
+    <div class="club-panel">
+      <h3>Seu nível atual</h3>
+      <div class="club-level-row">
+        <span class="club-medal">🥉</span>
+        <div><strong>Bronze</strong><small>Cliente Paulex Club</small></div>
+        <button class="link">Ver benefícios</button>
       </div>
     </div>
-  </section>
 
-  <section class="secao reveal" id="sobre">
-    <div class="container sobre">
-      <div class="sobre-texto">
-        <h2>Sobre o Mente Curiosa</h2>
-        <p>
-          O objetivo do Mente Curiosa é compartilhar curiosidades, fatos
-          interessantes e conhecimentos rápidos de forma simples e acessível.
-        </p>
-        <p>
-          O site foi criado para pessoas que gostam de aprender algo novo
-          todos os dias, seja sobre o universo, o corpo humano, a história,
-          os animais ou a tecnologia.
-        </p>
-      </div>
-
-      <div class="sobre-box">
-        <h3>Missão</h3>
-        <p>
-          Tornar o aprendizado mais divertido, leve e inspirador para todos.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="secao newsletter reveal">
-    <div class="container">
-      <div class="newsletter-box">
-        <h2>Receba novas curiosidades</h2>
-        <p>Cadastre seu e-mail e fique por dentro de conteúdos incríveis.</p>
-
-        <form class="form-newsletter" id="form-newsletter">
-          <input type="email" id="email" placeholder="Digite seu e-mail" required />
-          <button type="submit">Cadastrar</button>
-        </form>
-
-        <p class="mensagem-form" id="mensagem-form"></p>
-      </div>
-    </div>
-  </section>
-
-  <footer class="rodape reveal" id="contato">
-    <div class="container rodape-conteudo">
+    <div class="club-panel club-cta">
+      <span>🎁</span>
       <div>
-        <h3>Mente Curiosa</h3>
-        <p>Um site para quem ama descobrir coisas novas.</p>
-      </div>
-
-      <div>
-        <h4>Contato</h4>
-        <p>Email: contato@mentecuriosa.com</p>
-      </div>
-
-      <div>
-        <h4>Redes</h4>
-        <p>Instagram | YouTube | GitHub</p>
+        <strong>Ganhe mais pontos</strong>
+        <small>Comprando, indicando e avaliando produtos!</small>
       </div>
     </div>
+  </section>
 
-    <div class="rodape-final">
-      <p>© 2026 Mente Curiosa - Todos os direitos reservados.</p>
+  <!-- ===== LOGIN ===== -->
+  <section class="screen" id="screen-login" data-nav="conta">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Bem-vindo à Paulex!</h2>
+      <span class="icon-btn" aria-hidden="true"></span>
+    </header>
+    <p class="center muted">Faça login para continuar</p>
+
+    <div class="tabs" id="login-tabs">
+      <button class="tab active" onclick="loginTab(this,'entrar')">Entrar</button>
+      <button class="tab" onclick="loginTab(this,'cadastrar')">Cadastrar</button>
     </div>
-  </footer>
 
-  <script src="script.js"></script>
+    <form class="form" id="form-entrar" onsubmit="doLogin(event)">
+      <label class="field">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <input type="text" placeholder="E-mail, CPF ou telefone" required>
+      </label>
+      <label class="field">
+        <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        <input type="password" placeholder="Senha" required>
+      </label>
+      <button type="button" class="link right">Esqueceu sua senha?</button>
+      <button class="btn btn-black btn-lg" type="submit">Entrar</button>
+      <div class="or"><span>ou</span></div>
+      <button type="button" class="btn btn-outline btn-lg" onclick="doLogin(event)">
+        <span class="g-logo">G</span> Entrar com Google
+      </button>
+    </form>
+
+    <form class="form" id="form-cadastrar" hidden onsubmit="doLogin(event)">
+      <label class="field"><input type="text" placeholder="Nome completo" required></label>
+      <label class="field"><input type="email" placeholder="E-mail" required></label>
+      <label class="field"><input type="password" placeholder="Crie uma senha" required></label>
+      <button class="btn btn-black btn-lg" type="submit">Criar conta</button>
+    </form>
+  </section>
+
+  <!-- ===== CONTA ===== -->
+  <section class="screen" id="screen-conta" data-nav="conta">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Minha Conta</h2>
+      <span class="icon-btn" aria-hidden="true"></span>
+    </header>
+
+    <div class="account-head">
+      <span class="avatar">👤</span>
+      <div><strong>Olá, cliente Paulex!</strong><small class="muted">Cliente Paulex Club · Bronze</small></div>
+    </div>
+
+    <div class="menu">
+      <button class="menu-item" onclick="go('pedidos')">
+        <svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3M9 11h6"/></svg>
+        <span>Meus Pedidos</span>
+        <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+      </button>
+      <button class="menu-item" onclick="go('enderecos')">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        <span>Meus Endereços</span>
+        <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+      </button>
+      <button class="menu-item" onclick="go('club')">
+        <svg viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1 11H5L4 8z"/></svg>
+        <span>Paulex Club</span>
+        <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+      </button>
+      <button class="menu-item" onclick="logout()">
+        <svg viewBox="0 0 24 24"><path d="M9 4H5v16h4M14 8l4 4-4 4M18 12H9"/></svg>
+        <span>Sair</span>
+        <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ===== PEDIDOS ===== -->
+  <section class="screen" id="screen-pedidos">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Meus Pedidos</h2>
+      <span class="icon-btn" aria-hidden="true"></span>
+    </header>
+
+    <div class="tabs scroll" id="order-tabs">
+      <button class="tab active" onclick="orderTab(this,'todos')">Todos</button>
+      <button class="tab" onclick="orderTab(this,'andamento')">Em andamento</button>
+      <button class="tab" onclick="orderTab(this,'entregues')">Entregues</button>
+      <button class="tab" onclick="orderTab(this,'cancelados')">Cancelados</button>
+    </div>
+    <div class="orders" id="orders"></div>
+    <p class="empty" id="orders-empty" hidden>Nenhum pedido aqui.</p>
+  </section>
+
+  <!-- ===== ENDEREÇOS ===== -->
+  <section class="screen" id="screen-enderecos">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Meus Endereços</h2>
+      <button class="icon-btn" aria-label="Adicionar endereço" onclick="toast('Em breve: novo endereço!')">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </header>
+
+    <div class="addresses">
+      <div class="address">
+        <div>
+          <strong>Casa <span class="chip">Principal</span></strong>
+          <small>Rua das Flores, 123<br>Centro · São Paulo, SP<br>CEP 01000-000</small>
+        </div>
+        <div class="address-actions">
+          <button class="icon-btn" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M5 19l1-4L16 5l3 3L9 18l-4 1z"/></svg></button>
+          <button class="icon-btn" aria-label="Mais opções"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18" cy="12" r="1"/></svg></button>
+        </div>
+      </div>
+      <div class="address">
+        <div>
+          <strong>Trabalho</strong>
+          <small>Av. Paulista, 1000<br>Bela Vista · São Paulo, SP<br>CEP 01310-100</small>
+        </div>
+        <div class="address-actions">
+          <button class="icon-btn" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M5 19l1-4L16 5l3 3L9 18l-4 1z"/></svg></button>
+          <button class="icon-btn" aria-label="Mais opções"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18" cy="12" r="1"/></svg></button>
+        </div>
+      </div>
+      <div class="address">
+        <div>
+          <strong>Casa da Mãe</strong>
+          <small>Rua das Palmeiras, 45<br>Vila Mariana · São Paulo, SP<br>CEP 04000-020</small>
+        </div>
+        <div class="address-actions">
+          <button class="icon-btn" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M5 19l1-4L16 5l3 3L9 18l-4 1z"/></svg></button>
+          <button class="icon-btn" aria-label="Mais opções"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18" cy="12" r="1"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BOTTOM NAV ===== -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <button data-go="home" class="active">
+      <svg viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9h-5v-6h-6v6H4v-9z"/></svg>
+      <span>Início</span>
+    </button>
+    <button data-go="categorias">
+      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
+      <span>Categorias</span>
+    </button>
+    <button data-go="carrinho" class="has-badge">
+      <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+      <span>Carrinho</span>
+      <span class="badge cart-badge">0</span>
+    </button>
+    <button data-go="club">
+      <svg viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1 11H5L4 8z"/></svg>
+      <span>Paulex Club</span>
+    </button>
+    <button data-go="conta">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
+      <span>Conta</span>
+    </button>
+  </nav>
+
+  <div class="toast" id="toast" role="status"></div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
