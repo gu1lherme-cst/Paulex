@@ -321,15 +321,17 @@ input { font: inherit; }
 .card .old { font-size: 11px; color: var(--muted); text-decoration: line-through; }
 .card .price { font-size: 15.5px; font-weight: 700; letter-spacing: -.01em; }
 .card .add {
-  margin-top: auto;
-  align-self: flex-end;
-  width: 30px; height: 30px; border-radius: 50%;
+  margin-top: 10px;
+  width: 100%;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
   background: var(--blue); color: #fff;
-  font-size: 17px; font-weight: 600;
-  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12.5px; font-weight: 600;
+  padding: 9px 6px;
+  border-radius: 999px;
   transition: all .2s var(--ease);
 }
-.card .add:hover { background: var(--blue-dark); transform: scale(1.08); }
+.card .add svg { width: 15px; height: 15px; }
+.card .add:hover { background: var(--blue-dark); box-shadow: 0 6px 16px rgba(0, 45, 143, .3); }
 
 .empty { text-align: center; color: var(--muted); padding: 48px 16px; }
 
@@ -737,6 +739,123 @@ input { font: inherit; }
   .cat-row { grid-template-columns: repeat(6, 1fr); }
 }
 
+/* ---------- Selos do herói ---------- */
+.hero-badges {
+  list-style: none;
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  margin-top: 22px;
+  padding: 0 8px;
+}
+.hero-badges li {
+  font-size: 11.5px; font-weight: 600;
+  color: rgba(255, 255, 255, .9);
+  background: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .22);
+  padding: 6px 13px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ---------- Sobre a Paulex ---------- */
+.about-text { max-width: 640px; margin-left: auto; margin-right: auto; line-height: 1.65; }
+.stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 32px;
+}
+.stat {
+  background: var(--tile);
+  border-radius: var(--r);
+  padding: 22px 12px;
+}
+.stat strong { display: block; font-size: 21px; font-weight: 700; letter-spacing: -.02em; color: var(--blue); }
+.stat small { font-size: 12px; color: var(--muted); }
+
+/* ---------- Por que comprar ---------- */
+.why-title { margin-bottom: 34px; text-align: center; }
+
+/* ---------- Descrição e especificações do produto ---------- */
+.p-desc { font-size: 14px; line-height: 1.65; color: #48484A; margin-top: 10px; }
+.p-specs { margin-top: 26px; }
+.p-specs h3 { font-size: 15px; font-weight: 700; letter-spacing: -.01em; margin-bottom: 10px; }
+.p-specs .spec {
+  display: flex; justify-content: space-between; gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 13px;
+}
+.p-specs dt { color: var(--muted); }
+.p-specs dd { font-weight: 600; text-align: right; }
+
+/* ---------- Produtos relacionados ---------- */
+.p-related-wrap { padding-bottom: 48px; }
+.rel-title { font-size: 19px; font-weight: 700; letter-spacing: -.02em; margin: 8px 0 4px; }
+.p-related-wrap .product-grid { margin-top: 16px; }
+
+/* ---------- Níveis do Club ---------- */
+.club-login-cta {
+  background: var(--tile);
+  border-radius: var(--r);
+  padding: 22px;
+  text-align: center;
+  margin-top: 10px;
+}
+.club-login-cta p { font-size: 13.5px; color: var(--muted); margin-bottom: 14px; }
+.levels-title { font-size: 17px; font-weight: 700; letter-spacing: -.01em; margin: 14px 0 12px; }
+.levels { display: grid; gap: 10px; }
+.level {
+  background: var(--tile);
+  border-radius: var(--r);
+  padding: 18px;
+  position: relative;
+}
+.level.featured { outline: 2px solid var(--blue); outline-offset: -2px; background: #EEF3FF; }
+.level-medal {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #fff;
+  margin-bottom: 8px;
+}
+.level-medal svg { width: 20px; height: 20px; }
+.level-medal.bronze { color: #A05A2C; }
+.level-medal.prata { color: #7B8794; }
+.level-medal.ouro { color: var(--gold); }
+.level strong { display: block; font-size: 15px; letter-spacing: -.01em; }
+.level small { font-size: 11.5px; color: var(--muted); display: block; margin-bottom: 8px; }
+.level ul { list-style: none; font-size: 12.5px; color: #48484A; }
+.level li { padding: 3px 0; }
+.level li::before { content: "✓ "; color: var(--green); font-weight: 700; }
+
+/* ---------- Rodapé profissional ---------- */
+.footer { background: var(--tile); padding: 44px 0 0; text-align: left; font-size: 13px; }
+.footer-grid { display: grid; gap: 30px; padding-bottom: 34px; }
+.f-brand p { color: var(--muted); line-height: 1.6; margin: 12px 0 14px; font-size: 12.5px; }
+.f-social { display: flex; gap: 8px; }
+.f-social button {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: #fff; color: var(--blue-vivid);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all .2s var(--ease);
+}
+.f-social button:hover { background: var(--blue); color: #fff; }
+.f-social svg { width: 17px; height: 17px; }
+.f-col h4 { font-size: 13px; font-weight: 700; letter-spacing: -.01em; margin-bottom: 12px; }
+.f-links { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.f-links button {
+  font-size: 12.5px; color: var(--muted);
+  transition: color .2s;
+  text-align: left;
+}
+.f-links button:hover { color: var(--blue); }
+.f-note { font-size: 12px; color: var(--muted); }
+.f-bottom {
+  border-top: 1px solid var(--hairline);
+  padding-top: 18px; padding-bottom: 22px;
+  font-size: 12px; color: var(--muted);
+  text-align: center;
+}
+.f-bottom strong { color: var(--ink); }
+
 /* ============================================================
    COMPUTADOR E TABLET (≥ 768px)
    ============================================================ */
@@ -846,6 +965,18 @@ input { font: inherit; }
 
   /* Club centralizado */
   .club-wrap { max-width: 680px; padding-bottom: 64px; }
+
+  /* Sobre / níveis / rodapé */
+  .stats { grid-template-columns: repeat(4, 1fr); margin-top: 40px; }
+  .stat { padding: 28px 12px; }
+  .stat strong { font-size: 26px; }
+  .levels { grid-template-columns: repeat(3, 1fr); }
+  .trust-grid { grid-template-columns: repeat(5, 1fr); }
+  .footer-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; }
+  .hero-badges { gap: 10px; }
+  .hero-badges li { font-size: 12.5px; }
+  .p-related-wrap { padding-bottom: 72px; }
+  .p-related-wrap .product-grid { margin-top: 20px; }
 
   .toast { bottom: 44px; }
 }
