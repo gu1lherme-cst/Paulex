@@ -42,6 +42,15 @@ const FRETE_GRATIS_MIN = 99; // valor mínimo para frete grátis
       .apps.googleusercontent.com) e cole entre as aspas abaixo. */
 const GOOGLE_CLIENT_ID = "";
 
+/* CUPONS DE DESCONTO
+   O cliente digita o código no carrinho. Para criar um cupom novo,
+   copie uma linha e ajuste: o número é a porcentagem de desconto.
+   Para desativar um cupom, apague a linha (ou coloque // na frente). */
+const CUPONS = {
+  PAULEX10: { desconto: 10, descricao: "10% de desconto" },
+  CLUB5:    { desconto: 5,  descricao: "5% de desconto" },
+};
+
 /* Ilustrações de produto — duotone azul Paulex */
 const art = (inner) =>
   `<svg viewBox="0 0 64 64" fill="none" stroke="#0B3BA7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" role="img">${inner}</svg>`;

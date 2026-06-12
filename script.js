@@ -48,6 +48,8 @@ function showScreen(id) {
     $("#club-points").hidden = !logged;
     $("#club-login-cta").hidden = logged;
   }
+  if (id === "home") renderRecent();
+  if (id === "carrinho") renderCart();
 
   const nav = el.dataset.nav;
   document.querySelectorAll("[data-go]").forEach((b) =>
@@ -77,7 +79,7 @@ function route() {
   if (base === "produto" && PRODUCTS.some((p) => p.id === param)) return renderProduct(param);
   if (base === "lista") return renderList(decodeURIComponent(param || "maisvendidos"));
 
-  const telas = ["home", "categorias", "carrinho", "club", "login", "conta", "pedidos", "enderecos"];
+  const telas = ["home", "categorias", "carrinho", "club", "login", "conta", "pedidos", "enderecos", "privacidade", "termos"];
   if (telas.includes(base)) {
     let id = base;
     // Áreas pessoais exigem login (evita exibir dados de demonstração)
@@ -280,7 +282,28 @@ function renderProduct(id) {
   renderReviews(p);
   updateFavBtn();
   updateProductTotal();
+  pushRecent(p.id);
   showScreen("produto");
+}
+
+/* ---------- Vistos recentemente ---------- */
+function pushRecent(id) {
+  const rec = JSON.parse(localStorage.getItem("paulex_recent") || "[]").filter((x) => x !== id);
+  rec.unshift(id);
+  localStorage.setItem("paulex_recent", JSON.stringify(rec.slice(0, 8)));
+}
+
+function renderRecent() {
+  const rec = JSON.parse(localStorage.getItem("paulex_recent") || "[]")
+    .map((id) => PRODUCTS.find((p) => p.id === id))
+    .filter(Boolean);
+  $("#recent-section").hidden = rec.length === 0;
+  $("#recent-row").innerHTML = rec.map((p) => `
+    <button class="mini-card" onclick="openProduct('${p.id}')">
+      <span class="mini-art">${p.art}</span>
+      <span class="mini-name">${p.nome}</span>
+      <span class="mini-price">${money(p.preco)}</span>
+    </button>`).join("");
 }
 
 /* ---------- Resumo de avaliações ---------- */
@@ -378,6 +401,30 @@ function clearCart() {
   }
 }
 
+/* ---------- Cupom de desconto ---------- */
+let cupom = localStorage.getItem("paulex_cupom") || "";
+if (!CUPONS[cupom]) cupom = "";
+
+function applyCupom() {
+  const cod = $("#coupon-input").value.trim().toUpperCase();
+  if (!cod) return;
+  if (!CUPONS[cod]) {
+    toast("Cupom inválido ou expirado");
+    return;
+  }
+  cupom = cod;
+  localStorage.setItem("paulex_cupom", cupom);
+  toast(`Cupom ${cod} aplicado!`);
+  $("#coupon-input").value = "";
+  renderCart();
+}
+
+function removeCupom() {
+  cupom = "";
+  localStorage.removeItem("paulex_cupom");
+  renderCart();
+}
+
 function cartTotals() {
   let cheio = 0, total = 0, itens = 0;
   for (const [id, qty] of Object.entries(cart)) {
@@ -387,7 +434,8 @@ function cartTotals() {
     total += unitPrice(p, qty) * qty;
     itens += qty;
   }
-  return { cheio, total, desconto: cheio - total, itens };
+  const cupomVal = CUPONS[cupom] ? total * (CUPONS[cupom].desconto / 100) : 0;
+  return { cheio, total: total - cupomVal, desconto: cheio - total, cupomVal, itens };
 }
 
 function renderCart() {
@@ -425,6 +473,16 @@ function renderCart() {
     $("#cart-discount-row").style.display = t.desconto > 0.005 ? "" : "none";
     $("#cart-discount").textContent = "-" + money(t.desconto);
     $("#cart-total").textContent = money(t.total);
+
+    const temCupom = !!CUPONS[cupom];
+    $("#coupon-form").hidden = temCupom;
+    $("#cart-coupon-row").hidden = !temCupom;
+    if (temCupom) {
+      $("#cart-coupon-label").innerHTML =
+        `Cupom <strong>${cupom}</strong> (${CUPONS[cupom].descricao}) ` +
+        `<button class="coupon-remove" onclick="removeCupom()" aria-label="Remover cupom">remover</button>`;
+      $("#cart-coupon").textContent = "-" + money(t.cupomVal);
+    }
 
     const gratis = t.total >= FRETE_GRATIS_MIN;
     const falta = FRETE_GRATIS_MIN - t.total;
@@ -464,7 +522,10 @@ function cartMessage() {
     return `• ${qty}x ${p.nome} — ${money(unitPrice(p, qty) * qty)}`;
   });
   const t = cartTotals();
-  return `Olá, Paulex! Quero fazer um pedido:\n\n${linhas.join("\n")}\n\nTotal: ${money(t.total)}`;
+  const cupomLinha = CUPONS[cupom]
+    ? `\nCupom ${cupom} (${CUPONS[cupom].descricao}): -${money(t.cupomVal)}`
+    : "";
+  return `Olá, Paulex! Quero fazer um pedido:\n\n${linhas.join("\n")}${cupomLinha}\n\nTotal: ${money(t.total)}`;
 }
 
 function checkoutWhatsApp() {
@@ -613,5 +674,10 @@ updateBadges();
 renderUser();
 initGoogle();
 route();
+
+// Aplicativo instalável (PWA)
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
 
 setTimeout(() => $("#splash").classList.add("hide"), 1800);

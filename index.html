@@ -43,10 +43,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="img/logo.png">
-  <link rel="apple-touch-icon" href="img/logo.png">
+  <link rel="icon" type="image/png" href="img/icon-192.png">
+  <link rel="apple-touch-icon" href="img/icon-180.png">
+  <link rel="manifest" href="manifest.json">
   <link rel="preload" as="image" href="img/logo.png">
-  <link rel="stylesheet" href="style.css?v=11">
+  <link rel="stylesheet" href="style.css?v=12">
 </head>
 <body>
 
@@ -130,6 +131,14 @@
         <input type="search" id="search-input" placeholder="O que você está procurando?" autocomplete="off" aria-label="Buscar produtos">
       </div>
       <div class="suggest" id="suggest" hidden></div>
+    </div>
+
+    <!-- Vistos recentemente -->
+    <div class="recent" id="recent-section" hidden>
+      <div class="wrap">
+        <h3 class="rel-title">Vistos recentemente</h3>
+        <div class="suggest-row" id="recent-row"></div>
+      </div>
     </div>
 
     <!-- Sobre a Paulex -->
@@ -243,8 +252,8 @@
           <div class="f-links">
             <button onclick="window.scrollTo({top:0,behavior:'smooth'})">Sobre nós</button>
             <button onclick="go('club')">Paulex Club</button>
-            <button onclick="toast('Página em construção')">Política de Privacidade</button>
-            <button onclick="toast('Página em construção')">Termos de Uso</button>
+            <button onclick="go('privacidade')">Política de Privacidade</button>
+            <button onclick="go('termos')">Termos de Uso</button>
           </div>
         </div>
         <div class="f-col">
@@ -405,6 +414,14 @@
         <div class="ship-progress">
           <small id="ship-msg"></small>
           <div class="ship-bar"><span id="ship-fill"></span></div>
+        </div>
+        <div class="coupon-form" id="coupon-form">
+          <input id="coupon-input" placeholder="Tem um cupom?" autocomplete="off"
+            onkeydown="if(event.key==='Enter')applyCupom()">
+          <button class="pill pill-outline" onclick="applyCupom()">Aplicar</button>
+        </div>
+        <div class="row" id="cart-coupon-row" hidden>
+          <span id="cart-coupon-label"></span><span class="red" id="cart-coupon"></span>
         </div>
         <div class="row"><span id="cart-subtotal-label">Subtotal</span><span id="cart-subtotal"></span></div>
         <div class="row" id="cart-discount-row"><span>Desconto por quantidade</span><span class="red" id="cart-discount"></span></div>
@@ -671,6 +688,57 @@
     </div>
   </section>
 
+  <!-- ===== POLÍTICA DE PRIVACIDADE ===== -->
+  <section class="screen" id="screen-privacidade">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Política de Privacidade</h2>
+      <span class="icon-btn" aria-hidden="true"></span>
+    </header>
+    <div class="wrap narrow legal">
+      <p class="muted">Última atualização: junho de 2026</p>
+      <p>A <strong>Paulex Armarinho</strong> respeita a sua privacidade. Esta política explica, de forma simples, como tratamos as suas informações quando você usa o nosso site.</p>
+      <h3>Quais dados coletamos</h3>
+      <p>O site funciona sem cadastro obrigatório. Guardamos no <strong>seu próprio navegador</strong> (e não em nossos servidores) o conteúdo do carrinho, os favoritos, os produtos vistos recentemente e o cupom aplicado — para que sua experiência continue de onde parou.</p>
+      <p>Se você optar por entrar com o Google, recebemos apenas o seu nome e e-mail, usados para identificá-lo dentro do site.</p>
+      <h3>Pedidos pelo WhatsApp</h3>
+      <p>Ao finalizar um pedido, o resumo é enviado pelo WhatsApp para o nosso atendimento. A conversa passa a ser regida pela política de privacidade do WhatsApp, e usamos as informações apenas para concluir a sua compra e a entrega.</p>
+      <h3>O que não fazemos</h3>
+      <p>Não vendemos nem compartilhamos seus dados com terceiros para fins de marketing. Não armazenamos dados de pagamento.</p>
+      <h3>Seus direitos (LGPD)</h3>
+      <p>Nos termos da Lei Geral de Proteção de Dados (Lei 13.709/2018), você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento pelo nosso WhatsApp: <strong>(21) 98757-8187</strong>. Para apagar os dados guardados no navegador, basta limpar os dados de navegação do site.</p>
+    </div>
+  </section>
+
+  <!-- ===== TERMOS DE USO ===== -->
+  <section class="screen" id="screen-termos">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Termos de Uso</h2>
+      <span class="icon-btn" aria-hidden="true"></span>
+    </header>
+    <div class="wrap narrow legal">
+      <p class="muted">Última atualização: junho de 2026</p>
+      <p>Ao usar o site da <strong>Paulex Armarinho</strong>, você concorda com os termos abaixo.</p>
+      <h3>Sobre a loja</h3>
+      <p>A Paulex Armarinho atua desde 1984 nos segmentos de papelaria, utilidades, descartáveis, brinquedos, informática e cosméticos, em atacado e varejo.</p>
+      <h3>Preços e disponibilidade</h3>
+      <p>Os preços, condições de desconto por quantidade e a disponibilidade de estoque exibidos no site são informativos e podem ser atualizados sem aviso prévio. O valor final de cada pedido é <strong>confirmado no atendimento pelo WhatsApp</strong>, antes do pagamento.</p>
+      <h3>Pedidos, frete e pagamento</h3>
+      <p>Os pedidos iniciados no site são concluídos pelo WhatsApp, onde combinamos pagamento, prazo e forma de entrega. A condição de frete grátis em compras acima de R$ 99 está sujeita à região de entrega, confirmada no atendimento.</p>
+      <h3>Trocas e devoluções</h3>
+      <p>Seguimos o Código de Defesa do Consumidor: em compras a distância, você pode desistir em até 7 dias corridos após o recebimento. Produtos com defeito são trocados conforme a lei. Fale com a gente pelo WhatsApp para iniciar qualquer solicitação.</p>
+      <h3>Paulex Club</h3>
+      <p>O programa de fidelidade Paulex Club concede pontos e benefícios de caráter promocional, que podem ser ajustados ou descontinuados mediante aviso no site.</p>
+      <h3>Contato</h3>
+      <p>Dúvidas sobre estes termos: WhatsApp <strong>(21) 98757-8187</strong>, de segunda a sábado, das 8h às 18h.</p>
+    </div>
+  </section>
+
   <!-- ===== BOTTOM NAV (mobile) ===== -->
   <nav class="bottom-nav" id="bottom-nav">
     <button data-go="home" class="active">
@@ -699,7 +767,7 @@
   <div class="toast" id="toast" role="status"></div>
 </div>
 
-<script src="produtos.js?v=11"></script>
-<script src="script.js?v=11"></script>
+<script src="produtos.js?v=12"></script>
+<script src="script.js?v=12"></script>
 </body>
 </html>
