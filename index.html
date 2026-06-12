@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Paulex — Papelaria e utilidades desde 1984. Tudo o que você precisa, em um só lugar.">
-  <title>Paulex — Tudo o que você precisa, em um só lugar</title>
+  <meta name="theme-color" content="#002D8F">
+  <meta name="description" content="Paulex — Atacado e varejo desde 1984. Papelaria, utilidades, informática, brinquedos, cosméticos e descartáveis.">
+  <title>Paulex — Atacado e varejo desde 1984</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Yellowtail&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
 <!-- ===== SPLASH ===== -->
 <div class="splash" id="splash">
   <div class="splash-inner">
-    <h1 class="logo logo-xl">Paulex</h1>
+    <h1 class="logo logo-xl">Paul<span class="lx">ex</span></h1>
     <div class="desde">— DESDE 1984 —</div>
     <p class="splash-tagline">Tudo o que você precisa,<br>em <span class="red">um só lugar.</span></p>
   </div>
@@ -28,7 +28,7 @@
   <!-- ===== CABEÇALHO (desktop) ===== -->
   <header class="desk-header">
     <button class="desk-logo" onclick="go('home')">
-      <span class="logo">Paulex</span>
+      <span class="logo">Paul<span class="lx">ex</span></span>
       <small>DESDE 1984</small>
     </button>
     <nav class="desk-nav">
@@ -50,7 +50,7 @@
       <button class="icon-btn" aria-label="Menu" onclick="go('categorias')">
         <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
-      <h1 class="logo logo-top">Paulex</h1>
+      <h1 class="logo logo-top">Paul<span class="lx">ex</span></h1>
       <div class="topbar-actions">
         <button class="icon-btn has-badge" aria-label="Notificações">
           <svg viewBox="0 0 24 24"><path d="M18 16v-5a6 6 0 1 0-12 0v5l-2 2h16l-2-2zM10 20a2 2 0 0 0 4 0"/></svg>
@@ -73,11 +73,11 @@
     <!-- Hero -->
     <div class="hero">
       <div class="hero-text">
-        <h2>Tudo o que você <br>precisa em um <br><span class="red">só lugar.</span></h2>
+        <h2>Atacado e varejo, <br><span class="red">desde 1984.</span></h2>
         <ul>
-          <li>Qualidade</li>
-          <li>Confiança</li>
-          <li>Tradição desde 1984</li>
+          <li>Desconto progressivo por quantidade</li>
+          <li>Frete grátis acima de R$ 99</li>
+          <li>Atendimento pelo WhatsApp</li>
         </ul>
         <button class="btn btn-white" onclick="openList('ofertas')">Ver ofertas</button>
       </div>
@@ -241,7 +241,7 @@
           <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
           Adicionar ao carrinho
         </button>
-        <button class="btn btn-black" onclick="buyNow()">Comprar agora</button>
+        <button class="btn btn-primary" onclick="buyNow()">Comprar agora</button>
       </div>
     </div>
   </section>
@@ -261,22 +261,26 @@
     <div class="cart-empty" id="cart-empty" hidden>
       <span>🛒</span>
       <p>Seu carrinho está vazio.</p>
-      <button class="btn btn-black" onclick="go('home')">Ver produtos</button>
+      <button class="btn btn-primary" onclick="go('home')">Ver produtos</button>
     </div>
 
     <div class="cart-summary" id="cart-summary">
+      <div class="ship-progress">
+        <small id="ship-msg"></small>
+        <div class="ship-bar"><span id="ship-fill"></span></div>
+      </div>
       <div class="row"><span id="cart-subtotal-label">Subtotal</span><span id="cart-subtotal"></span></div>
       <div class="row" id="cart-discount-row"><span>Desconto por quantidade</span><span class="red" id="cart-discount"></span></div>
-      <div class="row"><span>Frete</span><span class="green">Grátis</span></div>
+      <div class="row"><span>Frete</span><span id="cart-frete"></span></div>
       <div class="row total"><span>Total</span><strong id="cart-total"></strong></div>
-      <button class="btn btn-black btn-lg" onclick="checkout()">
-        <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-        Finalizar compra
-      </button>
-      <button class="btn btn-wa" onclick="checkoutWhatsApp()">
+      <button class="btn btn-wa-solid btn-lg" onclick="checkoutWhatsApp()">
         <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
-        Comprar pelo WhatsApp
+        Finalizar pelo WhatsApp
       </button>
+      <small class="pay-note">
+        <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        Pagamento online em breve — Cartão, Pix e boleto
+      </small>
     </div>
   </section>
 
@@ -352,7 +356,7 @@
         <input type="password" placeholder="Senha" required>
       </label>
       <button type="button" class="link right">Esqueceu sua senha?</button>
-      <button class="btn btn-black btn-lg" type="submit">Entrar</button>
+      <button class="btn btn-primary btn-lg" type="submit">Entrar</button>
       <div class="or"><span>ou</span></div>
       <button type="button" class="btn btn-outline btn-lg" onclick="doLogin(event)">
         <span class="g-logo">G</span> Entrar com Google
@@ -363,7 +367,7 @@
       <label class="field"><input type="text" placeholder="Nome completo" required></label>
       <label class="field"><input type="email" placeholder="E-mail" required></label>
       <label class="field"><input type="password" placeholder="Crie uma senha" required></label>
-      <button class="btn btn-black btn-lg" type="submit">Criar conta</button>
+      <button class="btn btn-primary btn-lg" type="submit">Criar conta</button>
     </form>
   </section>
 
