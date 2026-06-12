@@ -1,23 +1,55 @@
-/* ============ Paulex — Papelaria desde 1984 ============ */
+/* ============ Paulex — Atacado e varejo desde 1984 ============ */
 
 const WHATSAPP_NUMBER = "5511999999999"; // troque pelo número da loja
 const FRETE_GRATIS_MIN = 99; // valor mínimo para frete grátis
 
+/* Ilustrações de produto — duotone azul Paulex */
+const art = (inner) =>
+  `<svg viewBox="0 0 64 64" fill="none" stroke="#0B3BA7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+
+const icon = (inner) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+
 const CATEGORIES = [
-  { id: "papelaria",    nome: "Papelaria",    desc: "Cadernos, canetas, lápis e muito mais", emoji: "✏️" },
-  { id: "utilidades",   nome: "Utilidades",   desc: "Produtos para o dia a dia e organização", emoji: "🏠" },
-  { id: "descartaveis", nome: "Descartáveis", desc: "Copos, pratos, talheres e embalagens", emoji: "🥤" },
-  { id: "brinquedos",   nome: "Brinquedos",   desc: "Diversão para todas as idades", emoji: "🧸" },
-  { id: "informatica",  nome: "Informática",  desc: "Acessórios, periféricos e muito mais", emoji: "💻" },
-  { id: "cosmeticos",   nome: "Cosméticos",   desc: "Beleza e cuidados pessoais", emoji: "🧴" },
+  {
+    id: "papelaria", nome: "Papelaria",
+    desc: "Cadernos, canetas, lápis e muito mais",
+    icon: icon('<path d="M4 20l1.5-5L16 4.5l3.5 3.5L9 18.5 4 20z"/><path d="M13.5 7l3.5 3.5"/>'),
+  },
+  {
+    id: "utilidades", nome: "Utilidades",
+    desc: "Produtos para o dia a dia e organização",
+    icon: icon('<path d="M4 8l8-4 8 4v9l-8 4-8-4V8z"/><path d="M4 8l8 4 8-4M12 12v9"/>'),
+  },
+  {
+    id: "descartaveis", nome: "Descartáveis",
+    desc: "Copos, pratos, talheres e embalagens",
+    icon: icon('<path d="M7 4h10l-1.5 16h-7L7 4z"/><path d="M7.8 9h8.4"/>'),
+  },
+  {
+    id: "brinquedos", nome: "Brinquedos",
+    desc: "Diversão para todas as idades",
+    icon: icon('<rect x="4" y="12.5" width="7" height="7" rx="1"/><rect x="13" y="12.5" width="7" height="7" rx="1"/><rect x="8.5" y="4" width="7" height="7" rx="1"/>'),
+  },
+  {
+    id: "informatica", nome: "Informática",
+    desc: "Acessórios, periféricos e muito mais",
+    icon: icon('<rect x="5" y="5" width="14" height="9" rx="1.5"/><path d="M3 18h18l-2-4H5l-2 4z"/>'),
+  },
+  {
+    id: "cosmeticos", nome: "Cosméticos",
+    desc: "Beleza e cuidados pessoais",
+    icon: icon('<path d="M10 3h4v3h-4z"/><rect x="7.5" y="6" width="9" height="14" rx="3"/><path d="M10 11h4"/>'),
+  },
 ];
 
 const PRODUCTS = [
   {
     id: "caneta-bic", nome: "Caneta BIC Cristal Azul", unidade: "Unidade",
-    preco: 1.20, cat: "papelaria", emoji: "🖊️",
+    preco: 1.20, cat: "papelaria",
+    art: art('<path d="M44 10 54 20 26 48 16 38z" fill="#DEE8FB"/><path d="M16 38 10 54 26 48z" fill="#fff"/><path d="m10 54 5-5"/><path d="M40 14l10 10"/>'),
     rating: 4.5, avaliacoes: 1256, estoque: 350,
-    maisVendido: true, promo: false,
+    maisVendido: true,
     tiers: [
       { de: 1,   ate: 9,        preco: 1.20, off: null },
       { de: 10,  ate: 49,       preco: 1.05, off: "-12%" },
@@ -27,57 +59,68 @@ const PRODUCTS = [
   },
   {
     id: "caderno-tilibra", nome: "Caderno Tilibra 10 Matérias", unidade: "Unidade",
-    preco: 34.90, cat: "papelaria", emoji: "📓",
+    preco: 34.90, cat: "papelaria",
+    art: art('<rect x="18" y="10" width="32" height="44" rx="5" fill="#DEE8FB"/><path d="M27 10v44"/><path d="M34 24h9M34 32h9M34 40h6"/><path d="M18 18h-5M18 26h-5M18 34h-5M18 42h-5"/>'),
     rating: 4.8, avaliacoes: 842, estoque: 120, maisVendido: true,
   },
   {
     id: "papel-chamex", nome: "Papel Sulfite A4 Chamex 500 fls", unidade: "Pacote",
-    preco: 27.90, cat: "papelaria", emoji: "📄",
+    preco: 27.90, cat: "papelaria",
+    art: art('<path d="M24 12h24v36"/><rect x="16" y="16" width="24" height="36" rx="2" fill="#fff"/><path d="M22 28h12M22 34h12M22 40h8"/>'),
     rating: 4.7, avaliacoes: 2310, estoque: 200, maisVendido: true,
   },
   {
     id: "lapis-faber", nome: "Lápis HB Faber-Castell", unidade: "Unidade",
-    preco: 1.00, precoAntigo: 1.50, cat: "papelaria", emoji: "✏️",
+    preco: 1.00, precoAntigo: 1.50, cat: "papelaria",
+    art: art('<path d="M42 12 52 22 26 48 16 38z" fill="#DEE8FB"/><path d="M16 38 12 52 26 48z" fill="#fff"/><path d="m12 52 4.5-1.5-3-3z" fill="#0B3BA7"/><path d="M38 16l10 10"/>'),
     rating: 4.6, avaliacoes: 990, estoque: 500, promo: true,
   },
   {
     id: "marca-texto", nome: "Marca-texto Amarelo Neon", unidade: "Unidade",
-    preco: 4.50, cat: "papelaria", emoji: "🖍️",
+    preco: 4.50, cat: "papelaria",
+    art: art('<rect x="25" y="8" width="14" height="13" rx="2" fill="#DEE8FB"/><rect x="22" y="21" width="20" height="22" rx="3" fill="#DEE8FB"/><path d="M27 43l2 11h6l2-11" fill="#fff"/>'),
     rating: 4.4, avaliacoes: 410, estoque: 180, novidade: true,
   },
   {
     id: "tesoura", nome: "Tesoura Escolar Inox 13cm", unidade: "Unidade",
-    preco: 7.90, precoAntigo: 11.90, cat: "utilidades", emoji: "✂️",
+    preco: 7.90, precoAntigo: 11.90, cat: "utilidades",
+    art: art('<circle cx="21" cy="46" r="6" fill="#DEE8FB"/><circle cx="41" cy="49" r="6" fill="#DEE8FB"/><path d="M25 42 47 13"/><path d="M37 45 15 16"/><circle cx="31" cy="30" r="1.6" fill="#0B3BA7"/>'),
     rating: 4.5, avaliacoes: 305, estoque: 90, promo: true,
   },
   {
     id: "cola-branca", nome: "Cola Branca Escolar 90g", unidade: "Unidade",
-    preco: 3.50, cat: "papelaria", emoji: "🧪",
+    preco: 3.50, cat: "papelaria",
+    art: art('<path d="M30 8h4v6h-4z"/><path d="M26 14h12l2 8H24z" fill="#fff"/><rect x="22" y="22" width="20" height="32" rx="5" fill="#DEE8FB"/><path d="M28 34h8"/>'),
     rating: 4.3, avaliacoes: 220, estoque: 260, maisVendido: true,
   },
   {
     id: "copo-200", nome: "Copo Descartável 200ml c/ 100", unidade: "Pacote",
-    preco: 6.90, cat: "descartaveis", emoji: "🥤",
+    preco: 6.90, cat: "descartaveis",
+    art: art('<path d="M21 12h22l-4 40H25z" fill="#DEE8FB"/><path d="M23.5 22h17M25.5 32h13" stroke="#fff"/>'),
     rating: 4.2, avaliacoes: 150, estoque: 400,
   },
   {
     id: "mouse-usb", nome: "Mouse Óptico USB", unidade: "Unidade",
-    preco: 24.90, precoAntigo: 39.90, cat: "informatica", emoji: "🖱️",
+    preco: 24.90, precoAntigo: 39.90, cat: "informatica",
+    art: art('<rect x="20" y="16" width="24" height="38" rx="12" fill="#DEE8FB"/><path d="M32 24v8"/><path d="M32 16V9c8 0 8-5 14-5"/>'),
     rating: 4.4, avaliacoes: 510, estoque: 60, promo: true,
   },
   {
     id: "fone-p2", nome: "Fone de Ouvido P2", unidade: "Unidade",
-    preco: 19.90, cat: "informatica", emoji: "🎧",
+    preco: 19.90, cat: "informatica",
+    art: art('<path d="M14 38v-6a18 18 0 0 1 36 0v6"/><rect x="10" y="38" width="11" height="16" rx="5" fill="#DEE8FB"/><rect x="43" y="38" width="11" height="16" rx="5" fill="#DEE8FB"/>'),
     rating: 4.1, avaliacoes: 330, estoque: 75, novidade: true,
   },
   {
     id: "urso-pelucia", nome: "Urso de Pelúcia 30cm", unidade: "Unidade",
-    preco: 49.90, cat: "brinquedos", emoji: "🧸",
+    preco: 49.90, cat: "brinquedos",
+    art: art('<circle cx="21" cy="17" r="6" fill="#DEE8FB"/><circle cx="43" cy="17" r="6" fill="#DEE8FB"/><circle cx="32" cy="27" r="13" fill="#DEE8FB"/><ellipse cx="32" cy="48" rx="13" ry="10" fill="#DEE8FB"/><circle cx="27" cy="25" r="1.5" fill="#0B3BA7"/><circle cx="37" cy="25" r="1.5" fill="#0B3BA7"/><path d="M29 32c2 1.8 4 1.8 6 0"/>'),
     rating: 4.9, avaliacoes: 188, estoque: 35, novidade: true,
   },
   {
     id: "hidratante", nome: "Hidratante Corporal 400ml", unidade: "Unidade",
-    preco: 18.90, precoAntigo: 24.90, cat: "cosmeticos", emoji: "🧴",
+    preco: 18.90, precoAntigo: 24.90, cat: "cosmeticos",
+    art: art('<rect x="22" y="26" width="20" height="28" rx="5" fill="#DEE8FB"/><path d="M30 26v-8h4v8"/><path d="M32 18v-6h10v5"/><path d="M28 38h8"/>'),
     rating: 4.6, avaliacoes: 270, estoque: 88, promo: true,
   },
 ];
@@ -88,6 +131,9 @@ const ORDERS = [
   { numero: "12045", data: "05/04/2024", status: "entregue",   rotulo: "Entregue",      total: 62.30 },
   { numero: "11899", data: "21/03/2024", status: "cancelado",  rotulo: "Cancelado",     total: 35.40 },
 ];
+
+const ICON_BOX = icon('<path d="M4 8l8-4 8 4v9l-8 4-8-4V8z"/><path d="M4 8l8 4 8-4M12 12v9"/>');
+const ICON_CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>';
 
 /* ---------- Estado ---------- */
 let cart = JSON.parse(localStorage.getItem("paulex_cart") || "{}");
@@ -142,16 +188,16 @@ function renderCategories() {
   $("#cat-row").innerHTML = CATEGORIES.map(
     (c) => `
     <button class="cat-chip" onclick="openList('cat:${c.id}')">
-      <span>${c.emoji}</span>${c.nome}
+      <span>${c.icon}</span>${c.nome}
     </button>`
   ).join("");
 
   $("#cat-list").innerHTML = CATEGORIES.map(
     (c) => `
     <button class="cat-card" onclick="openList('cat:${c.id}')">
-      <span class="cat-ico">${c.emoji}</span>
+      <span class="cat-ico">${c.icon}</span>
       <div><strong>${c.nome}</strong><small>${c.desc}</small></div>
-      <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+      ${ICON_CHEV}
     </button>`
   ).join("");
 }
@@ -166,7 +212,7 @@ function productCard(p) {
   const old = p.precoAntigo ? `<span class="old">${money(p.precoAntigo)}</span>` : "";
   return `
     <div class="card" onclick="openProduct('${p.id}')" role="button" tabindex="0">
-      <div class="ph">${tag}${p.emoji}</div>
+      <div class="ph">${tag}${p.art}</div>
       <div class="info">
         <span class="name">${p.nome}</span>
         ${old}
@@ -221,7 +267,7 @@ function openProduct(id) {
   productQty = 1;
   const p = currentProduct;
 
-  $("#p-photo").textContent = p.emoji;
+  $("#p-photo").innerHTML = p.art;
   $("#p-name").textContent = p.nome;
   $("#p-unit").textContent = p.unidade;
   const full = Math.round(p.rating);
@@ -339,7 +385,7 @@ function renderCart() {
     const unit = unitPrice(p, qty);
     return `
       <div class="cart-item">
-        <div class="ph">${p.emoji}</div>
+        <div class="ph">${p.art}</div>
         <div class="info">
           <strong>${p.nome}</strong>
           <small>${qty} ${qty > 1 ? "unidades" : "unidade"} · ${money(unit)} cada</small>
@@ -367,7 +413,7 @@ function renderCart() {
     const msg = $("#ship-msg");
     const fill = $("#ship-fill");
     msg.textContent = gratis
-      ? "🎉 Você ganhou frete grátis!"
+      ? "Você ganhou frete grátis!"
       : `Faltam ${money(falta)} para o frete grátis`;
     msg.classList.toggle("done", gratis);
     fill.classList.toggle("done", gratis);
@@ -403,7 +449,7 @@ function renderOrders(filtro = "todos") {
 
   $("#orders").innerHTML = list.map((o) => `
     <div class="order">
-      <span class="o-ico">📦</span>
+      <span class="o-ico">${ICON_BOX}</span>
       <div class="o-main">
         <strong>Pedido #${o.numero}</strong>
         <small>${o.data}</small>
@@ -435,7 +481,7 @@ function doLogin(e) {
   e.preventDefault();
   logged = true;
   localStorage.setItem("paulex_logged", "1");
-  toast("Bem-vindo à Paulex! 💙");
+  toast("Bem-vindo à Paulex!");
   show("conta");
 }
 
