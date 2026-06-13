@@ -71,7 +71,7 @@ input { font: inherit; }
 .logo-img { display: block; height: auto; }
 .logo-img-xl { width: min(220px, 56vw); margin: 0 auto; }
 .logo-img-top { height: 28px; width: auto; }
-.logo-img-desk { height: 30px; width: auto; }
+.logo-img-desk { height: 38px; width: auto; }
 .home-logo { display: flex; align-items: center; }
 .desde {
   font-size: 10px; letter-spacing: 4px; font-weight: 600;
@@ -1122,22 +1122,40 @@ input { font: inherit; }
   }
   .desk-wrap {
     display: flex; align-items: center; justify-content: space-between;
-    height: 52px;
+    height: 64px; gap: 18px;
   }
-  .desk-logo { display: flex; align-items: center; }
-  .desk-nav { display: flex; align-items: center; gap: 4px; }
+  .desk-logo { display: flex; align-items: center; flex: none; }
+  .desk-nav {
+    display: flex; align-items: center; justify-content: center;
+    gap: 2px; flex: 1 1 auto; flex-wrap: nowrap;
+  }
   .desk-nav button {
-    padding: 8px 16px;
-    border-radius: 999px;
-    font-size: 13.5px; font-weight: 500;
-    color: var(--muted);
-    transition: all .2s var(--ease);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px; font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+    transition: color .2s var(--ease), background .2s var(--ease);
   }
-  .desk-nav button:hover { color: var(--ink); background: var(--tile); }
+  .desk-nav button:hover { color: var(--blue); }
   .desk-nav button.active { color: var(--blue); font-weight: 600; }
+  .desk-actions { display: flex; align-items: center; gap: 6px; flex: none; }
+  .desk-search-btn, .desk-cart {
+    display: flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 10px;
+    color: var(--ink); transition: background .2s var(--ease);
+  }
+  .desk-search-btn:hover, .desk-cart:hover { background: var(--tile); }
+  .desk-search-btn svg { width: 21px; height: 21px; }
   .desk-cart { position: relative; }
-  .desk-cart svg { width: 19px; height: 19px; }
-  .desk-cart .badge { top: -2px; right: 2px; }
+  .desk-cart svg { width: 21px; height: 21px; }
+  .desk-cart .badge { top: 4px; right: 4px; }
+
+  /* Telas largas: logo maior, mais respiro */
+  @media (min-width: 1024px) {
+    .desk-nav button { padding: 8px 15px; }
+    .logo-img-desk { height: 44px; }
+  }
 
   /* Topbar mobile some na home (o cabeçalho assume) */
   .home-topbar { display: none; }

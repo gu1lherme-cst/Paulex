@@ -131,6 +131,18 @@ function go(id) { setRoute("/" + id); }
 function openList(kind) { setRoute("/lista/" + encodeURIComponent(kind)); }
 function openProduct(id) { setRoute("/produto/" + id); }
 
+// Lupa do cabeçalho: vai para a home e foca o campo de busca
+function focusSearch() {
+  go("home");
+  setTimeout(() => {
+    const inp = document.getElementById("search-input");
+    if (inp) {
+      inp.scrollIntoView({ behavior: "smooth", block: "center" });
+      inp.focus();
+    }
+  }, 60);
+}
+
 function back() {
   if (history.length > 1 && location.hash) history.back();
   else go("home");

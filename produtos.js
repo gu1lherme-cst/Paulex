@@ -94,7 +94,7 @@ const CATEGORIES = [
     icon: icon('<rect x="4" y="12.5" width="7" height="7" rx="1"/><rect x="13" y="12.5" width="7" height="7" rx="1"/><rect x="8.5" y="4" width="7" height="7" rx="1"/>'),
   },
   {
-    id: "informatica", nome: "Informática",
+    id: "informatica", nome: "TV e Acessórios",
     desc: "Acessórios, periféricos e muito mais",
     icon: icon('<rect x="5" y="5" width="14" height="9" rx="1.5"/><path d="M3 18h18l-2-4H5l-2 4z"/>'),
   },
