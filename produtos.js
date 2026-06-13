@@ -33,6 +33,16 @@
 const WHATSAPP_NUMBER = "5521987578187"; // WhatsApp da loja (55 + DDD + número)
 const FRETE_GRATIS_MIN = 99; // valor mínimo para frete grátis
 
+/* ATACADO PARA EMPRESAS
+   A partir de ATACADO_MIN peças do MESMO produto, o cliente paga o
+   preço de atacado automaticamente. Por padrão, o atacado é
+   ATACADO_DESCONTO_PADRAO % abaixo do preço normal.
+   Para definir um preço de atacado exato em um produto, adicione o
+   campo  precoAtacado: 0.89  no bloco dele (vale mais que o padrão).
+   Produtos com a tabela "tiers" usam as faixas próprias. */
+const ATACADO_MIN = 12;            // peças a partir das quais vale o atacado
+const ATACADO_DESCONTO_PADRAO = 15; // % de desconto padrão no atacado
+
 /* LOGIN COM GOOGLE (opcional)
    O botão "Entrar com Google" só aparece depois que você criar uma
    credencial gratuita e colar o ID abaixo. Passo a passo:
@@ -106,8 +116,8 @@ const PRODUCTS = [
     rating: 4.5, avaliacoes: 1256, estoque: 350,
     maisVendido: true,
     tiers: [
-      { de: 1,   ate: 9,        preco: 1.20, off: null },
-      { de: 10,  ate: 49,       preco: 1.05, off: "-12%" },
+      { de: 1,   ate: 11,       preco: 1.20, off: null },
+      { de: 12,  ate: 49,       preco: 1.05, off: "-12%" },
       { de: 50,  ate: 99,       preco: 0.99, off: "-18%" },
       { de: 100, ate: Infinity, preco: 0.89, off: "-25%" },
     ],
