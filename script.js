@@ -3,12 +3,19 @@
    Os produtos e categorias ficam em produtos.js
    ============================================================ */
 
-const ORDERS = [
-  { numero: "12548", data: "02/05/2024", status: "entregue",   rotulo: "Entregue",      total: 149.60 },
-  { numero: "12387", data: "18/04/2024", status: "transporte", rotulo: "Em transporte", total: 89.90 },
-  { numero: "12045", data: "05/04/2024", status: "entregue",   rotulo: "Entregue",      total: 62.30 },
-  { numero: "11899", data: "21/03/2024", status: "cancelado",  rotulo: "Cancelado",     total: 35.40 },
-];
+/* Pedidos reais do cliente, salvos no navegador */
+let myOrders = JSON.parse(localStorage.getItem("paulex_orders") || "[]");
+const saveOrders = () => localStorage.setItem("paulex_orders", JSON.stringify(myOrders));
+
+/* Endereços do cliente, salvos no navegador */
+let addrs = JSON.parse(localStorage.getItem("paulex_addrs") || "[]");
+const saveAddrsLS = () => localStorage.setItem("paulex_addrs", JSON.stringify(addrs));
+
+const STATUS_INFO = {
+  aguardando: { rotulo: "Aguardando confirmação", classe: "transporte" },
+  entregue:   { rotulo: "Recebido",               classe: "entregue" },
+  cancelado:  { rotulo: "Cancelado",              classe: "cancelado" },
+};
 
 const ICON_BOX = icon('<path d="M4 8l8-4 8 4v9l-8 4-8-4V8z"/><path d="M4 8l8 4 8-4M12 12v9"/>');
 const ICON_CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>';
@@ -47,9 +54,13 @@ function showScreen(id) {
   if (id === "club") {
     $("#club-points").hidden = !logged;
     $("#club-login-cta").hidden = logged;
+    $("#club-detail").hidden = true;
+    renderClub();
   }
   if (id === "home") renderRecent();
   if (id === "carrinho") renderCart();
+  if (id === "pedidos") renderOrders(currentOrderTab);
+  if (id === "enderecos") { renderAddrs(); hideAddrForm(); }
 
   const nav = el.dataset.nav;
   document.querySelectorAll("[data-go]").forEach((b) =>
@@ -81,10 +92,12 @@ function route() {
 
   const telas = ["home", "categorias", "carrinho", "club", "login", "conta", "pedidos", "enderecos", "privacidade", "termos"];
   if (telas.includes(base)) {
-    let id = base;
-    // Áreas pessoais exigem login (evita exibir dados de demonstração)
-    if (["conta", "pedidos", "enderecos"].includes(id) && !logged) id = "login";
-    return showScreen(id);
+    // Áreas pessoais exigem login (a URL passa a refletir a tela exibida)
+    if (["conta", "pedidos", "enderecos"].includes(base) && !logged) {
+      location.replace("#/login");
+      return;
+    }
+    return showScreen(base);
   }
   showScreen("home");
 }
@@ -530,36 +543,256 @@ function cartMessage() {
 
 function checkoutWhatsApp() {
   if (!Object.keys(cart).length) return toast("Seu carrinho está vazio");
-  openWhatsApp(cartMessage());
+  const msg = cartMessage();
+  const t = cartTotals();
+  const numero = String(1001 + myOrders.length);
+  myOrders.unshift({
+    numero,
+    data: new Date().toLocaleDateString("pt-BR"),
+    status: "aguardando",
+    total: t.total,
+    itens: Object.entries(cart).map(([id, qty]) => {
+      const p = PRODUCTS.find((x) => x.id === id);
+      return { id, nome: p.nome, qty, valor: unitPrice(p, qty) * qty };
+    }),
+  });
+  saveOrders();
+  openWhatsApp(`${msg}\n\nPedido nº ${numero}`);
+  cart = {};
+  removeCupom();
+  saveCart();
+  renderCart();
+  toast(`Pedido #${numero} registrado!`);
 }
 
-/* ---------- Pedidos ---------- */
-function renderOrders(filtro = "todos") {
-  const map = { andamento: ["transporte"], entregues: ["entregue"], cancelados: ["cancelado"] };
-  const list = filtro === "todos"
-    ? ORDERS
-    : ORDERS.filter((o) => map[filtro].includes(o.status));
+/* ---------- Pedidos (reais, salvos no aparelho) ---------- */
+let currentOrderTab = "todos";
+const openOrders = new Set();
 
-  $("#orders").innerHTML = list.map((o) => `
-    <div class="order">
-      <span class="o-ico">${ICON_BOX}</span>
-      <div class="o-main">
-        <strong>Pedido #${o.numero}</strong>
-        <small>${o.data}</small>
-      </div>
-      <div class="o-side">
-        <span class="status ${o.status}">${o.rotulo}</span>
-        <strong>${money(o.total)}</strong>
-        <button class="link">Ver detalhes ›</button>
-      </div>
-    </div>`).join("");
+function renderOrders(filtro = currentOrderTab) {
+  currentOrderTab = filtro;
+  const map = { andamento: ["aguardando"], entregues: ["entregue"], cancelados: ["cancelado"] };
+  const list = filtro === "todos"
+    ? myOrders
+    : myOrders.filter((o) => map[filtro].includes(o.status));
+
+  $("#orders").innerHTML = list.map((o) => {
+    const st = STATUS_INFO[o.status];
+    const aberto = openOrders.has(o.numero);
+    const itens = (o.itens || []).map((i) =>
+      `<div class="o-item"><span>${i.qty}x ${i.nome}</span><span>${money(i.valor)}</span></div>`
+    ).join("");
+    const acoes = `
+      <div class="o-actions">
+        <button class="pill pill-outline" onclick="orderRepeat('${o.numero}')">Repetir pedido</button>
+        ${o.status === "aguardando" ? `
+          <button class="pill pill-blue" onclick="orderStatus('${o.numero}','entregue')">Marcar como recebido</button>
+          <button class="link" onclick="orderStatus('${o.numero}','cancelado')">Cancelar pedido</button>` : ""}
+      </div>`;
+    return `
+    <div class="order-wrap">
+      <button class="order" onclick="toggleOrder('${o.numero}')" aria-expanded="${aberto}">
+        <span class="o-ico">${ICON_BOX}</span>
+        <div class="o-main">
+          <strong>Pedido #${o.numero}</strong>
+          <small>${o.data} · ${(o.itens || []).length} ${(o.itens || []).length === 1 ? "item" : "itens"}</small>
+        </div>
+        <div class="o-side">
+          <span class="status ${st.classe}">${st.rotulo}</span>
+          <strong>${money(o.total)}</strong>
+          <span class="link">${aberto ? "Fechar ‹" : "Ver detalhes ›"}</span>
+        </div>
+      </button>
+      <div class="o-det" ${aberto ? "" : "hidden"}>${itens}${acoes}</div>
+    </div>`;
+  }).join("");
   $("#orders-empty").hidden = list.length > 0;
+}
+
+function toggleOrder(n) {
+  openOrders.has(n) ? openOrders.delete(n) : openOrders.add(n);
+  renderOrders();
+}
+
+function orderStatus(n, status) {
+  const o = myOrders.find((x) => x.numero === n);
+  if (!o) return;
+  if (status === "cancelado" && !confirm(`Cancelar o pedido #${n}?`)) return;
+  o.status = status;
+  saveOrders();
+  renderOrders();
+  toast(status === "entregue" ? "Que bom que chegou! 📦" : "Pedido cancelado");
+}
+
+function orderRepeat(n) {
+  const o = myOrders.find((x) => x.numero === n);
+  if (!o) return;
+  (o.itens || []).forEach((i) => {
+    if (PRODUCTS.some((p) => p.id === i.id)) cart[i.id] = (cart[i.id] || 0) + i.qty;
+  });
+  saveCart();
+  go("carrinho");
+  toast("Itens adicionados ao carrinho");
 }
 
 function orderTab(btn, filtro) {
   $("#order-tabs").querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
   btn.classList.add("active");
   renderOrders(filtro);
+}
+
+/* ---------- Paulex Club (pontos calculados dos pedidos) ---------- */
+function clubPoints() {
+  return Math.floor(
+    myOrders.filter((o) => o.status !== "cancelado").reduce((a, o) => a + o.total, 0)
+  );
+}
+
+function clubLevel(p) {
+  if (p >= 5000) return { nome: "Ouro", cashback: 3, base: 5000, prox: null };
+  if (p >= 1000) return { nome: "Prata", cashback: 2, base: 1000, prox: { nome: "Ouro", pts: 5000 } };
+  return { nome: "Bronze", cashback: 1, base: 0, prox: { nome: "Prata", pts: 1000 } };
+}
+
+function renderClub() {
+  const pts = clubPoints();
+  const lv = clubLevel(pts);
+
+  $("#club-pts").innerHTML = `${pts.toLocaleString("pt-BR")} <span>pts</span>`;
+  if (lv.prox) {
+    $("#club-next-msg").textContent =
+      pts === 0
+        ? "Faça seu primeiro pedido para começar a pontuar"
+        : `Faltam ${(lv.prox.pts - pts).toLocaleString("pt-BR")} pts para o nível ${lv.prox.nome}`;
+    $("#club-fill").style.width =
+      Math.min(100, ((pts - lv.base) / (lv.prox.pts - lv.base)) * 100) + "%";
+    $("#club-lv-a").textContent = lv.nome;
+    $("#club-lv-b").textContent = lv.prox.nome;
+  } else {
+    $("#club-next-msg").textContent = "Você está no nível máximo. Obrigado pela parceria!";
+    $("#club-fill").style.width = "100%";
+    $("#club-lv-a").textContent = "Ouro";
+    $("#club-lv-b").textContent = "★";
+  }
+
+  document.querySelectorAll(".level").forEach((el) =>
+    el.classList.toggle("featured", el.dataset.level === lv.nome)
+  );
+}
+
+function clubDetail(tipo) {
+  const det = $("#club-detail");
+  const pts = clubPoints();
+  const lv = clubLevel(pts);
+
+  if (tipo === "beneficios") {
+    det.hidden = true;
+    $("#levels-title").scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+
+  let html = "";
+  if (tipo === "cupons") {
+    html = `<h3>Cupons disponíveis</h3>` + Object.entries(CUPONS).map(([cod, c]) => `
+      <div class="cupom-row">
+        <div><strong>${cod}</strong><small>${c.descricao}</small></div>
+        <button class="pill pill-blue" onclick="cupom='${cod}';localStorage.setItem('paulex_cupom','${cod}');go('carrinho');toast('Cupom ${cod} aplicado!')">Usar</button>
+      </div>`).join("");
+  } else if (tipo === "cashback") {
+    html = `<h3>Cashback</h3>
+      <p class="club-text">Seu nível <strong>${lv.nome}</strong> dá <strong>${lv.cashback}% de cashback</strong> em pontos a cada compra confirmada. Subindo de nível, o percentual aumenta — veja a tabela de níveis abaixo.</p>`;
+  } else if (tipo === "pontos") {
+    const linhas = myOrders.filter((o) => o.status !== "cancelado").map((o) =>
+      `<div class="cupom-row"><div><strong>+${Math.floor(o.total)} pts</strong><small>Pedido #${o.numero} · ${o.data}</small></div></div>`
+    ).join("");
+    html = `<h3>Histórico de pontos</h3>` +
+      (linhas || `<p class="club-text">Você ainda não tem movimentações. A cada R$ 1 em pedidos, você ganha 1 ponto.</p>`);
+  }
+  det.innerHTML = html;
+  det.hidden = false;
+}
+
+/* ---------- Endereços (reais, salvos no aparelho) ---------- */
+let editAddr = -1;
+
+function renderAddrs() {
+  $("#addr-empty").hidden = addrs.length > 0;
+  $("#addr-list").innerHTML = addrs.map((a, i) => `
+    <div class="address">
+      <div>
+        <strong>${a.nome} ${i === 0 ? '<span class="chip">Principal</span>' : ""}</strong>
+        <small>${a.rua}<br>${a.bairro}<br>CEP ${a.cep || "—"}</small>
+        ${i > 0 ? `<button class="link addr-main" onclick="mainAddr(${i})">Tornar principal</button>` : ""}
+      </div>
+      <div class="address-actions">
+        <button class="icon-btn" aria-label="Editar" onclick="showAddrForm(${i})">
+          <svg viewBox="0 0 24 24"><path d="M5 19l1-4L16 5l3 3L9 18l-4 1z"/></svg>
+        </button>
+        <button class="icon-btn" aria-label="Excluir" onclick="delAddr(${i})">
+          <svg viewBox="0 0 24 24"><path d="M5 7h14M10 7V5h4v2M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>
+        </button>
+      </div>
+    </div>`).join("");
+}
+
+function showAddrForm(i = -1) {
+  editAddr = i;
+  const a = addrs[i] || { nome: "", cep: "", rua: "", bairro: "" };
+  $("#addr-nome").value = a.nome;
+  $("#addr-cep").value = a.cep;
+  $("#addr-rua").value = a.rua;
+  $("#addr-bairro").value = a.bairro;
+  $("#addr-form").hidden = false;
+  $("#addr-nome").focus();
+}
+
+function hideAddrForm() {
+  $("#addr-form").hidden = true;
+  editAddr = -1;
+}
+
+function saveAddr(e) {
+  e.preventDefault();
+  const a = {
+    nome: $("#addr-nome").value.trim(),
+    cep: $("#addr-cep").value.trim(),
+    rua: $("#addr-rua").value.trim(),
+    bairro: $("#addr-bairro").value.trim(),
+  };
+  if (editAddr >= 0) addrs[editAddr] = a;
+  else addrs.push(a);
+  saveAddrsLS();
+  hideAddrForm();
+  renderAddrs();
+  toast("Endereço salvo!");
+}
+
+function delAddr(i) {
+  if (!confirm(`Excluir o endereço "${addrs[i].nome}"?`)) return;
+  addrs.splice(i, 1);
+  saveAddrsLS();
+  renderAddrs();
+}
+
+function mainAddr(i) {
+  addrs.unshift(addrs.splice(i, 1)[0]);
+  saveAddrsLS();
+  renderAddrs();
+  toast("Endereço principal atualizado");
+}
+
+/* Busca automática de endereço pelo CEP (ViaCEP) */
+function cepLookup() {
+  const cep = $("#addr-cep").value.replace(/\D/g, "");
+  if (cep.length !== 8) return;
+  fetch(`https://viacep.com.br/ws/${cep}/json/`)
+    .then((r) => r.json())
+    .then((d) => {
+      if (d.erro) return;
+      if (!$("#addr-rua").value) $("#addr-rua").value = d.logradouro || "";
+      $("#addr-bairro").value = `${d.bairro ? d.bairro + " · " : ""}${d.localidade}, ${d.uf}`;
+    })
+    .catch(() => {});
 }
 
 /* ---------- Login ---------- */
@@ -572,10 +805,22 @@ function loginTab(btn, qual) {
 
 function doLogin(e) {
   e.preventDefault();
+  let nome = "", email = "";
+  if (!$("#form-cadastrar").hidden) {
+    nome = $("#cad-nome").value.trim();
+    email = $("#cad-email").value.trim();
+  } else {
+    const u = $("#login-user").value.trim();
+    if (u.includes("@")) { email = u; nome = u.split("@")[0]; }
+    else nome = u;
+  }
+  if (nome || email) {
+    localStorage.setItem("paulex_user", JSON.stringify({ nome: nome || email, email }));
+  }
   logged = true;
   localStorage.setItem("paulex_logged", "1");
-  toast("Bem-vindo à Paulex!");
   renderUser();
+  toast(nome ? `Bem-vindo, ${nome.split(" ")[0]}!` : "Bem-vindo à Paulex!");
   setRoute("/conta");
 }
 
@@ -638,8 +883,10 @@ function onGoogleCredential(resp) {
 
 function renderUser() {
   const u = JSON.parse(localStorage.getItem("paulex_user") || "null");
+  const lv = clubLevel(clubPoints());
   $("#account-name").textContent = u ? `Olá, ${u.nome.split(" ")[0]}!` : "Olá, cliente Paulex!";
-  $("#account-sub").textContent = u ? u.email : "Cliente Paulex Club · Prata";
+  $("#account-sub").textContent =
+    (u && u.email ? u.email + " · " : "") + `Paulex Club ${lv.nome}`;
 }
 
 /* ---------- Toast ---------- */

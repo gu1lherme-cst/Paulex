@@ -47,7 +47,7 @@
   <link rel="apple-touch-icon" href="img/icon-180.png">
   <link rel="manifest" href="manifest.json">
   <link rel="preload" as="image" href="img/logo.png">
-  <link rel="stylesheet" href="style.css?v=12">
+  <link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
 
@@ -457,10 +457,10 @@
           <svg viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1 11H5L4 8z"/></svg>
         </div>
         <small>Seus pontos</small>
-        <strong>2.450 <span>pts</span></strong>
-        <small class="club-next">Faltam 2.550 pts para o nível Ouro</small>
-        <div class="club-progress"><span style="width:49%"></span></div>
-        <div class="club-levels"><span>Prata</span><span>Ouro</span></div>
+        <strong id="club-pts">0 <span>pts</span></strong>
+        <small class="club-next" id="club-next-msg"></small>
+        <div class="club-progress"><span id="club-fill" style="width:0%"></span></div>
+        <div class="club-levels"><span id="club-lv-a">Bronze</span><span id="club-lv-b">Prata</span></div>
       </div>
 
       <div class="club-login-cta" id="club-login-cta" hidden>
@@ -469,27 +469,29 @@
       </div>
 
       <div class="club-grid">
-        <button class="club-item">
+        <button class="club-item" onclick="clubDetail('cupons')">
           <span class="ci red"><svg viewBox="0 0 24 24"><path d="M4 9a2 2 0 0 0 0 6v3h16v-3a2 2 0 0 1 0-6V6H4v3z"/><path d="M13 7v10" stroke-dasharray="2 3"/></svg></span>
-          <strong>Cupons</strong><small>Descontos mensais</small>
+          <strong>Cupons</strong><small>Toque para ver</small>
         </button>
-        <button class="club-item">
+        <button class="club-item" onclick="clubDetail('cashback')">
           <span class="ci green"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v11M14.8 9c-.4-1-1.5-1.6-2.8-1.6-1.7 0-3 .9-3 2.1 0 3 6 1.4 6 4.4 0 1.2-1.3 2.1-3 2.1-1.3 0-2.4-.6-2.8-1.6"/></svg></span>
-          <strong>Cashback</strong><small>Em todas as compras</small>
+          <strong>Cashback</strong><small>Por nível</small>
         </button>
-        <button class="club-item">
+        <button class="club-item" onclick="clubDetail('pontos')">
           <span class="ci gold"><svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.3.9-4.5 4.4 1 6.1-5.5-2.9L6.5 20l1-6.1L3 9.5l6.3-.9L12 3z"/></svg></span>
-          <strong>Ofertas exclusivas</strong><small>Só para membros</small>
+          <strong>Meus pontos</strong><small>Histórico</small>
         </button>
-        <button class="club-item">
+        <button class="club-item" onclick="clubDetail('beneficios')">
           <span class="ci blue"><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg></span>
-          <strong>Frete especial</strong><small>Condições únicas</small>
+          <strong>Benefícios</strong><small>Por nível</small>
         </button>
       </div>
 
-      <h3 class="levels-title">Níveis do Club</h3>
+      <div class="club-panel" id="club-detail" hidden></div>
+
+      <h3 class="levels-title" id="levels-title">Níveis do Club</h3>
       <div class="levels">
-        <div class="level">
+        <div class="level" data-level="Bronze">
           <span class="level-medal bronze"><svg viewBox="0 0 24 24"><circle cx="12" cy="15" r="5"/><path d="M9 10.5 6 3h4l2 5 2-5h4l-3 7.5"/></svg></span>
           <strong>Bronze</strong>
           <small>0 – 999 pts</small>
@@ -498,7 +500,7 @@
             <li>Cashback de 1%</li>
           </ul>
         </div>
-        <div class="level featured">
+        <div class="level" data-level="Prata">
           <span class="level-medal prata"><svg viewBox="0 0 24 24"><circle cx="12" cy="15" r="5"/><path d="M9 10.5 6 3h4l2 5 2-5h4l-3 7.5"/></svg></span>
           <strong>Prata</strong>
           <small>1.000 – 4.999 pts</small>
@@ -508,7 +510,7 @@
             <li>Ofertas antecipadas</li>
           </ul>
         </div>
-        <div class="level">
+        <div class="level" data-level="Ouro">
           <span class="level-medal ouro"><svg viewBox="0 0 24 24"><circle cx="12" cy="15" r="5"/><path d="M9 10.5 6 3h4l2 5 2-5h4l-3 7.5"/></svg></span>
           <strong>Ouro</strong>
           <small>5.000+ pts</small>
@@ -552,21 +554,21 @@
       <form class="form" id="form-entrar" onsubmit="doLogin(event)">
         <label class="field">
           <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-          <input type="text" placeholder="E-mail, CPF ou telefone" required>
+          <input type="text" id="login-user" placeholder="E-mail ou nome" required>
         </label>
         <label class="field">
           <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
           <input type="password" placeholder="Senha" required>
         </label>
-        <button type="button" class="link right">Esqueceu sua senha?</button>
+        <button type="button" class="link right" onclick="openWhatsApp('Olá, Paulex! Esqueci minha senha do site e preciso de ajuda.')">Esqueceu sua senha?</button>
         <button class="pill pill-blue pill-lg" type="submit">Entrar</button>
         <div class="or" id="or-row" hidden><span>ou</span></div>
         <div class="google-slot" id="google-btn-slot" hidden></div>
       </form>
 
       <form class="form" id="form-cadastrar" hidden onsubmit="doLogin(event)">
-        <label class="field"><input type="text" placeholder="Nome completo" required></label>
-        <label class="field"><input type="email" placeholder="E-mail" required></label>
+        <label class="field"><input type="text" id="cad-nome" placeholder="Nome completo" required></label>
+        <label class="field"><input type="email" id="cad-email" placeholder="E-mail" required></label>
         <label class="field"><input type="password" placeholder="Crie uma senha" required></label>
         <button class="pill pill-blue pill-lg" type="submit">Criar conta</button>
       </form>
@@ -639,7 +641,11 @@
         <button class="tab" onclick="orderTab(this,'cancelados')">Cancelados</button>
       </div>
       <div class="orders" id="orders"></div>
-      <p class="empty" id="orders-empty" hidden>Nenhum pedido aqui.</p>
+      <div class="empty orders-zero" id="orders-empty" hidden>
+        <p>Nenhum pedido aqui ainda.</p>
+        <button class="pill pill-blue" onclick="go('home')">Ver produtos</button>
+      </div>
+      <p class="store-note">Os pedidos feitos pelo site ficam salvos neste aparelho e são confirmados pelo WhatsApp.</p>
     </div>
   </section>
 
@@ -650,41 +656,26 @@
         <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
       </button>
       <h2>Meus Endereços</h2>
-      <button class="icon-btn" aria-label="Adicionar endereço" onclick="toast('Em breve: novo endereço!')">
+      <button class="icon-btn" aria-label="Adicionar endereço" onclick="showAddrForm()">
         <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
       </button>
     </header>
 
     <div class="wrap narrow">
-      <div class="addresses">
-        <div class="address">
-          <div>
-            <strong>Casa <span class="chip">Principal</span></strong>
-            <small>Rua das Flores, 123<br>Centro · São Paulo, SP<br>CEP 01000-000</small>
-          </div>
-          <div class="address-actions">
-            <button class="icon-btn" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M5 19l1-4L16 5l3 3L9 18l-4 1z"/></svg></button>
-          </div>
-        </div>
-        <div class="address">
-          <div>
-            <strong>Trabalho</strong>
-            <small>Av. Paulista, 1000<br>Bela Vista · São Paulo, SP<br>CEP 01310-100</small>
-          </div>
-          <div class="address-actions">
-            <button class="icon-btn" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M5 19l1-4L16 5l3 3L9 18l-4 1z"/></svg></button>
-          </div>
-        </div>
-        <div class="address">
-          <div>
-            <strong>Casa da Mãe</strong>
-            <small>Rua das Palmeiras, 45<br>Vila Mariana · São Paulo, SP<br>CEP 04000-020</small>
-          </div>
-          <div class="address-actions">
-            <button class="icon-btn" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M5 19l1-4L16 5l3 3L9 18l-4 1z"/></svg></button>
-          </div>
-        </div>
+      <div class="addresses" id="addr-list"></div>
+      <div class="empty orders-zero" id="addr-empty" hidden>
+        <p>Nenhum endereço salvo ainda.</p>
+        <button class="pill pill-blue" onclick="showAddrForm()">Adicionar endereço</button>
       </div>
+
+      <form class="form addr-form" id="addr-form" hidden onsubmit="saveAddr(event)">
+        <label class="field"><input id="addr-nome" placeholder="Nome do endereço (ex.: Casa)" required></label>
+        <label class="field"><input id="addr-cep" placeholder="CEP" inputmode="numeric" maxlength="9" onblur="cepLookup()"></label>
+        <label class="field"><input id="addr-rua" placeholder="Rua e número" required></label>
+        <label class="field"><input id="addr-bairro" placeholder="Bairro e cidade" required></label>
+        <button class="pill pill-blue pill-lg" type="submit">Salvar endereço</button>
+        <button class="pill pill-outline pill-lg" type="button" onclick="hideAddrForm()">Cancelar</button>
+      </form>
     </div>
   </section>
 
@@ -767,7 +758,7 @@
   <div class="toast" id="toast" role="status"></div>
 </div>
 
-<script src="produtos.js?v=12"></script>
-<script src="script.js?v=12"></script>
+<script src="produtos.js?v=13"></script>
+<script src="script.js?v=13"></script>
 </body>
 </html>
