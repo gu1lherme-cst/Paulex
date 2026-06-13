@@ -71,7 +71,7 @@ input { font: inherit; }
 .logo-img { display: block; height: auto; }
 .logo-img-xl { width: min(220px, 56vw); margin: 0 auto; }
 .logo-img-top { height: 28px; width: auto; }
-.logo-img-desk { height: 38px; width: auto; }
+.logo-img-desk { height: 36px; width: auto; }
 .home-logo { display: flex; align-items: center; }
 .desde {
   font-size: 10px; letter-spacing: 4px; font-weight: 600;
@@ -1139,6 +1139,22 @@ input { font: inherit; }
   }
   .desk-nav button:hover { color: var(--blue); }
   .desk-nav button.active { color: var(--blue); font-weight: 600; }
+
+  /* Selo colorido "Paulex Club" na navegação */
+  .desk-nav .club-link { padding: 4px 12px; }
+  .club-logo { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; }
+  .club-name { font-family: "Pacifico", cursive; font-size: 19px; }
+  .club-name i { font-style: normal; }
+  .club-name i:nth-child(1) { color: var(--blue); }
+  .club-name i:nth-child(2) { color: var(--red); }
+  .club-name i:nth-child(3) { color: var(--gold); }
+  .club-name i:nth-child(4) { color: var(--green); }
+  .club-name i:nth-child(5) { color: var(--red); }
+  .club-name i:nth-child(6) { color: var(--blue); }
+  .club-sub {
+    font-size: 8px; font-weight: 700; letter-spacing: 3px;
+    color: var(--blue); margin-top: 1px;
+  }
   .desk-actions { display: flex; align-items: center; gap: 6px; flex: none; }
   .desk-search-btn, .desk-cart {
     display: flex; align-items: center; justify-content: center;
@@ -1151,10 +1167,10 @@ input { font: inherit; }
   .desk-cart svg { width: 21px; height: 21px; }
   .desk-cart .badge { top: 4px; right: 4px; }
 
-  /* Telas largas: logo maior, mais respiro */
+  /* Telas largas: mais respiro */
   @media (min-width: 1024px) {
     .desk-nav button { padding: 8px 15px; }
-    .logo-img-desk { height: 44px; }
+    .logo-img-desk { height: 40px; }
   }
 
   /* Topbar mobile some na home (o cabeçalho assume) */

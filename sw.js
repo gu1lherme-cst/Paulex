@@ -1,13 +1,13 @@
 /* Service worker Paulex — permite instalar como aplicativo e
    navegar com internet instável (os arquivos ficam em cache). */
 
-const CACHE = "paulex-v17";
+const CACHE = "paulex-v18";
 const ASSETS = [
   "./",
   "index.html",
-  "style.css?v=17",
-  "script.js?v=17",
-  "produtos.js?v=17",
+  "style.css?v=18",
+  "script.js?v=18",
+  "produtos.js?v=18",
   "manifest.json",
   "img/logo.png",
   "img/icon-192.png",

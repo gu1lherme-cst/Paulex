@@ -42,12 +42,12 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="img/icon-192.png">
   <link rel="apple-touch-icon" href="img/icon-180.png">
   <link rel="manifest" href="manifest.json">
   <link rel="preload" as="image" href="img/logo.png">
-  <link rel="stylesheet" href="style.css?v=17">
+  <link rel="stylesheet" href="style.css?v=18">
 </head>
 <body>
 
@@ -66,7 +66,7 @@
   <header class="desk-header">
     <div class="wrap desk-wrap">
       <button class="desk-logo" onclick="go('home')" aria-label="Início">
-        <img src="img/logo.png" alt="Paulex" class="logo-img logo-img-desk" width="110" height="40">
+        <img src="img/icon-192.png" alt="Paulex" class="logo-img logo-img-desk" width="40" height="40">
       </button>
       <nav class="desk-nav">
         <button data-go="home" class="active">Início</button>
@@ -74,8 +74,13 @@
         <button onclick="openList('cat:utilidades')">Utilidades</button>
         <button onclick="openList('cat:descartaveis')">Descartáveis</button>
         <button onclick="openList('cat:brinquedos')">Brinquedos</button>
-        <button onclick="openList('cat:informatica')">TV e Acessórios</button>
-        <button data-go="club">Paulex Club</button>
+        <button onclick="openList('cat:informatica')">Informática</button>
+        <button data-go="club" class="club-link" aria-label="Paulex Club">
+          <span class="club-logo">
+            <span class="club-name"><i>P</i><i>a</i><i>u</i><i>l</i><i>e</i><i>x</i></span>
+            <span class="club-sub">CLUB</span>
+          </span>
+        </button>
         <button data-go="conta">Conta</button>
       </nav>
       <div class="desk-actions">
@@ -872,7 +877,7 @@
   <div class="toast" id="toast" role="status"></div>
 </div>
 
-<script src="produtos.js?v=17"></script>
-<script src="script.js?v=17"></script>
+<script src="produtos.js?v=18"></script>
+<script src="script.js?v=18"></script>
 </body>
 </html>
