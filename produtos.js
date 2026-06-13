@@ -11,6 +11,10 @@
    - estoque:      unidades disponíveis
    - desc:         descrição mostrada na página do produto
    - specs:        pares ["Nome", "Valor"] das especificações
+   - imagem:       (opcional) caminho da FOTO REAL do produto, ex.:
+                   imagem: "img/produtos/caneta-bic.jpg"
+                   Com foto definida, ela substitui a ilustração em todo
+                   o site automaticamente.
 
    DESTAQUES (opcionais)
    - maisVendido: true  -> aparece em "Mais vendidos"

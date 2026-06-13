@@ -335,6 +335,11 @@ input { font: inherit; }
 
 .empty { text-align: center; color: var(--muted); padding: 48px 16px; }
 
+/* ---------- Fotos reais de produto (quando definidas em produtos.js) ---------- */
+.card .ph img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; padding: 10px; }
+.p-photo img { width: 80%; height: 80%; object-fit: contain; mix-blend-mode: multiply; }
+.mini-art img, .sug-art img, .cart-item .ph img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+
 /* ---------- Produto ---------- */
 .p-wrap { padding-top: 6px; padding-bottom: 40px; }
 .p-photo {
@@ -616,13 +621,28 @@ input { font: inherit; }
 .menu-item .chev { color: var(--muted); width: 16px; height: 16px; }
 
 /* ---------- Pedidos ---------- */
-.orders { display: flex; flex-direction: column; gap: 10px; padding-bottom: 32px; }
+.orders { display: flex; flex-direction: column; gap: 10px; }
+.order-wrap { background: var(--tile); border-radius: var(--r); overflow: hidden; }
 .order {
-  background: var(--tile);
-  border-radius: var(--r);
+  width: 100%;
+  text-align: left;
   padding: 16px;
   display: flex; align-items: center; gap: 14px;
+  transition: background .2s;
 }
+.order:hover { background: #EDF1F7; }
+.o-det { padding: 0 16px 16px; }
+.o-item {
+  display: flex; justify-content: space-between;
+  font-size: 12.5px; color: #48484A;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.o-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; }
+.o-actions .pill { padding: 9px 16px; font-size: 12.5px; }
+.o-actions .link { font-size: 12px; color: var(--red-text); }
+.orders-zero { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.store-note { text-align: center; font-size: 11.5px; color: var(--muted); padding: 18px 0 32px; }
 .order .o-ico {
   width: 44px; height: 44px; border-radius: 50%;
   background: #fff; color: var(--blue-vivid);
@@ -646,7 +666,23 @@ input { font: inherit; }
 .status.transporte { background: #E3EAFB; color: var(--blue-vivid); }
 .status.cancelado { background: #FDE7E8; color: var(--red-text); }
 
+/* ---------- Detalhe do Club (cupons, cashback, pontos) ---------- */
+#club-detail h3 { font-size: 14px; margin-bottom: 12px; letter-spacing: -.01em; }
+.cupom-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+.cupom-row strong { display: block; font-size: 13.5px; letter-spacing: .02em; }
+.cupom-row small { color: var(--muted); font-size: 11.5px; }
+.cupom-row .pill { padding: 8px 16px; font-size: 12px; }
+.club-text { font-size: 13px; line-height: 1.6; color: #48484A; }
+
 /* ---------- Endereços ---------- */
+.addr-form { padding-top: 16px; }
+.addr-main { font-size: 11.5px; display: inline-block; margin-top: 8px; }
 .addresses { display: flex; flex-direction: column; gap: 10px; padding: 10px 0 32px; }
 .address {
   background: var(--tile);
