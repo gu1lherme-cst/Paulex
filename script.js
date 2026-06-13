@@ -61,11 +61,38 @@ const $ = (sel) => document.querySelector(sel);
 const money = (v) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-/* ---------- Preço com desconto por quantidade ---------- */
+/* ---------- Preço: varejo até 11 peças, atacado a partir de 12 ---------- */
+function atacadoUnit(p) {
+  if (p.precoAtacado) return p.precoAtacado;
+  return Math.round(p.preco * (1 - ATACADO_DESCONTO_PADRAO / 100) * 100) / 100;
+}
+
+function atacadoOff(p) {
+  return Math.round((1 - atacadoUnit(p) / p.preco) * 100);
+}
+
 function unitPrice(p, qty) {
-  if (!p.tiers) return p.preco;
-  const tier = p.tiers.find((t) => qty >= t.de && qty <= t.ate);
-  return tier ? tier.preco : p.preco;
+  if (p.tiers) {
+    const tier = p.tiers.find((t) => qty >= t.de && qty <= t.ate);
+    return tier ? tier.preco : p.preco;
+  }
+  if (qty >= ATACADO_MIN) return atacadoUnit(p);
+  return p.preco;
+}
+
+/* Tabela de preços de um produto (varejo x atacado), unificada */
+function priceTiers(p) {
+  if (p.tiers) {
+    return p.tiers.map((t) => ({
+      faixa: t.ate === Infinity ? `${t.de}+ unidades` : `${t.de} a ${t.ate} unidades`,
+      preco: t.preco,
+      off: t.off,
+    }));
+  }
+  return [
+    { faixa: `1 a ${ATACADO_MIN - 1} unidades`, preco: p.preco, off: null },
+    { faixa: `${ATACADO_MIN}+ unidades (atacado)`, preco: atacadoUnit(p), off: `-${atacadoOff(p)}%` },
+  ];
 }
 
 /* ============================================================
@@ -117,7 +144,7 @@ function route() {
   if (base === "produto" && PRODUCTS.some((p) => p.id === param)) return renderProduct(param);
   if (base === "lista") return renderList(decodeURIComponent(param || "maisvendidos"));
 
-  const telas = ["home", "categorias", "carrinho", "club", "login", "conta", "pedidos", "enderecos", "privacidade", "termos"];
+  const telas = ["home", "categorias", "carrinho", "club", "atacado", "login", "conta", "pedidos", "enderecos", "privacidade", "termos"];
   if (telas.includes(base)) {
     // Áreas pessoais exigem login (a URL passa a refletir a tela exibida)
     if (["conta", "pedidos", "enderecos"].includes(base) && !logged) {
@@ -139,6 +166,20 @@ function openWhatsApp(texto) {
   track("whatsapp_click");
   const win = window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
   if (win) win.opener = null;
+}
+
+/* Orçamento de atacado para empresas, escolas, lojas e escritórios */
+function orcamento(segmento) {
+  track("orcamento_atacado", { segmento: segmento || "empresa" });
+  const intro = segmento
+    ? `Olá, Paulex! Sou de ${segmento} e gostaria de um orçamento de atacado.`
+    : "Olá, Paulex! Gostaria de um orçamento de atacado para empresa.";
+  const itens = Object.entries(cart).map(([id, qty]) => {
+    const p = PRODUCTS.find((x) => x.id === id);
+    return p ? `• ${qty}x ${p.nome}` : "";
+  }).filter(Boolean);
+  const lista = itens.length ? `\n\nJá tenho no carrinho:\n${itens.join("\n")}` : "";
+  openWhatsApp(`${intro}${lista}\n\nProdutos de interesse e quantidades: `);
 }
 
 /* ---------- Render: categorias ---------- */
@@ -328,15 +369,10 @@ function renderProduct(id) {
     .map(([k, v]) => `<div class="spec"><dt>${k}</dt><dd>${v}</dd></div>`)
     .join("");
 
-  if (p.tiers) {
-    $("#p-tiers").hidden = false;
-    $("#p-tiers-body").innerHTML = p.tiers.map((t) => {
-      const faixa = t.ate === Infinity ? `${t.de}+ unidades` : `${t.de} a ${t.ate} unidades`;
-      return `<tr><td>${faixa}</td><td>${money(t.preco)}</td><td class="off">${t.off || ""}</td></tr>`;
-    }).join("");
-  } else {
-    $("#p-tiers").hidden = true;
-  }
+  // Tabela de preços varejo x atacado (todos os produtos têm atacado a partir de 12)
+  $("#p-tiers-body").innerHTML = priceTiers(p).map((t) =>
+    `<tr><td>${t.faixa}</td><td>${money(t.preco)}</td><td class="off">${t.off || ""}</td></tr>`
+  ).join("");
 
   // Produtos relacionados (mesma categoria)
   const rel = PRODUCTS.filter((x) => x.cat === p.cat && x.id !== p.id).slice(0, 4);
@@ -514,12 +550,13 @@ function renderCart() {
   wrap.innerHTML = entries.map(([id, qty]) => {
     const p = PRODUCTS.find((x) => x.id === id);
     const unit = unitPrice(p, qty);
+    const atacado = unit < p.preco - 0.005;
     return `
       <div class="cart-item">
         <div class="ph">${productMedia(p)}</div>
         <div class="info">
           <strong>${p.nome}</strong>
-          <small>${qty} ${qty > 1 ? "unidades" : "unidade"} · ${money(unit)} cada</small>
+          <small>${qty} ${qty > 1 ? "unidades" : "unidade"} · ${money(unit)} cada${atacado ? ' <span class="atacado-tag">atacado</span>' : ""}</small>
         </div>
         <div class="stepper">
           <button onclick="cartQty('${id}',-1)" aria-label="Diminuir">−</button>
@@ -959,7 +996,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObse
       if (e.isIntersecting) { e.target.classList.add("in"); obs.unobserve(e.target); }
     });
   }, { threshold: 0.12 });
-  document.querySelectorAll(".section, .trust, .footer").forEach((el) => {
+  document.querySelectorAll("#screen-home .section, #screen-home .trust, #screen-home .footer").forEach((el) => {
     el.classList.add("reveal");
     obs.observe(el);
   });

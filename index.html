@@ -47,7 +47,7 @@
   <link rel="apple-touch-icon" href="img/icon-180.png">
   <link rel="manifest" href="manifest.json">
   <link rel="preload" as="image" href="img/logo.png">
-  <link rel="stylesheet" href="style.css?v=14">
+  <link rel="stylesheet" href="style.css?v=16">
 </head>
 <body>
 
@@ -71,6 +71,7 @@
       <nav class="desk-nav">
         <button data-go="home" class="active">Início</button>
         <button data-go="categorias">Categorias</button>
+        <button data-go="atacado">Atacado</button>
         <button data-go="club">Paulex Club</button>
         <button data-go="conta">Conta</button>
         <button data-go="carrinho" class="desk-cart" aria-label="Carrinho">
@@ -184,6 +185,28 @@
       </div>
     </div>
 
+    <!-- Atacado para empresas -->
+    <div class="section alt biz-promo">
+      <div class="wrap">
+        <span class="biz-badge">Atacado</span>
+        <h3 class="sec-title">Para a sua empresa.</h3>
+        <p class="sec-sub">Acima de 12 peças, você paga preço de atacado. Atendimento dedicado para escolas, lojas e escritórios.</p>
+        <div class="biz-tags">
+          <span>🏫 Escolas</span>
+          <span>🏪 Lojas</span>
+          <span>🏢 Escritórios</span>
+          <span>📦 Revendedores</span>
+        </div>
+        <div class="cta-row">
+          <button class="pill pill-blue" onclick="go('atacado')">Ver vantagens do atacado</button>
+          <button class="pill pill-wa-ghost" onclick="orcamento()">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
+            Pedir orçamento
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Paulex Club -->
     <div class="section club-promo">
       <div class="wrap">
@@ -251,6 +274,7 @@
           <h4>Institucional</h4>
           <div class="f-links">
             <button onclick="window.scrollTo({top:0,behavior:'smooth'})">Sobre nós</button>
+            <button onclick="go('atacado')">Atacado para empresas</button>
             <button onclick="go('club')">Paulex Club</button>
             <button onclick="go('privacidade')">Política de Privacidade</button>
             <button onclick="go('termos')">Termos de Uso</button>
@@ -335,12 +359,13 @@
         <div class="stock" id="p-stock"></div>
         <p class="p-desc" id="p-desc"></p>
 
-        <div class="tiers" id="p-tiers" hidden>
-          <strong class="red">Compre mais e economize</strong>
+        <div class="tiers" id="p-tiers">
+          <strong class="red">Preço de atacado a partir de 12 peças</strong>
           <table>
             <thead><tr><th>Quantidade</th><th>Preço unitário</th><th></th></tr></thead>
             <tbody id="p-tiers-body"></tbody>
           </table>
+          <button class="link tiers-cta" onclick="orcamento()">Precisa de mais? Peça um orçamento ›</button>
         </div>
 
         <div class="qty-row">
@@ -679,6 +704,87 @@
     </div>
   </section>
 
+  <!-- ===== ATACADO / EMPRESAS ===== -->
+  <section class="screen" id="screen-atacado" data-nav="atacado">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Atacado</h2>
+      <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+        <span class="badge cart-badge">0</span>
+      </button>
+    </header>
+
+    <div class="biz-hero">
+      <span class="biz-badge light">Atacado e varejo desde 1984</span>
+      <h2>Compre em quantidade,<br>pague preço de atacado.</h2>
+      <p>Acima de <strong>12 peças</strong> do mesmo produto, o desconto de atacado é aplicado automaticamente — sem cadastro e sem pedido mínimo de valor.</p>
+      <div class="cta-row">
+        <button class="pill pill-white" onclick="orcamento()">
+          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
+          Pedir orçamento
+        </button>
+        <button class="pill pill-ghost" onclick="openList('maisvendidos')">Ver produtos</button>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="section">
+        <h3 class="sec-title">Feito para quem compra em volume.</h3>
+        <p class="sec-sub">Atendemos empresas de todos os tamanhos com preço, prazo e atenção que o varejo não dá.</p>
+        <div class="biz-grid">
+          <div class="biz-card">
+            <span class="biz-ico">🏫</span>
+            <strong>Escolas e creches</strong>
+            <small>Listas de material, papelaria e descartáveis para o ano todo.</small>
+          </div>
+          <div class="biz-card">
+            <span class="biz-ico">🏪</span>
+            <strong>Lojas e revendedores</strong>
+            <small>Reposição de estoque com margem para revender.</small>
+          </div>
+          <div class="biz-card">
+            <span class="biz-ico">🏢</span>
+            <strong>Escritórios e empresas</strong>
+            <small>Suprimentos, informática e utilidades para o dia a dia.</small>
+          </div>
+          <div class="biz-card">
+            <span class="biz-ico">🎉</span>
+            <strong>Eventos e festas</strong>
+            <small>Descartáveis e itens em grande quantidade.</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="section alt">
+        <h3 class="sec-title">Como funciona.</h3>
+        <div class="steps">
+          <div class="step"><span>1</span><div><strong>Monte seu pedido</strong><small>Adicione 12 ou mais peças do mesmo item e o preço de atacado aparece sozinho.</small></div></div>
+          <div class="step"><span>2</span><div><strong>Ou peça um orçamento</strong><small>Tem uma lista grande? Mande pelo WhatsApp que preparamos a melhor condição.</small></div></div>
+          <div class="step"><span>3</span><div><strong>Confirmação e entrega</strong><small>Combinamos pagamento, nota e prazo de entrega pelo WhatsApp.</small></div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="sec-title">Vantagens do atacado Paulex.</h3>
+        <div class="biz-benefits">
+          <div class="biz-benefit"><strong>Preço de atacado</strong><small>Automático a partir de 12 peças</small></div>
+          <div class="biz-benefit"><strong>Sem pedido mínimo</strong><small>de valor para começar</small></div>
+          <div class="biz-benefit"><strong>Atendimento dedicado</strong><small>direto pelo WhatsApp</small></div>
+          <div class="biz-benefit"><strong>Variedade real</strong><small>6 categorias num só lugar</small></div>
+          <div class="biz-benefit"><strong>Tradição desde 1984</strong><small>40 anos de mercado</small></div>
+          <div class="biz-benefit"><strong>Entrega para o Brasil</strong><small>combinada por pedido</small></div>
+        </div>
+        <button class="pill pill-wa sec-cta" onclick="orcamento()">
+          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
+          Falar com o atacado
+        </button>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== POLÍTICA DE PRIVACIDADE ===== -->
   <section class="screen" id="screen-privacidade">
     <header class="topbar topbar-title">
@@ -758,7 +864,7 @@
   <div class="toast" id="toast" role="status"></div>
 </div>
 
-<script src="produtos.js?v=14"></script>
-<script src="script.js?v=14"></script>
+<script src="produtos.js?v=16"></script>
+<script src="script.js?v=16"></script>
 </body>
 </html>
