@@ -58,6 +58,7 @@ let currentListKind = "";
 let currentSort = "relevancia";
 
 const $ = (sel) => document.querySelector(sel);
+const safe = (el) => el || { innerHTML: "", textContent: "", classList: { toggle: () => {}, add: () => {}, remove: () => {} }, hidden: false, querySelectorAll: () => [] };
 const money = (v) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
@@ -111,7 +112,10 @@ function showScreen(id) {
     $("#club-detail").hidden = true;
     renderClub();
   }
-  if (id === "home") renderRecent();
+  if (id === "home") {
+    renderRecent();
+    renderHome();
+  }
   if (id === "carrinho") renderCart();
   if (id === "pedidos") renderOrders(currentOrderTab);
   if (id === "enderecos") { renderAddrs(); hideAddrForm(); }
@@ -140,7 +144,7 @@ function focusSearch() {
       inp.scrollIntoView({ behavior: "smooth", block: "center" });
       inp.focus();
     }
-  }, 60);
+  }, 150);
 }
 
 function back() {
@@ -196,35 +200,45 @@ function orcamento(segmento) {
 
 /* ---------- Render: categorias ---------- */
 function renderCategories() {
-  $("#cat-row").innerHTML = CATEGORIES.map(
-    (c) => `
-    <button class="cat-card-home" onclick="openList('cat:${c.id}')">
-      <div class="cat-card-home-img">
-        <div class="cat-ico-wrap"><span>${c.icon}</span></div>
-      </div>
-      <div class="cat-card-home-body">
-        <strong>${c.nome}</strong>
-        <small>${c.desc}</small>
-        <span class="cat-card-home-link">
-          Ver produtos
-          <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </span>
-      </div>
-    </button>`
-  ).join("");
+  const catRow = $("#cat-row");
+  const catList = $("#cat-list");
+  const footCats = $("#foot-cats");
 
-  $("#cat-list").innerHTML = CATEGORIES.map(
-    (c) => `
-    <button class="cat-card" onclick="openList('cat:${c.id}')">
-      <span class="cat-ico">${c.icon}</span>
-      <div><strong>${c.nome}</strong><small>${c.desc}</small></div>
-      ${ICON_CHEV}
-    </button>`
-  ).join("");
+  if (catRow) {
+    catRow.innerHTML = CATEGORIES.map(
+      (c) => `
+      <button class="cat-card-home" onclick="openList('cat:${c.id}')">
+        <div class="cat-card-home-img">
+          <div class="cat-ico-wrap"><span>${c.icon}</span></div>
+        </div>
+        <div class="cat-card-home-body">
+          <strong>${c.nome}</strong>
+          <small>${c.desc}</small>
+          <span class="cat-card-home-link">
+            Ver produtos
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </button>`
+    ).join("");
+  }
 
-  $("#foot-cats").innerHTML = CATEGORIES.map(
-    (c) => `<button onclick="openList('cat:${c.id}')">${c.nome}</button>`
-  ).join("");
+  if (catList) {
+    catList.innerHTML = CATEGORIES.map(
+      (c) => `
+      <button class="cat-card" onclick="openList('cat:${c.id}')">
+        <span class="cat-ico">${c.icon}</span>
+        <div><strong>${c.nome}</strong><small>${c.desc}</small></div>
+        ${ICON_CHEV}
+      </button>`
+    ).join("");
+  }
+
+  if (footCats) {
+    footCats.innerHTML = CATEGORIES.map(
+      (c) => `<button onclick="openList('cat:${c.id}')">${c.nome}</button>`
+    ).join("");
+  }
 }
 
 /* ---------- Render: cards de produto ---------- */
@@ -249,9 +263,12 @@ function productCard(p) {
 }
 
 function renderHome() {
-  $("#home-grid").innerHTML =
+  const homeGrid = $("#home-grid");
+  const promoGrid = $("#promo-grid");
+  if (!homeGrid || !promoGrid) return;
+  homeGrid.innerHTML =
     PRODUCTS.filter((p) => p.maisVendido).map(productCard).join("");
-  $("#promo-grid").innerHTML =
+  promoGrid.innerHTML =
     PRODUCTS.filter((p) => p.promo).slice(0, 4).map(productCard).join("");
 }
 
@@ -284,26 +301,28 @@ function renderSuggest(term) {
 }
 
 function suggestGo(id) {
-  suggest.hidden = true;
-  searchInput.value = "";
+  if (suggest) suggest.hidden = true;
+  if (searchInput) searchInput.value = "";
   openProduct(id);
 }
 
-searchInput.addEventListener("input", (e) => renderSuggest(e.target.value));
-searchInput.addEventListener("focus", (e) => renderSuggest(e.target.value));
-searchInput.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") suggest.hidden = true;
-  if (e.key === "Enter") {
-    const q = e.target.value.trim();
-    if (q.length >= 2) {
-      suggest.hidden = true;
-      track("search", { search_term: q });
-      openList("busca:" + q);
+if (searchInput) {
+  searchInput.addEventListener("input", (e) => renderSuggest(e.target.value));
+  searchInput.addEventListener("focus", (e) => renderSuggest(e.target.value));
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") suggest.hidden = true;
+    if (e.key === "Enter") {
+      const q = e.target.value.trim();
+      if (q.length >= 2) {
+        suggest.hidden = true;
+        track("search", { search_term: q });
+        openList("busca:" + q);
+      }
     }
-  }
-});
+  });
+}
 document.addEventListener("click", (e) => {
-  if (!e.target.closest(".search-wrap")) suggest.hidden = true;
+  if (suggest && !e.target.closest(".search-wrap")) suggest.hidden = true;
 });
 
 /* ---------- Lista (categoria / ofertas / favoritos) ---------- */
@@ -339,13 +358,20 @@ function renderList(kind) {
   currentListKind = kind;
 
   const { title, list } = listFor(kind);
-  $("#list-title").textContent = title;
-  $("#list-grid").innerHTML = sortedList(list).map(productCard).join("");
-  $("#list-empty").hidden = list.length > 0;
-  $("#sort-row").hidden = list.length < 2;
-  $("#sort-row").querySelectorAll(".sort").forEach((b) =>
-    b.classList.toggle("active", b.dataset.sort === currentSort)
-  );
+  const listTitle = $("#list-title");
+  const listGrid = $("#list-grid");
+  const listEmpty = $("#list-empty");
+  const sortRow = $("#sort-row");
+
+  if (listTitle) listTitle.textContent = title;
+  if (listGrid) listGrid.innerHTML = sortedList(list).map(productCard).join("");
+  if (listEmpty) listEmpty.hidden = list.length > 0;
+  if (sortRow) {
+    sortRow.hidden = list.length < 2;
+    sortRow.querySelectorAll(".sort").forEach((b) =>
+      b.classList.toggle("active", b.dataset.sort === currentSort)
+    );
+  }
   showScreen("list");
 }
 
@@ -364,42 +390,43 @@ function toggleFav() {
 }
 
 function updateFavBtn() {
-  $("#p-fav").classList.toggle("fav-on", !!currentProduct && favs.has(currentProduct.id));
+  safe($("#p-fav")).classList.toggle("fav-on", !!currentProduct && favs.has(currentProduct.id));
 }
 
 /* ---------- Produto ---------- */
 function renderProduct(id) {
   currentProduct = PRODUCTS.find((p) => p.id === id);
+  if (!currentProduct) return;
   productQty = 1;
   const p = currentProduct;
 
-  $("#p-photo").innerHTML = productMedia(p);
-  $("#p-name").textContent = p.nome;
-  $("#p-unit").textContent = p.unidade;
+  safe($("#p-photo")).innerHTML = productMedia(p);
+  safe($("#p-name")).textContent = p.nome;
+  safe($("#p-unit")).textContent = p.unidade;
   const full = Math.round(p.rating);
-  $("#p-stars").innerHTML =
+  safe($("#p-stars")).innerHTML =
     "★".repeat(full) + "☆".repeat(5 - full) +
     ` <small>${p.rating.toFixed(1)} (${p.avaliacoes.toLocaleString("pt-BR")} avaliações)</small>`;
-  $("#p-price").innerHTML =
+  safe($("#p-price")).innerHTML =
     money(p.preco) + (p.precoAntigo ? `<small>${money(p.precoAntigo)}</small>` : "");
-  $("#p-price").classList.toggle("red", !!p.precoAntigo);
-  $("#p-stock").innerHTML =
+  safe($("#p-price")).classList.toggle("red", !!p.precoAntigo);
+  safe($("#p-stock")).innerHTML =
     `● Em estoque <span>· ${p.estoque} unidades disponíveis</span>`;
-  $("#p-desc").textContent = p.desc;
+  safe($("#p-desc")).textContent = p.desc;
 
-  $("#p-specs-body").innerHTML = p.specs
+  safe($("#p-specs-body")).innerHTML = p.specs
     .map(([k, v]) => `<div class="spec"><dt>${k}</dt><dd>${v}</dd></div>`)
     .join("");
 
   // Tabela de preços varejo x atacado (todos os produtos têm atacado a partir de 12)
-  $("#p-tiers-body").innerHTML = priceTiers(p).map((t) =>
+  safe($("#p-tiers-body")).innerHTML = priceTiers(p).map((t) =>
     `<tr><td>${t.faixa}</td><td>${money(t.preco)}</td><td class="off">${t.off || ""}</td></tr>`
   ).join("");
 
   // Produtos relacionados (mesma categoria)
   const rel = PRODUCTS.filter((x) => x.cat === p.cat && x.id !== p.id).slice(0, 4);
-  $("#p-related-wrap").hidden = rel.length === 0;
-  $("#p-related").innerHTML = rel.map(productCard).join("");
+  safe($("#p-related-wrap")).hidden = rel.length === 0;
+  safe($("#p-related")).innerHTML = rel.map(productCard).join("");
 
   renderReviews(p);
   updateFavBtn();
@@ -419,8 +446,11 @@ function renderRecent() {
   const rec = JSON.parse(localStorage.getItem("paulex_recent") || "[]")
     .map((id) => PRODUCTS.find((p) => p.id === id))
     .filter(Boolean);
-  $("#recent-section").hidden = rec.length === 0;
-  $("#recent-row").innerHTML = rec.map((p) => `
+  const recentSection = $("#recent-section");
+  const recentRow = $("#recent-row");
+  if (!recentSection || !recentRow) return;
+  recentSection.hidden = rec.length === 0;
+  recentRow.innerHTML = rec.map((p) => `
     <button class="mini-card" onclick="openProduct('${p.id}')">
       <span class="mini-art">${productMedia(p)}</span>
       <span class="mini-name">${p.nome}</span>
@@ -431,9 +461,9 @@ function renderRecent() {
 /* ---------- Resumo de avaliações ---------- */
 function renderReviews(p) {
   const full = Math.round(p.rating);
-  $("#p-rev-score").textContent = p.rating.toFixed(1).replace(".", ",");
-  $("#p-rev-stars").textContent = "★".repeat(full) + "☆".repeat(5 - full);
-  $("#p-rev-count").textContent =
+  safe($("#p-rev-score")).textContent = p.rating.toFixed(1).replace(".", ",");
+  safe($("#p-rev-stars")).textContent = "★".repeat(full) + "☆".repeat(5 - full);
+  safe($("#p-rev-count")).textContent =
     `${p.avaliacoes.toLocaleString("pt-BR")} avaliações`;
 
   // distribuição aproximada a partir da nota média
@@ -446,7 +476,7 @@ function renderReviews(p) {
     Math.max(0.005, 0.04 - (r - 4) * 0.03),
   ];
   const total = pesos.reduce((a, b) => a + b, 0);
-  $("#p-rev-bars").innerHTML = pesos.map((w, i) => {
+  safe($("#p-rev-bars")).innerHTML = pesos.map((w, i) => {
     const pct = Math.round((w / total) * 100);
     return `
       <div class="rev-row">
@@ -464,16 +494,17 @@ function pQty(delta) {
 
 function updateProductTotal() {
   const p = currentProduct;
+  if (!p) return;
   const unit = unitPrice(p, productQty);
   const total = unit * productQty;
   const economia = (p.preco - unit) * productQty;
 
-  $("#p-qty").textContent = productQty;
-  $("#p-total-label").textContent =
+  safe($("#p-qty")).textContent = productQty;
+  safe($("#p-total-label")).textContent =
     `Total (${productQty} ${productQty > 1 ? "unidades" : "unidade"})`;
-  $("#p-total").textContent = money(total);
-  $("#p-save").hidden = economia <= 0.005;
-  $("#p-save").textContent = `Economize ${money(economia)}`;
+  safe($("#p-total")).textContent = money(total);
+  safe($("#p-save")).hidden = economia <= 0.005;
+  safe($("#p-save")).textContent = `Economize ${money(economia)}`;
 }
 
 /* ---------- Carrinho ---------- */

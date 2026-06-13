@@ -149,14 +149,15 @@ input { font: inherit; }
   overflow: hidden;
 }
 .hero-inner {
-  display: flex; align-items: center; gap: 32px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 20px;
   text-align: left;
   padding-bottom: 0;
 }
 .hero-text { flex: 1 1 0; min-width: 0; }
 .hero-visual {
-  flex: 0 0 360px; display: flex; align-items: flex-end;
+  flex: 0 0 auto; display: flex; align-items: flex-end;
   justify-content: center; overflow: hidden;
+  width: 100%; max-width: 280px;
 }
 .hero-visual svg { width: 100%; height: auto; display: block; }
 .eyebrow {
@@ -1251,9 +1252,13 @@ input { font: inherit; }
 
   /* Hero duas colunas */
   .hero { padding: 60px 0 0; }
-  .hero-inner { min-height: 420px; }
+  .hero-inner {
+    flex-direction: row; align-items: center;
+    text-align: left; min-height: 420px;
+  }
   .hero-text { max-width: 520px; }
-  .cta-row { margin-top: 32px; }
+  .hero-visual { flex: 0 0 360px; width: auto; max-width: none; }
+  .cta-row { justify-content: flex-start; margin-top: 32px; }
   .pill { font-size: 15px; }
 
   /* Faixa de benefícios */
