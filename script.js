@@ -21,6 +21,33 @@ const ICON_BOX = icon('<path d="M4 8l8-4 8 4v9l-8 4-8-4V8z"/><path d="M4 8l8 4 8
 const ICON_CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>';
 const ICON_CART = icon('<path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/>');
 
+/* Proteção contra injeção de HTML em conteúdo dinâmico */
+const escapeHTML = (v) =>
+  String(v).replace(/[&<>"']/g, (ch) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  }[ch]));
+
+/* Eventos de analytics (prontos para Google Tag Manager / GA4) */
+function track(event, data = {}) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event, ...data });
+}
+
+/* Foto real do produto quando existir; ilustração como reserva */
+function productMedia(p) {
+  if (p.imagem) {
+    return `<img src="${p.imagem}" alt="${escapeHTML(p.nome)}" loading="lazy" decoding="async">`;
+  }
+  return p.art;
+}
+
+function cardKey(e, id) {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    openProduct(id);
+  }
+}
+
 /* ---------- Estado ---------- */
 let cart = JSON.parse(localStorage.getItem("paulex_cart") || "{}");
 let favs = new Set(JSON.parse(localStorage.getItem("paulex_favs") || "[]"));
@@ -109,7 +136,9 @@ document.querySelectorAll("[data-go]").forEach((b) =>
 
 function openWhatsApp(texto) {
   const msg = texto || "Olá, Paulex! Vim pelo site e gostaria de um atendimento.";
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
+  track("whatsapp_click");
+  const win = window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
+  if (win) win.opener = null;
 }
 
 /* ---------- Render: categorias ---------- */
@@ -144,8 +173,8 @@ function productCard(p) {
     : "";
   const old = p.precoAntigo ? `<span class="old">${money(p.precoAntigo)}</span>` : "";
   return `
-    <div class="card" onclick="openProduct('${p.id}')" role="button" tabindex="0">
-      <div class="ph">${tag}${p.art}</div>
+    <div class="card" onclick="openProduct('${p.id}')" onkeydown="cardKey(event,'${p.id}')" role="button" tabindex="0">
+      <div class="ph">${tag}${productMedia(p)}</div>
       <div class="info">
         <span class="name">${p.nome}</span>
         ${old}
@@ -167,16 +196,23 @@ function renderHome() {
 const searchInput = $("#search-input");
 const suggest = $("#suggest");
 
+function productMatches(p, q) {
+  const cat = CATEGORIES.find((c) => c.id === p.cat);
+  return [p.nome, p.desc, p.unidade, cat && cat.nome]
+    .filter(Boolean)
+    .some((v) => v.toLowerCase().includes(q));
+}
+
 function renderSuggest(term) {
   const q = term.trim().toLowerCase();
   if (q.length < 2) { suggest.hidden = true; return; }
-  const hits = PRODUCTS.filter((p) => p.nome.toLowerCase().includes(q)).slice(0, 6);
+  const hits = PRODUCTS.filter((p) => productMatches(p, q)).slice(0, 6);
   if (!hits.length) {
-    suggest.innerHTML = `<div class="sug-empty">Nenhum produto encontrado para “${term}”.</div>`;
+    suggest.innerHTML = `<div class="sug-empty">Nenhum produto encontrado para “${escapeHTML(term)}”.</div>`;
   } else {
     suggest.innerHTML = hits.map((p) => `
       <button class="sug" onclick="suggestGo('${p.id}')">
-        <span class="sug-art">${p.art}</span>
+        <span class="sug-art">${productMedia(p)}</span>
         <span class="sug-name">${p.nome}</span>
         <span class="sug-price">${money(p.preco)}</span>
       </button>`).join("");
@@ -192,13 +228,28 @@ function suggestGo(id) {
 
 searchInput.addEventListener("input", (e) => renderSuggest(e.target.value));
 searchInput.addEventListener("focus", (e) => renderSuggest(e.target.value));
-searchInput.addEventListener("keydown", (e) => { if (e.key === "Escape") suggest.hidden = true; });
+searchInput.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") suggest.hidden = true;
+  if (e.key === "Enter") {
+    const q = e.target.value.trim();
+    if (q.length >= 2) {
+      suggest.hidden = true;
+      track("search", { search_term: q });
+      openList("busca:" + q);
+    }
+  }
+});
 document.addEventListener("click", (e) => {
   if (!e.target.closest(".search-wrap")) suggest.hidden = true;
 });
 
 /* ---------- Lista (categoria / ofertas / favoritos) ---------- */
 function listFor(kind) {
+  if (kind.startsWith("busca:")) {
+    const termo = kind.slice(6);
+    const q = termo.toLowerCase();
+    return { title: `Busca: ${termo}`, list: PRODUCTS.filter((p) => productMatches(p, q)) };
+  }
   if (kind.startsWith("cat:")) {
     const cat = CATEGORIES.find((c) => c.id === kind.slice(4));
     return { title: cat ? cat.nome : "Produtos", list: PRODUCTS.filter((p) => p.cat === (cat && cat.id)) };
@@ -259,7 +310,7 @@ function renderProduct(id) {
   productQty = 1;
   const p = currentProduct;
 
-  $("#p-photo").innerHTML = p.art;
+  $("#p-photo").innerHTML = productMedia(p);
   $("#p-name").textContent = p.nome;
   $("#p-unit").textContent = p.unidade;
   const full = Math.round(p.rating);
@@ -313,7 +364,7 @@ function renderRecent() {
   $("#recent-section").hidden = rec.length === 0;
   $("#recent-row").innerHTML = rec.map((p) => `
     <button class="mini-card" onclick="openProduct('${p.id}')">
-      <span class="mini-art">${p.art}</span>
+      <span class="mini-art">${productMedia(p)}</span>
       <span class="mini-name">${p.nome}</span>
       <span class="mini-price">${money(p.preco)}</span>
     </button>`).join("");
@@ -384,6 +435,7 @@ function updateBadges() {
 function quickAdd(id) {
   cart[id] = (cart[id] || 0) + 1;
   saveCart();
+  track("add_to_cart", { item: id });
   toast("Adicionado ao carrinho ✓");
 }
 
@@ -464,7 +516,7 @@ function renderCart() {
     const unit = unitPrice(p, qty);
     return `
       <div class="cart-item">
-        <div class="ph">${p.art}</div>
+        <div class="ph">${productMedia(p)}</div>
         <div class="info">
           <strong>${p.nome}</strong>
           <small>${qty} ${qty > 1 ? "unidades" : "unidade"} · ${money(unit)} cada</small>
@@ -521,7 +573,7 @@ function renderCart() {
   $("#cart-suggest").hidden = vazio || sugestoes.length === 0;
   $("#cart-suggest-row").innerHTML = sugestoes.map((p) => `
     <button class="mini-card" onclick="openProduct('${p.id}')">
-      <span class="mini-art">${p.art}</span>
+      <span class="mini-art">${productMedia(p)}</span>
       <span class="mini-name">${p.nome}</span>
       <span class="mini-price">${money(p.preco)}</span>
       <span class="mini-add" role="button" aria-label="Adicionar ${p.nome}"
@@ -557,6 +609,7 @@ function checkoutWhatsApp() {
     }),
   });
   saveOrders();
+  track("checkout", { value: t.total, pedido: numero });
   openWhatsApp(`${msg}\n\nPedido nº ${numero}`);
   cart = {};
   removeCupom();
@@ -720,8 +773,8 @@ function renderAddrs() {
   $("#addr-list").innerHTML = addrs.map((a, i) => `
     <div class="address">
       <div>
-        <strong>${a.nome} ${i === 0 ? '<span class="chip">Principal</span>' : ""}</strong>
-        <small>${a.rua}<br>${a.bairro}<br>CEP ${a.cep || "—"}</small>
+        <strong>${escapeHTML(a.nome)} ${i === 0 ? '<span class="chip">Principal</span>' : ""}</strong>
+        <small>${escapeHTML(a.rua)}<br>${escapeHTML(a.bairro)}<br>CEP ${escapeHTML(a.cep || "—")}</small>
         ${i > 0 ? `<button class="link addr-main" onclick="mainAddr(${i})">Tornar principal</button>` : ""}
       </div>
       <div class="address-actions">

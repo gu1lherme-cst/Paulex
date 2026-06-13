@@ -335,6 +335,11 @@ input { font: inherit; }
 
 .empty { text-align: center; color: var(--muted); padding: 48px 16px; }
 
+/* ---------- Fotos reais de produto (quando definidas em produtos.js) ---------- */
+.card .ph img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; padding: 10px; }
+.p-photo img { width: 80%; height: 80%; object-fit: contain; mix-blend-mode: multiply; }
+.mini-art img, .sug-art img, .cart-item .ph img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+
 /* ---------- Produto ---------- */
 .p-wrap { padding-top: 6px; padding-bottom: 40px; }
 .p-photo {
