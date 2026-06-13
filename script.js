@@ -198,8 +198,18 @@ function orcamento(segmento) {
 function renderCategories() {
   $("#cat-row").innerHTML = CATEGORIES.map(
     (c) => `
-    <button class="cat-chip" onclick="openList('cat:${c.id}')">
-      <span>${c.icon}</span>${c.nome}
+    <button class="cat-card-home" onclick="openList('cat:${c.id}')">
+      <div class="cat-card-home-img">
+        <div class="cat-ico-wrap"><span>${c.icon}</span></div>
+      </div>
+      <div class="cat-card-home-body">
+        <strong>${c.nome}</strong>
+        <small>${c.desc}</small>
+        <span class="cat-card-home-link">
+          Ver produtos
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
     </button>`
   ).join("");
 

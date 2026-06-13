@@ -143,34 +143,73 @@ input { font: inherit; }
 
 /* ---------- Hero ---------- */
 .hero {
-  background:
-    radial-gradient(130% 110% at 50% 0%, #2563D9 0%, #0B3BA7 48%, #00114A 100%);
+  background: radial-gradient(130% 110% at 60% 0%, #2563D9 0%, #0B3BA7 48%, #00114A 100%);
   color: #fff;
-  text-align: center;
-  padding: 56px 24px 0;
+  padding: 52px 0 0;
   overflow: hidden;
 }
+.hero-inner {
+  display: flex; align-items: center; gap: 32px;
+  text-align: left;
+  padding-bottom: 0;
+}
+.hero-text { flex: 1 1 0; min-width: 0; }
+.hero-visual {
+  flex: 0 0 360px; display: flex; align-items: flex-end;
+  justify-content: center; overflow: hidden;
+}
+.hero-visual svg { width: 100%; height: auto; display: block; }
 .eyebrow {
-  font-size: 12px; font-weight: 600; letter-spacing: 3px;
-  text-transform: uppercase; color: rgba(255, 255, 255, .65);
+  font-size: 11px; font-weight: 600; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(255, 255, 255, .6);
   margin-bottom: 14px;
 }
 .hero h2 {
-  font-size: clamp(30px, 6vw, 52px);
-  font-weight: 700; letter-spacing: -.03em; line-height: 1.08;
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 800; letter-spacing: -.03em; line-height: 1.08;
 }
 .hero-sub {
   margin-top: 14px;
-  font-size: clamp(15px, 2.2vw, 19px);
+  font-size: clamp(14px, 1.8vw, 18px);
   color: rgba(255, 255, 255, .82);
+  line-height: 1.55;
+}
+.hero-detail {
+  margin-top: 10px;
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, .58);
   line-height: 1.5;
 }
 .cta-row {
-  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-  margin-top: 26px;
+  display: flex; gap: 12px; flex-wrap: wrap;
+  margin-top: 28px;
 }
-.hero-art { margin: 34px auto -4px; max-width: 300px; }
-.hero-art svg { width: 100%; height: auto; }
+
+/* Benefícios */
+.benefits-bar {
+  background: #fff;
+  border-bottom: 1px solid var(--hairline);
+}
+.benefits-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+.benefit-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.benefit-item:last-child { border-bottom: 0; }
+.benefit-ico {
+  flex: none;
+  width: 44px; height: 44px; border-radius: 12px;
+  background: var(--tile); color: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+}
+.benefit-ico svg { width: 22px; height: 22px; }
+.benefit-item strong { display: block; font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.benefit-item p { font-size: 12.5px; color: var(--muted); line-height: 1.4; margin: 0; }
 
 /* ---------- Pílulas (CTAs) ---------- */
 .pill {
@@ -238,13 +277,51 @@ input { font: inherit; }
 .club-promo .club-promo-ico svg { width: 26px; height: 26px; }
 .club-promo .pill { margin-top: 24px; }
 
-/* ---------- Categorias (chips na home) ---------- */
+/* ---------- Categorias (cards na home) ---------- */
 .cat-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-top: 30px;
+  gap: 14px;
+  margin-top: 36px;
 }
+.cat-card-home {
+  display: flex; flex-direction: column; align-items: flex-start;
+  background: #fff; border-radius: var(--r);
+  border: 1px solid var(--hairline);
+  overflow: hidden;
+  transition: box-shadow .25s var(--ease), transform .25s var(--ease);
+  cursor: pointer; text-align: left;
+}
+.cat-card-home:hover { box-shadow: var(--shadow-hover); transform: translateY(-3px); }
+.cat-card-home-img {
+  width: 100%; padding-top: 64%;
+  position: relative; overflow: hidden;
+  background: var(--tile);
+}
+.cat-card-home-img .cat-ico-wrap {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.cat-ico-wrap span {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: rgba(0,45,143,.08); color: var(--blue-vivid);
+  display: flex; align-items: center; justify-content: center;
+}
+.cat-ico-wrap svg { width: 30px; height: 30px; }
+.cat-card-home-body { padding: 14px 16px 16px; width: 100%; }
+.cat-card-home-body strong {
+  display: block; font-size: 15px; font-weight: 600; letter-spacing: -.01em;
+}
+.cat-card-home-body small {
+  display: block; margin-top: 3px; font-size: 12px; color: var(--muted);
+}
+.cat-card-home-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-top: 10px; font-size: 12.5px; font-weight: 600; color: var(--blue);
+}
+.cat-card-home-link svg { width: 14px; height: 14px; }
+
+/* Compat chip (telas menores / fallback) */
 .cat-chip {
   display: flex; flex-direction: column; align-items: center; gap: 10px;
   font-size: 12.5px; font-weight: 600;
@@ -259,7 +336,6 @@ input { font: inherit; }
   display: inline-flex; align-items: center; justify-content: center;
 }
 .cat-chip span svg { width: 24px; height: 24px; }
-.section .cat-chip:hover { background: #fff; box-shadow: var(--shadow-hover); }
 
 /* ---------- Categorias (lista) ---------- */
 .cat-list { padding: 14px 0 28px; display: flex; flex-direction: column; gap: 10px; }
@@ -1122,28 +1198,29 @@ input { font: inherit; }
   }
   .desk-wrap {
     display: flex; align-items: center; justify-content: space-between;
-    height: 64px; gap: 18px;
+    height: 56px; gap: 12px;
   }
   .desk-logo { display: flex; align-items: center; flex: none; }
   .desk-nav {
-    display: flex; align-items: center; justify-content: center;
-    gap: 2px; flex: 1 1 auto; flex-wrap: nowrap;
+    display: flex; align-items: center;
+    gap: 1px; flex: 1 1 auto; flex-wrap: nowrap; justify-content: flex-start;
   }
   .desk-nav button {
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 14px; font-weight: 500;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 500;
     color: var(--ink);
     white-space: nowrap;
     transition: color .2s var(--ease), background .2s var(--ease);
   }
-  .desk-nav button:hover { color: var(--blue); }
+  .desk-nav button:hover { color: var(--blue); background: rgba(0,45,143,.05); }
   .desk-nav button.active { color: var(--blue); font-weight: 600; }
+  .desk-nav .nav-hot { color: var(--red-text); }
+  .desk-nav .nav-hot:hover { color: var(--red); background: rgba(255,10,24,.06); }
 
-  /* Selo colorido "Paulex Club" na navegação */
-  .desk-nav .club-link { padding: 4px 12px; }
+  /* Paulex Club (direita) + ícones de ação */
   .club-logo { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; }
-  .club-name { font-family: "Pacifico", cursive; font-size: 19px; }
+  .club-name { font-family: "Pacifico", cursive; font-size: 17px; }
   .club-name i { font-style: normal; }
   .club-name i:nth-child(1) { color: var(--blue); }
   .club-name i:nth-child(2) { color: var(--red); }
@@ -1152,47 +1229,49 @@ input { font: inherit; }
   .club-name i:nth-child(5) { color: var(--red); }
   .club-name i:nth-child(6) { color: var(--blue); }
   .club-sub {
-    font-size: 8px; font-weight: 700; letter-spacing: 3px;
+    font-size: 7.5px; font-weight: 700; letter-spacing: 2.5px;
     color: var(--blue); margin-top: 1px;
   }
-  .desk-actions { display: flex; align-items: center; gap: 6px; flex: none; }
-  .desk-search-btn, .desk-cart {
+  .desk-actions { display: flex; align-items: center; gap: 4px; flex: none; }
+  .club-link { padding: 4px 8px; }
+  .desk-action-btn {
     display: flex; align-items: center; justify-content: center;
-    width: 40px; height: 40px; border-radius: 10px;
+    width: 38px; height: 38px; border-radius: 9px;
     color: var(--ink); transition: background .2s var(--ease);
   }
-  .desk-search-btn:hover, .desk-cart:hover { background: var(--tile); }
-  .desk-search-btn svg { width: 21px; height: 21px; }
+  .desk-action-btn:hover { background: var(--tile); }
+  .desk-action-btn svg { width: 20px; height: 20px; }
   .desk-cart { position: relative; }
-  .desk-cart svg { width: 21px; height: 21px; }
   .desk-cart .badge { top: 4px; right: 4px; }
-
-  /* Telas largas: mais respiro */
-  @media (min-width: 1024px) {
-    .desk-nav button { padding: 8px 15px; }
-    .logo-img-desk { height: 40px; }
-  }
 
   /* Topbar mobile some na home (o cabeçalho assume) */
   .home-topbar { display: none; }
   .topbar { padding: 14px 24px; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; position: static; }
   .topbar-title h2 { font-size: 21px; letter-spacing: -.02em; }
 
-  /* Hero */
-  .hero { padding-top: 84px; }
-  .hero-art { max-width: 380px; margin-top: 44px; }
+  /* Hero duas colunas */
+  .hero { padding: 60px 0 0; }
+  .hero-inner { min-height: 420px; }
+  .hero-text { max-width: 520px; }
   .cta-row { margin-top: 32px; }
   .pill { font-size: 15px; }
 
-  .search-wrap { padding-top: 28px; }
+  /* Faixa de benefícios */
+  .benefits-wrap {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 28px 0;
+  }
+  .benefit-item { border-bottom: 0; padding: 0; }
 
-  .section { padding: 84px 0; }
+  .search-wrap { padding-top: 36px; }
+
+  .section { padding: 80px 0; }
+  .cat-section { padding: 72px 0; }
   .sec-cta { margin-top: 36px; }
 
-  .cat-row { grid-template-columns: repeat(6, 1fr); margin-top: 40px; gap: 8px; }
-  .cat-chip { font-size: 13px; padding: 22px 6px; }
-  .cat-chip span { width: 62px; height: 62px; }
-  .cat-chip span svg { width: 28px; height: 28px; }
+  /* Category cards (home) */
+  .cat-row { grid-template-columns: repeat(6, 1fr); margin-top: 48px; gap: 14px; }
 
   .product-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 40px; }
   .card .ph { height: 165px; }
