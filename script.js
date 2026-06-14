@@ -267,9 +267,9 @@ function renderHome() {
   const promoGrid = $("#promo-grid");
   if (!homeGrid || !promoGrid) return;
   homeGrid.innerHTML =
-    PRODUCTS.filter((p) => p.maisVendido).map(productCard).join("");
+    PRODUCTS.filter((p) => p.maisVendido).slice(0, 6).map(productCard).join("");
   promoGrid.innerHTML =
-    PRODUCTS.filter((p) => p.promo).slice(0, 4).map(productCard).join("");
+    PRODUCTS.filter((p) => p.promo).slice(0, 6).map(productCard).join("");
 }
 
 /* ---------- Busca com sugestões instantâneas ---------- */

@@ -143,10 +143,11 @@ input { font: inherit; }
 
 /* ---------- Hero ---------- */
 .hero {
-  background: radial-gradient(130% 110% at 60% 0%, #2563D9 0%, #0B3BA7 48%, #00114A 100%);
+  background: linear-gradient(160deg, #0B3BA7 0%, #002D8F 55%, #00226E 100%);
   color: #fff;
-  padding: 52px 0 0;
+  padding: 36px 0 0;
   overflow: hidden;
+  border-radius: 0 0 28px 28px;
 }
 .hero-inner {
   display: flex; flex-direction: column; align-items: flex-start; gap: 24px;
@@ -155,11 +156,117 @@ input { font: inherit; }
 }
 .hero-text { flex: 1 1 0; min-width: 0; }
 .hero-visual {
-  flex: 0 0 auto; display: flex; align-items: flex-end;
-  justify-content: center; overflow: hidden;
-  width: 100%; max-width: 280px;
+  flex: 0 0 auto; position: relative;
+  display: flex; align-items: flex-end;
+  justify-content: center;
+  width: 100%; max-width: 300px;
 }
 .hero-visual svg { width: 100%; height: auto; display: block; }
+.hero-badge {
+  position: absolute; top: 4px; right: 0;
+  background: #fff; color: var(--blue);
+  width: 78px; height: 78px; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  line-height: 1.05; text-align: center;
+}
+.hero-badge strong { font-size: 18px; font-weight: 800; }
+.hero-badge span { font-size: 9px; color: var(--muted); margin-top: 2px; }
+
+/* Faixa de confiança dentro do hero */
+.hero-trust {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+  padding-top: 26px; padding-bottom: 30px;
+}
+.hero-trust-item {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 12.5px; color: rgba(255,255,255,.82);
+}
+.hero-trust-item svg { width: 18px; height: 18px; color: #fff; flex: none; }
+.hero-trust-item strong { color: #fff; font-weight: 600; }
+
+/* Cartão flutuante de benefícios */
+.benefits-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);
+  margin-top: 20px; position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1fr;
+  padding: 8px 0;
+}
+.benefits-card .benefit-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 22px;
+  border-bottom: 1px solid rgba(0,0,0,.05);
+}
+.benefits-card .benefit-item:last-child { border-bottom: 0; }
+.benefits-card .benefit-ico {
+  flex: none; width: 44px; height: 44px; border-radius: 12px;
+  background: rgba(0,45,143,.08); color: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+}
+.benefits-card .benefit-ico svg { width: 22px; height: 22px; }
+.benefits-card .benefit-item strong { display: block; font-size: 14px; font-weight: 600; }
+.benefits-card .benefit-item p { font-size: 12.5px; color: var(--muted); margin: 2px 0 0; }
+
+/* Cabeçalho de seção (título à esquerda + link à direita) */
+.sec-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 16px; margin-bottom: 8px; text-align: left;
+}
+.sec-title-left {
+  font-size: clamp(22px, 3.5vw, 30px);
+  font-weight: 700; letter-spacing: -.02em; line-height: 1.15;
+}
+.sec-sub-left { margin-top: 6px; font-size: 14px; color: var(--muted); }
+.sec-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 13.5px; font-weight: 600; color: var(--blue);
+  white-space: nowrap; flex: none;
+}
+.sec-link svg { width: 15px; height: 15px; }
+.sec-link:hover { color: var(--blue-dark); }
+
+/* Cartão Atacado "Para a sua empresa" */
+.biz-card {
+  background: linear-gradient(160deg, #0B3BA7 0%, #002D8F 100%);
+  border-radius: 24px; overflow: hidden;
+  display: flex; flex-direction: column;
+  color: #fff;
+}
+.biz-text { padding: 32px 26px; text-align: left; }
+.biz-eyebrow {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,.7); margin-bottom: 10px;
+}
+.biz-text h3 { font-size: clamp(24px, 4vw, 34px); font-weight: 800; letter-spacing: -.02em; }
+.biz-text > p { margin-top: 12px; font-size: 14.5px; color: rgba(255,255,255,.82); line-height: 1.55; max-width: 460px; }
+.biz-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.biz-tags span {
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+  padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 500;
+}
+.biz-card .cta-row { margin-top: 24px; }
+.biz-visual { display: flex; align-items: stretch; }
+.biz-visual svg { width: 100%; height: auto; display: block; }
+
+/* Faixa de confiança pré-rodapé */
+.trust-strip-section { padding: 20px 0 40px; }
+.trust-strip {
+  display: grid; grid-template-columns: 1fr; gap: 22px;
+  text-align: left;
+}
+.trust-strip-item { display: flex; align-items: flex-start; gap: 14px; }
+.trust-strip-item svg { width: 30px; height: 30px; color: var(--blue); flex: none; }
+.trust-strip-item strong { display: block; font-size: 14.5px; font-weight: 600; }
+.trust-strip-item small { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+
+/* Logo do rodapé */
+.f-brand-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.f-brand-logo img { display: block; height: 32px; width: auto; }
+.f-brand-logo span { font-size: 16px; font-weight: 700; letter-spacing: -.01em; }
 .eyebrow {
   font-size: 11px; font-weight: 600; letter-spacing: 3px;
   text-transform: uppercase; color: rgba(255, 255, 255, .6);
@@ -389,13 +496,13 @@ input { font: inherit; }
 .card .old { font-size: 11px; color: var(--muted); text-decoration: line-through; }
 .card .price { font-size: 15.5px; font-weight: 700; letter-spacing: -.01em; }
 .card .add {
-  margin-top: 10px;
+  margin-top: 12px;
   width: 100%;
   display: inline-flex; align-items: center; justify-content: center; gap: 7px;
   background: var(--blue); color: #fff;
   font-size: 12.5px; font-weight: 600;
-  padding: 9px 6px;
-  border-radius: 999px;
+  padding: 10px 6px;
+  border-radius: 12px;
   transition: all .2s var(--ease);
 }
 .card .add svg { width: 15px; height: 15px; }
@@ -1240,39 +1347,55 @@ input { font: inherit; }
   .topbar-title h2 { font-size: 21px; letter-spacing: -.02em; }
 
   /* Hero duas colunas */
-  .hero { padding: 80px 0 0; }
+  .hero { padding: 56px 0 0; border-radius: 0 0 36px 36px; }
   .hero-inner {
     flex-direction: row; align-items: center;
-    text-align: left; min-height: 480px; gap: 60px;
+    text-align: left; min-height: 400px; gap: 50px;
   }
   .hero-text { max-width: 540px; }
-  .hero-visual { flex: 0 0 380px; width: auto; max-width: none; }
-  .cta-row { justify-content: flex-start; margin-top: 36px; gap: 16px; }
+  .hero-visual { flex: 0 0 360px; width: auto; max-width: none; }
+  .hero-badge { width: 92px; height: 92px; top: 10px; right: -6px; }
+  .hero-badge strong { font-size: 22px; }
+  .hero-badge span { font-size: 10px; }
+  .cta-row { justify-content: flex-start; margin-top: 32px; gap: 16px; }
   .pill { font-size: 15px; padding: 14px 28px; }
 
-  /* Faixa de benefícios */
-  .benefits-wrap {
+  /* Faixa de confiança no hero: 4 colunas */
+  .hero-trust { grid-template-columns: repeat(4, 1fr); gap: 18px; padding-top: 30px; padding-bottom: 34px; }
+  .hero-trust-item { font-size: 13px; }
+
+  /* Cartão de benefícios: 4 colunas com divisores verticais */
+  .benefits-card {
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    padding: 28px 0;
+    padding: 0; margin-top: 24px;
   }
-  .benefit-item { border-bottom: 0; padding: 0; }
+  .benefits-card .benefit-item {
+    border-bottom: 0; border-right: 1px solid rgba(0,0,0,.07);
+    padding: 22px 24px;
+  }
+  .benefits-card .benefit-item:last-child { border-right: 0; }
 
-  .search-wrap { padding-top: 36px; }
-
-  .section { padding: 80px 0; }
-  .cat-section { padding: 72px 0; }
+  .section { padding: 56px 0; }
   .sec-cta { margin-top: 36px; }
+  .sec-head { margin-bottom: 4px; }
 
   /* Category cards (home) */
-  .cat-row { grid-template-columns: repeat(6, 1fr); margin-top: 48px; gap: 14px; }
+  .cat-row { grid-template-columns: repeat(6, 1fr); margin-top: 28px; gap: 16px; }
 
-  .product-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 40px; }
-  .card .ph { height: 165px; }
-  .card .ph svg { width: 76px; height: 76px; }
-  .card .info { padding: 14px 16px 16px; }
-  .card .name { font-size: 13.5px; }
-  .card .price { font-size: 16.5px; }
+  .product-grid { grid-template-columns: repeat(6, 1fr); gap: 16px; margin-top: 28px; }
+  .card .ph { height: 150px; }
+  .card .ph svg { width: 70px; height: 70px; }
+  .card .info { padding: 14px 14px 16px; }
+  .card .name { font-size: 13px; }
+  .card .price { font-size: 16px; }
+
+  /* Atacado em duas colunas */
+  .biz-card { flex-direction: row; align-items: stretch; }
+  .biz-text { flex: 1 1 0; padding: 44px 44px; display: flex; flex-direction: column; justify-content: center; }
+  .biz-visual { flex: 0 0 42%; }
+
+  /* Faixa de confiança pré-rodapé: 4 colunas */
+  .trust-strip { grid-template-columns: repeat(4, 1fr); gap: 28px; }
 
   .trust { padding: 60px 0; }
   .trust-grid { grid-template-columns: repeat(4, 1fr); }
