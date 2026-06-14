@@ -27,7 +27,7 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: "Inter", system-ui, -apple-system, sans-serif;
-  background: var(--page);
+  background: #F5F5F7;
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -239,24 +239,11 @@ input { font: inherit; }
 .pill-wa:hover { background: #1FB456; box-shadow: 0 8px 22px rgba(37, 211, 102, .35); }
 .pill-lg { width: 100%; padding: 15px; }
 
-/* ---------- Busca ---------- */
-.search-wrap { padding-top: 18px; padding-bottom: 6px; }
-.search {
-  display: flex; align-items: center; gap: 10px;
-  background: var(--tile);
-  border-radius: 999px;
-  padding: 13px 20px;
-  color: var(--muted);
-  max-width: 640px;
-  margin: 0 auto;
-  transition: box-shadow .25s var(--ease);
-}
-.search:focus-within { box-shadow: 0 0 0 3px rgba(0, 45, 143, .15); }
-.search input { flex: 1; border: 0; background: none; outline: none; color: var(--ink); }
-.search svg { width: 17px; height: 17px; }
+/* ---------- Busca (oculto) ---------- */
+.search-wrap { display: none; }
 
 /* ---------- Seções (estilo página) ---------- */
-.section { padding: 52px 0; text-align: center; }
+.section { padding: 60px 0; text-align: center; }
 .section.alt { background: var(--tile); }
 .sec-title {
   font-size: clamp(26px, 4.5vw, 40px);
@@ -287,13 +274,14 @@ input { font: inherit; }
 }
 .cat-card-home {
   display: flex; flex-direction: column; align-items: flex-start;
-  background: #fff; border-radius: var(--r);
-  border: 1px solid var(--hairline);
+  background: #fff; border-radius: 20px;
+  border: none;
   overflow: hidden;
-  transition: box-shadow .25s var(--ease), transform .25s var(--ease);
+  transition: box-shadow .3s var(--ease), transform .3s var(--ease);
   cursor: pointer; text-align: left;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
-.cat-card-home:hover { box-shadow: var(--shadow-hover); transform: translateY(-3px); }
+.cat-card-home:hover { box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); transform: translateY(-4px); }
 .cat-card-home-img {
   width: 100%; padding-top: 64%;
   position: relative; overflow: hidden;
@@ -1199,7 +1187,7 @@ input { font: inherit; }
   }
   .desk-wrap {
     display: flex; align-items: center; justify-content: space-between;
-    height: 56px; gap: 12px;
+    height: 48px; gap: 12px;
   }
   .desk-logo { display: flex; align-items: center; flex: none; }
   .desk-nav {
@@ -1251,15 +1239,15 @@ input { font: inherit; }
   .topbar-title h2 { font-size: 21px; letter-spacing: -.02em; }
 
   /* Hero duas colunas */
-  .hero { padding: 60px 0 0; }
+  .hero { padding: 80px 0 0; }
   .hero-inner {
     flex-direction: row; align-items: center;
-    text-align: left; min-height: 420px;
+    text-align: left; min-height: 480px; gap: 60px;
   }
-  .hero-text { max-width: 520px; }
-  .hero-visual { flex: 0 0 360px; width: auto; max-width: none; }
-  .cta-row { justify-content: flex-start; margin-top: 32px; }
-  .pill { font-size: 15px; }
+  .hero-text { max-width: 540px; }
+  .hero-visual { flex: 0 0 380px; width: auto; max-width: none; }
+  .cta-row { justify-content: flex-start; margin-top: 36px; gap: 16px; }
+  .pill { font-size: 15px; padding: 14px 28px; }
 
   /* Faixa de benefícios */
   .benefits-wrap {
