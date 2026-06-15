@@ -1,22 +1,27 @@
 /* Service worker Paulex — permite instalar como aplicativo e
    navegar com internet instável (os arquivos ficam em cache). */
 
-const CACHE = "paulex-v23";
+const CACHE = "paulex-v24";
 const ASSETS = [
   "./",
   "index.html",
-  "style.css?v=23",
-  "script.js?v=23",
-  "produtos.js?v=23",
+  "style.css?v=24",
+  "script.js?v=24",
+  "produtos.js?v=24",
   "manifest.json",
   "img/logo.png",
   "img/px-logo.png",
-  "img/icon-192.png",
-  "img/icon-512.png",
+  "img/favicon-192.png",
+  "img/favicon-512.png",
 ];
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)));
+  // Pré-cacheia o que der; ignora falhas individuais para não travar a instalação
+  e.waitUntil(
+    caches.open(CACHE).then((c) =>
+      Promise.allSettled(ASSETS.map((a) => c.add(a)))
+    )
+  );
   self.skipWaiting();
 });
 

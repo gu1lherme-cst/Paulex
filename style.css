@@ -282,28 +282,12 @@ input { font: inherit; }
   color: rgba(255, 255, 255, .82);
   line-height: 1.55;
 }
-.hero-detail {
-  margin-top: 10px;
-  font-size: 13.5px;
-  color: rgba(255, 255, 255, .58);
-  line-height: 1.5;
-}
 .cta-row {
   display: flex; gap: 12px; flex-wrap: wrap;
   margin-top: 28px;
 }
 
-/* Benefícios */
-.benefits-bar {
-  background: transparent;
-  border: none;
-}
-.benefits-wrap {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
-  padding: 24px 0;
-}
+/* Benefícios (itens dentro do cartão flutuante) */
 .benefit-item {
   display: flex; align-items: flex-start; gap: 16px;
   padding: 24px 0;
@@ -364,15 +348,6 @@ input { font: inherit; }
 }
 .sec-cta { margin-top: 40px; }
 
-.club-promo .club-promo-ico {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 54px; height: 54px; border-radius: 50%;
-  background: var(--tile); color: var(--gold);
-  margin-bottom: 16px;
-}
-.club-promo .club-promo-ico svg { width: 26px; height: 26px; }
-.club-promo .pill { margin-top: 24px; }
-
 /* ---------- Categorias (cards na home) ---------- */
 .cat-row {
   display: grid;
@@ -417,22 +392,6 @@ input { font: inherit; }
   margin-top: 10px; font-size: 12.5px; font-weight: 600; color: var(--blue);
 }
 .cat-card-home-link svg { width: 14px; height: 14px; }
-
-/* Compat chip (telas menores / fallback) */
-.cat-chip {
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  font-size: 12.5px; font-weight: 600;
-  padding: 18px 6px;
-  border-radius: var(--r);
-  transition: all .25s var(--ease);
-}
-.cat-chip:hover { background: var(--tile); transform: translateY(-2px); }
-.cat-chip span {
-  width: 52px; height: 52px; border-radius: 50%;
-  background: var(--tile); color: var(--blue-vivid);
-  display: inline-flex; align-items: center; justify-content: center;
-}
-.cat-chip span svg { width: 24px; height: 24px; }
 
 /* ---------- Categorias (lista) ---------- */
 .cat-list { padding: 14px 0 28px; display: flex; flex-direction: column; gap: 10px; }
@@ -553,8 +512,7 @@ input { font: inherit; }
   padding: 1px 7px; border-radius: 999px; margin-left: 4px;
 }
 
-/* ---------- Atacado: vitrine na home ---------- */
-.biz-promo { text-align: center; }
+/* ---------- Atacado: selo (tela de atacado) ---------- */
 .biz-badge {
   display: inline-block;
   background: var(--blue); color: #fff;
@@ -562,13 +520,6 @@ input { font: inherit; }
   padding: 5px 14px; border-radius: 999px; margin-bottom: 14px;
 }
 .biz-badge.light { background: rgba(255,255,255,.16); }
-.biz-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 18px 0 24px; }
-.biz-tags span {
-  font-size: 12.5px; font-weight: 600; color: var(--ink);
-  background: #fff; border-radius: 999px; padding: 8px 14px;
-  box-shadow: 0 1px 3px rgba(0,0,0,.05);
-}
-.biz-promo .cta-row { justify-content: center; }
 
 /* ---------- Tela de Atacado ---------- */
 .biz-hero {
@@ -827,7 +778,6 @@ input { font: inherit; }
 
 .or { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; }
 .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--hairline); }
-.g-logo { font-weight: 700; color: #EA4335; }
 .google-slot { display: flex; justify-content: center; min-height: 44px; }
 
 .account-head { display: flex; align-items: center; gap: 14px; padding: 16px 0 22px; }
@@ -936,19 +886,7 @@ input { font: inherit; }
   padding: 2px 9px; border-radius: 999px;
 }
 
-/* ---------- Confiança + rodapé ---------- */
-.trust { padding: 44px 0; border-top: 1px solid var(--hairline); }
-.trust-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 28px 16px;
-}
-.trust-item {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  text-align: center;
-}
-.trust-item svg { width: 24px; height: 24px; color: var(--blue-vivid); margin-bottom: 4px; }
-.trust-item strong { font-size: 12.5px; letter-spacing: -.005em; }
-.trust-item small { font-size: 11px; color: var(--muted); }
+/* ---------- Rodapé ---------- */
 
 .footer {
   background: var(--tile);
@@ -1072,41 +1010,6 @@ input { font: inherit; }
 
 /* ---------- Foco visível (acessibilidade) ---------- */
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 6px; }
-
-/* ---------- Selos do herói ---------- */
-.hero-badges {
-  list-style: none;
-  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
-  margin-top: 22px;
-  padding: 0 8px;
-}
-.hero-badges li {
-  font-size: 11.5px; font-weight: 600;
-  color: rgba(255, 255, 255, .9);
-  background: rgba(255, 255, 255, .12);
-  border: 1px solid rgba(255, 255, 255, .22);
-  padding: 6px 13px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-
-/* ---------- Sobre a Paulex ---------- */
-.about-text { max-width: 640px; margin-left: auto; margin-right: auto; line-height: 1.65; }
-.stats {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 32px;
-}
-.stat {
-  background: var(--tile);
-  border-radius: var(--r);
-  padding: 22px 12px;
-}
-.stat strong { display: block; font-size: 21px; font-weight: 700; letter-spacing: -.02em; color: var(--blue); }
-.stat small { font-size: 12px; color: var(--muted); }
-
-/* ---------- Por que comprar ---------- */
-.why-title { margin-bottom: 34px; text-align: center; }
 
 /* ---------- Descrição e especificações do produto ---------- */
 .p-desc { font-size: 14px; line-height: 1.65; color: #48484A; margin-top: 10px; }
@@ -1312,25 +1215,9 @@ input { font: inherit; }
   }
   .desk-nav button:hover { color: var(--blue); background: rgba(0,45,143,.05); }
   .desk-nav button.active { color: var(--blue); font-weight: 600; }
-  .desk-nav .nav-hot { color: var(--red-text); }
-  .desk-nav .nav-hot:hover { color: var(--red); background: rgba(255,10,24,.06); }
 
-  /* Paulex Club (direita) + ícones de ação */
-  .club-logo { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; }
-  .club-name { font-family: "Pacifico", cursive; font-size: 17px; }
-  .club-name i { font-style: normal; }
-  .club-name i:nth-child(1) { color: var(--blue); }
-  .club-name i:nth-child(2) { color: var(--red); }
-  .club-name i:nth-child(3) { color: var(--gold); }
-  .club-name i:nth-child(4) { color: var(--green); }
-  .club-name i:nth-child(5) { color: var(--red); }
-  .club-name i:nth-child(6) { color: var(--blue); }
-  .club-sub {
-    font-size: 7.5px; font-weight: 700; letter-spacing: 2.5px;
-    color: var(--blue); margin-top: 1px;
-  }
+  /* Ícones de ação (conta + carrinho) */
   .desk-actions { display: flex; align-items: center; gap: 4px; flex: none; }
-  .club-link { padding: 4px 8px; }
   .desk-action-btn {
     display: flex; align-items: center; justify-content: center;
     width: 38px; height: 38px; border-radius: 9px;
