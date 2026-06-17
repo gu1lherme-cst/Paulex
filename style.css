@@ -348,18 +348,23 @@ input { font: inherit; }
 .biz-eyebrow {
   display: inline-block; font-size: 11px; font-weight: 700;
   letter-spacing: 2px; text-transform: uppercase;
-  color: rgba(255,255,255,.7); margin-bottom: 10px;
+  color: #fff; opacity: .85;
+  background: rgba(255,255,255,.14); padding: 5px 12px; border-radius: 999px;
+  margin-bottom: 14px;
 }
-.biz-text h3 { font-size: clamp(24px, 4vw, 34px); font-weight: 800; letter-spacing: -.02em; }
-.biz-text > p { margin-top: 12px; font-size: 14.5px; color: rgba(255,255,255,.82); line-height: 1.55; max-width: 460px; }
+.biz-text h3 { color: #fff; font-size: clamp(24px, 4vw, 34px); font-weight: 800; letter-spacing: -.02em; }
+.biz-text > p { margin-top: 12px; font-size: 14.5px; color: rgba(255,255,255,.9); line-height: 1.55; max-width: 460px; }
 .biz-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
 .biz-tags span {
-  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
-  padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.28);
+  padding: 9px 15px; border-radius: 999px;
+  font-size: 13.5px; font-weight: 600; color: #fff;
 }
-.biz-card .cta-row { margin-top: 24px; }
-.biz-visual { display: flex; align-items: stretch; }
-.biz-visual svg { width: 100%; height: auto; display: block; }
+.biz-tags span svg { width: 16px; height: 16px; color: #fff; flex: none; }
+.biz-card .cta-row { margin-top: 26px; }
+.biz-visual { display: flex; align-items: stretch; min-height: 220px; background: #0A368F; }
+.biz-visual svg { width: 100%; height: 100%; min-height: 220px; display: block; object-fit: cover; }
 
 /* Faixa de confiança pré-rodapé */
 .trust-strip-section { padding: 20px 0 40px; }

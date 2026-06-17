@@ -1103,7 +1103,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObse
     entries.forEach((e) => {
       if (e.isIntersecting) { e.target.classList.add("in"); obs.unobserve(e.target); }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0, rootMargin: "0px 0px 140px 0px" });
   document.querySelectorAll("#screen-home .section, #screen-home .trust, #screen-home .footer").forEach((el) => {
     el.classList.add("reveal");
     obs.observe(el);
