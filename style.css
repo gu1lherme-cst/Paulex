@@ -337,8 +337,8 @@ input { font: inherit; }
 .sec-link svg { width: 15px; height: 15px; }
 .sec-link:hover { color: var(--blue-dark); }
 
-/* Cartão Atacado "Para a sua empresa" */
-.biz-card {
+/* Cartão Atacado "Para a sua empresa" (banner da home) */
+.biz-banner {
   background: linear-gradient(160deg, #0B3BA7 0%, #002D8F 100%);
   border-radius: 24px; overflow: hidden;
   display: flex; flex-direction: column;
@@ -362,7 +362,7 @@ input { font: inherit; }
   font-size: 13.5px; font-weight: 600; color: #fff;
 }
 .biz-tags span svg { width: 16px; height: 16px; color: #fff; flex: none; }
-.biz-card .cta-row { margin-top: 26px; }
+.biz-banner .cta-row { margin-top: 26px; }
 .biz-visual { display: flex; align-items: stretch; min-height: 220px; background: #0A368F; }
 .biz-visual svg { width: 100%; height: 100%; min-height: 220px; display: block; object-fit: cover; }
 
@@ -1453,7 +1453,7 @@ input { font: inherit; }
   .affil-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
 
   /* Atacado em duas colunas */
-  .biz-card { flex-direction: row; align-items: stretch; }
+  .biz-banner { flex-direction: row; align-items: stretch; }
   .biz-text { flex: 1 1 0; padding: 44px 44px; display: flex; flex-direction: column; justify-content: center; }
   .biz-visual { flex: 0 0 42%; }
 
