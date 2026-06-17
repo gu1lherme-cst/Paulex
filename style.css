@@ -141,25 +141,37 @@ input { font: inherit; }
 .link:hover { opacity: .7; }
 .link.right { align-self: flex-end; }
 
-/* ---------- Hero ---------- */
+/* ---------- Topo da home: hero + card de oferta ---------- */
+.home-top {
+  display: grid; grid-template-columns: 1fr; gap: 16px;
+  padding-top: 16px;
+}
+
+/* ---------- Hero (banner em card) ---------- */
 .hero {
-  background: linear-gradient(160deg, #0B3BA7 0%, #002D8F 55%, #00226E 100%);
+  background: linear-gradient(150deg, #0B3BA7 0%, #002D8F 55%, #00226E 100%);
   color: #fff;
-  padding: 36px 0 0;
+  padding: 30px 24px;
   overflow: hidden;
-  border-radius: 0 0 28px 28px;
+  border-radius: 22px;
+  position: relative;
+}
+.hero::after {
+  content: ""; position: absolute; right: -60px; top: -60px;
+  width: 220px; height: 220px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.08), transparent 70%);
+  pointer-events: none;
 }
 .hero-inner {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 24px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 20px;
   text-align: left;
-  padding-bottom: 0;
 }
 .hero-text { flex: 1 1 0; min-width: 0; }
 .hero-visual {
   flex: 0 0 auto; position: relative;
   display: flex; align-items: flex-end;
   justify-content: center;
-  width: 100%; max-width: 300px;
+  width: 100%; max-width: 290px;
 }
 .hero-visual svg { width: 100%; height: auto; display: block; }
 .hero-badge {
@@ -173,18 +185,115 @@ input { font: inherit; }
 .hero-badge strong { font-size: 18px; font-weight: 800; }
 .hero-badge span { font-size: 9px; color: var(--muted); margin-top: 2px; }
 
-/* Faixa de confiança dentro do hero */
-.hero-trust {
+/* ---------- Card lateral: Ofertas do Dia ---------- */
+.offer-card {
+  background: #fff; border-radius: 22px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);
+  padding: 18px; display: flex; flex-direction: column; gap: 14px;
+  border: 1px solid rgba(0,0,0,.04);
+}
+.offer-head {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 800; letter-spacing: .02em;
+  color: var(--red-text); text-transform: uppercase;
+}
+.offer-head svg { width: 18px; height: 18px; fill: var(--red-text); stroke: none; }
+.offer-timer-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #FFF1F1; border-radius: 12px; padding: 10px 14px;
+}
+.offer-timer-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+.offer-timer {
+  font-size: 20px; font-weight: 800; letter-spacing: 1px;
+  color: var(--red-text); font-variant-numeric: tabular-nums;
+}
+.offer-product {
+  position: relative; text-align: center;
+  background: var(--tile); border-radius: 16px; padding: 18px 14px 14px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  transition: transform .2s var(--ease);
+}
+.offer-product:hover { transform: translateY(-2px); }
+.offer-badge {
+  position: absolute; top: 10px; left: 10px;
+  background: var(--red); color: #fff;
+  font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 999px;
+}
+.offer-art { width: 88px; height: 88px; display: flex; align-items: center; justify-content: center; }
+.offer-art svg { width: 100%; height: 100%; }
+.offer-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+.offer-prices { display: flex; align-items: baseline; gap: 8px; justify-content: center; }
+.offer-old { font-size: 13px; color: var(--muted); text-decoration: line-through; }
+.offer-new { font-size: 22px; font-weight: 800; color: var(--blue); letter-spacing: -.02em; }
+.offer-btn {
+  background: var(--red); color: #fff;
+  font-size: 14px; font-weight: 700; padding: 13px; border-radius: 12px;
+  transition: background .2s var(--ease), transform .2s var(--ease);
+}
+.offer-btn:hover { background: #C8060F; transform: translateY(-1px); }
+
+/* Faixa de confiança (abaixo do hero) */
+.hero-trust-row {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 14px 18px;
-  padding-top: 26px; padding-bottom: 30px;
+  padding-top: 22px; padding-bottom: 4px;
 }
 .hero-trust-item {
-  display: flex; align-items: center; gap: 9px;
-  font-size: 12.5px; color: rgba(255,255,255,.82);
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--muted);
 }
-.hero-trust-item svg { width: 18px; height: 18px; color: #fff; flex: none; }
-.hero-trust-item strong { color: #fff; font-weight: 600; }
+.hero-trust-item svg { width: 22px; height: 22px; color: var(--blue); flex: none; }
+.hero-trust-item strong { color: var(--ink); font-weight: 600; }
+
+/* ---------- Seção de afiliados ---------- */
+.affil-head { text-align: center; max-width: 680px; margin: 0 auto; }
+.affil-eyebrow {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--green);
+  background: rgba(29,163,74,.1); padding: 5px 12px; border-radius: 999px;
+  margin-bottom: 14px;
+}
+.affil-head .sec-title-left { text-align: center; font-size: clamp(22px, 3.5vw, 30px); }
+.affil-sub { margin-top: 12px; font-size: 14.5px; color: var(--muted); line-height: 1.55; }
+.affil-partners {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px;
+}
+.affil-partner {
+  font-size: 13px; font-weight: 700; color: var(--ink);
+  background: #fff; border: 1px solid var(--hairline);
+  padding: 8px 16px; border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+.affil-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px;
+}
+.affil-card {
+  position: relative; background: #fff; border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  display: flex; flex-direction: column; overflow: hidden;
+  transition: box-shadow .25s var(--ease), transform .25s var(--ease);
+}
+.affil-card:hover { box-shadow: 0 14px 30px rgba(0,0,0,.12); transform: translateY(-3px); }
+.affil-badge {
+  position: absolute; top: 12px; left: 12px; z-index: 1;
+  background: var(--green); color: #fff;
+  font-size: 10px; font-weight: 800; letter-spacing: .5px;
+  padding: 4px 10px; border-radius: 999px;
+}
+.affil-art {
+  height: 150px; background: var(--tile);
+  display: flex; align-items: center; justify-content: center;
+}
+.affil-art svg { width: 84px; height: 84px; }
+.affil-info { padding: 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.affil-name { font-size: 14px; font-weight: 600; line-height: 1.35; flex: 1; }
+.affil-price { font-size: 20px; font-weight: 800; color: var(--ink); letter-spacing: -.02em; }
+.affil-btn {
+  margin-top: 6px; text-align: center;
+  font-size: 13.5px; font-weight: 700; padding: 11px; border-radius: 12px;
+  transition: filter .2s var(--ease), transform .2s var(--ease);
+}
+.affil-btn:hover { filter: brightness(.94); transform: translateY(-1px); }
 
 /* Cartão flutuante de benefícios */
 .benefits-card {
@@ -450,6 +559,7 @@ input { font: inherit; }
   padding: 4px 9px; border-radius: 999px;
 }
 .card .tag.new { background: var(--blue); }
+.card .tag.best { background: var(--green); }
 .card .info { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 3px; flex: 1; }
 .card .name { font-size: 12.5px; font-weight: 600; line-height: 1.35; letter-spacing: -.005em; }
 .card .old { font-size: 11px; color: var(--muted); text-decoration: line-through; }
@@ -1187,78 +1297,136 @@ input { font: inherit; }
   .app { padding-bottom: 0; }
   .bottom-nav { display: none; }
 
-  /* Navegação fina, vidro fosco */
+  /* Cabeçalho premium (3 faixas) */
   .desk-header {
     display: block;
     position: sticky; top: 0; z-index: 30;
-    background: rgba(255, 255, 255, .82);
-    backdrop-filter: blur(20px) saturate(1.8);
-    -webkit-backdrop-filter: blur(20px) saturate(1.8);
+    background: #fff;
     border-bottom: 1px solid var(--hairline);
+    box-shadow: 0 1px 10px rgba(0,0,0,.04);
   }
-  .desk-wrap {
-    display: flex; align-items: center; justify-content: space-between;
-    height: 48px; gap: 12px;
+  /* Barra de informações */
+  .info-bar { background: var(--blue); color: #fff; }
+  .info-bar-wrap {
+    display: flex; align-items: center; justify-content: center; gap: 18px;
+    height: 34px; font-size: 12.5px;
+  }
+  .info-bar-item {
+    display: inline-flex; align-items: center; gap: 7px;
+    color: rgba(255,255,255,.92); white-space: nowrap;
+  }
+  .info-bar-item svg { width: 15px; height: 15px; }
+  .info-bar-sep { width: 1px; height: 14px; background: rgba(255,255,255,.25); }
+  .info-bar-wa { transition: color .2s var(--ease); }
+  .info-bar-wa:hover { color: #fff; text-decoration: underline; }
+
+  /* Header principal */
+  .desk-main {
+    display: flex; align-items: center; gap: 24px;
+    height: 70px;
   }
   .desk-logo { display: flex; align-items: center; flex: none; }
+  .desk-search {
+    flex: 1 1 auto; position: relative;
+    display: flex; align-items: center; gap: 10px;
+    background: var(--tile); border: 1.5px solid transparent;
+    border-radius: 12px; padding: 0 6px 0 14px; height: 44px;
+    transition: border-color .2s var(--ease), background .2s var(--ease);
+  }
+  .desk-search:focus-within { background: #fff; border-color: var(--blue); }
+  .desk-search > svg { width: 19px; height: 19px; color: var(--muted); flex: none; }
+  .desk-search input { flex: 1; border: 0; background: none; outline: none; font-size: 14.5px; color: var(--ink); }
+  .desk-search-go {
+    flex: none; background: var(--blue); color: #fff;
+    font-size: 13.5px; font-weight: 700; height: 34px; padding: 0 20px;
+    border-radius: 9px; transition: background .2s var(--ease);
+  }
+  .desk-search-go:hover { background: var(--blue-dark); }
+  .desk-search .suggest { top: 52px; left: 0; right: 0; }
+
+  .desk-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+  .desk-account {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 12px; border-radius: 10px;
+    transition: background .2s var(--ease);
+  }
+  .desk-account:hover { background: var(--tile); }
+  .desk-account > svg { width: 24px; height: 24px; color: var(--ink); flex: none; }
+  .desk-account-txt { display: flex; flex-direction: column; line-height: 1.2; text-align: left; }
+  .desk-account-txt small { font-size: 11px; color: var(--muted); }
+  .desk-account-txt strong { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .desk-cart-btn {
+    position: relative; display: flex; align-items: center; gap: 9px;
+    padding: 8px 14px; border-radius: 10px;
+    background: var(--blue); color: #fff;
+    transition: background .2s var(--ease);
+  }
+  .desk-cart-btn:hover { background: var(--blue-dark); }
+  .desk-cart-btn > svg { width: 22px; height: 22px; color: #fff; }
+  .desk-cart-txt { font-size: 13.5px; font-weight: 700; }
+  .desk-cart-btn .badge { top: 2px; left: 26px; right: auto; background: var(--red); }
+
+  /* Menu de navegação */
+  .desk-nav-wrap { border-top: 1px solid var(--hairline); }
   .desk-nav {
     display: flex; align-items: center;
-    gap: 1px; flex: 1 1 auto; flex-wrap: nowrap; justify-content: flex-start;
+    gap: 2px; flex-wrap: nowrap; height: 46px;
   }
   .desk-nav button {
-    padding: 6px 8px;
-    border-radius: 6px;
-    font-size: 13px; font-weight: 500;
+    padding: 8px 13px;
+    border-radius: 8px;
+    font-size: 13.5px; font-weight: 500;
     color: var(--ink);
     white-space: nowrap;
     transition: color .2s var(--ease), background .2s var(--ease);
   }
   .desk-nav button:hover { color: var(--blue); background: rgba(0,45,143,.05); }
   .desk-nav button.active { color: var(--blue); font-weight: 600; }
-
-  /* Ícones de ação (conta + carrinho) */
-  .desk-actions { display: flex; align-items: center; gap: 4px; flex: none; }
-  .desk-action-btn {
-    display: flex; align-items: center; justify-content: center;
-    width: 38px; height: 38px; border-radius: 9px;
-    color: var(--ink); transition: background .2s var(--ease);
+  .desk-nav .nav-ofertas {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--red); color: #fff; font-weight: 700;
   }
-  .desk-action-btn:hover { background: var(--tile); }
-  .desk-action-btn svg { width: 20px; height: 20px; }
-  .desk-cart { position: relative; }
-  .desk-cart .badge { top: 4px; right: 4px; }
+  .desk-nav .nav-ofertas svg { width: 15px; height: 15px; fill: #fff; stroke: none; }
+  .desk-nav .nav-ofertas:hover { background: #C8060F; color: #fff; }
 
   /* Topbar mobile some na home (o cabeçalho assume) */
   .home-topbar { display: none; }
   .topbar { padding: 14px 24px; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; position: static; }
   .topbar-title h2 { font-size: 21px; letter-spacing: -.02em; }
 
-  /* Hero duas colunas */
-  .hero { padding: 56px 0 0; border-radius: 0 0 36px 36px; }
+  /* Topo: hero + card de oferta lado a lado */
+  .home-top {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 20px; align-items: stretch; padding-top: 24px;
+  }
+  .hero { padding: 44px 48px; border-radius: 24px; }
   .hero-inner {
     flex-direction: row; align-items: center;
-    text-align: left; min-height: 400px; gap: 50px;
+    text-align: left; min-height: 360px; gap: 40px; height: 100%;
   }
-  .hero-text { max-width: 540px; }
-  .hero-visual { flex: 0 0 360px; width: auto; max-width: none; }
-  .hero-badge { width: 92px; height: 92px; top: 10px; right: -6px; }
-  .hero-badge strong { font-size: 22px; }
+  .hero-text { max-width: 460px; }
+  .hero-visual { flex: 0 0 300px; width: auto; max-width: none; }
+  .hero-badge { width: 88px; height: 88px; top: 6px; right: -6px; }
+  .hero-badge strong { font-size: 21px; }
   .hero-badge span { font-size: 10px; }
   .cta-row { justify-content: flex-start; margin-top: 32px; gap: 16px; }
   .pill { font-size: 15px; padding: 14px 28px; }
+  .offer-card { padding: 20px; }
 
-  /* Faixa de confiança no hero: 4 colunas */
-  .hero-trust { grid-template-columns: repeat(4, 1fr); gap: 18px; padding-top: 30px; padding-bottom: 34px; }
+  /* Faixa de confiança: 4 colunas */
+  .hero-trust-row { grid-template-columns: repeat(4, 1fr); gap: 18px; padding-top: 28px; padding-bottom: 4px; }
   .hero-trust-item { font-size: 13px; }
 
-  /* Cartão de benefícios: 4 colunas com divisores verticais */
+  /* Cartão de benefícios: 5 colunas com divisores */
   .benefits-card {
     grid-template-columns: repeat(4, 1fr);
-    padding: 0; margin-top: 24px;
+    padding: 0; margin-top: 26px;
   }
+  .benefits-card-5 { grid-template-columns: repeat(5, 1fr); }
   .benefits-card .benefit-item {
     border-bottom: 0; border-right: 1px solid rgba(0,0,0,.07);
-    padding: 22px 24px;
+    padding: 22px 22px;
   }
   .benefits-card .benefit-item:last-child { border-right: 0; }
 
@@ -1275,6 +1443,9 @@ input { font: inherit; }
   .card .info { padding: 14px 14px 16px; }
   .card .name { font-size: 13px; }
   .card .price { font-size: 16px; }
+
+  /* Afiliados: 4 colunas */
+  .affil-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
 
   /* Atacado em duas colunas */
   .biz-card { flex-direction: row; align-items: stretch; }

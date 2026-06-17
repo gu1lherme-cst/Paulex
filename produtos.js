@@ -295,4 +295,45 @@ const PRODUCTS = [
     art: art('<rect x="20" y="24" width="24" height="30" rx="6" fill="#DEE8FB"/><rect x="27" y="16" width="10" height="8" rx="2" fill="#fff"/><path d="M37 14c3-1 5-2 8-2"/><circle cx="47" cy="11" r="2.4" fill="#DEE8FB"/>'),
     rating: 4.7, avaliacoes: 160, estoque: 40, novidade: true,
   },
+  {
+    id: "headphone-bluetooth", nome: "Headphone Bluetooth Sem Fio", unidade: "Unidade",
+    preco: 179.90, precoAntigo: 229.90, cat: "informatica",
+    desc: "Headphone Bluetooth 5.3 com cancelamento de ruído, até 30h de bateria e almofadas memory foam. Som potente com graves profundos e microfone embutido para chamadas.",
+    specs: [["Conexão", "Bluetooth 5.3"], ["Bateria", "Até 30 horas"], ["Recursos", "Cancelamento de ruído"], ["Microfone", "Embutido"]],
+    art: art('<path d="M14 38v-6a18 18 0 0 1 36 0v6"/><rect x="9" y="36" width="13" height="20" rx="6" fill="#DEE8FB"/><rect x="42" y="36" width="13" height="20" rx="6" fill="#DEE8FB"/>'),
+    rating: 4.7, avaliacoes: 512, estoque: 30, promo: true, maisVendido: true,
+  },
+];
+
+/* ============================================================
+   PRODUTOS AFILIADOS
+   Produtos vendidos por lojas parceiras (Amazon, Shopee, Magalu,
+   Mercado Livre). O botão leva o cliente direto para a loja.
+   Edite "url" com o seu link de afiliado real.
+   ============================================================ */
+const AFILIADOS = [
+  {
+    id: "epson-ecotank", nome: "Impressora Epson EcoTank L3250",
+    preco: 1099.00, loja: "Amazon", cor: "#FF9900",
+    url: "https://www.amazon.com.br/",
+    art: art('<rect x="10" y="18" width="44" height="18" rx="3" fill="#DEE8FB"/><rect x="16" y="34" width="32" height="16" rx="2" fill="#fff"/><path d="M20 30h24M22 42h20"/><rect x="18" y="12" width="28" height="8" rx="2" fill="#fff"/>'),
+  },
+  {
+    id: "ssd-kingston", nome: "SSD Kingston NV2 1TB NVMe",
+    preco: 219.00, loja: "Shopee", cor: "#EE4D2D",
+    url: "https://shopee.com.br/",
+    art: art('<rect x="14" y="20" width="36" height="24" rx="3" fill="#DEE8FB"/><path d="M20 26h12M20 32h20M20 38h8"/><circle cx="44" cy="38" r="2.4" fill="#0B3BA7"/>'),
+  },
+  {
+    id: "monitor-gamer", nome: "Monitor Gamer 24'' 144Hz",
+    preco: 579.00, loja: "Magalu", cor: "#0086FF",
+    url: "https://www.magazineluiza.com.br/",
+    art: art('<rect x="10" y="14" width="44" height="28" rx="3" fill="#DEE8FB"/><path d="M28 42v6M22 48h20"/><path d="M16 20h24M16 26h16"/>'),
+  },
+  {
+    id: "cadeira-office", nome: "Cadeira Office Ergonômica",
+    preco: 699.00, loja: "Mercado Livre", cor: "#FFE600", corTexto: "#2D3277",
+    url: "https://www.mercadolivre.com.br/",
+    art: art('<path d="M22 16h16a3 3 0 0 1 3 3v14H19V19a3 3 0 0 1 3-3z" fill="#DEE8FB"/><path d="M30 33v9M20 50h20M30 42l-8 8M30 42l8 8"/>'),
+  },
 ];

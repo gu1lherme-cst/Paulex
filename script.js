@@ -135,18 +135,6 @@ function go(id) { setRoute("/" + id); }
 function openList(kind) { setRoute("/lista/" + encodeURIComponent(kind)); }
 function openProduct(id) { setRoute("/produto/" + id); }
 
-// Lupa do cabeçalho: vai para a home e foca o campo de busca
-function focusSearch() {
-  go("home");
-  setTimeout(() => {
-    const inp = document.getElementById("search-input");
-    if (inp) {
-      inp.scrollIntoView({ behavior: "smooth", block: "center" });
-      inp.focus();
-    }
-  }, 150);
-}
-
 function back() {
   if (history.length > 1 && location.hash) history.back();
   else go("home");
@@ -244,9 +232,11 @@ function renderCategories() {
 /* ---------- Render: cards de produto ---------- */
 function productCard(p) {
   const tag = p.promo
-    ? `<span class="tag">OFERTA</span>`
+    ? `<span class="tag">PROMOÇÃO</span>`
     : p.novidade
     ? `<span class="tag new">NOVO</span>`
+    : p.maisVendido
+    ? `<span class="tag best">MAIS VENDIDO</span>`
     : "";
   const old = p.precoAntigo ? `<span class="old">${money(p.precoAntigo)}</span>` : "";
   return `
@@ -262,6 +252,62 @@ function productCard(p) {
     </div>`;
 }
 
+/* ---------- Render: produtos afiliados ---------- */
+function renderAffiliates() {
+  const grid = $("#affil-grid");
+  if (!grid || typeof AFILIADOS === "undefined") return;
+  grid.innerHTML = AFILIADOS.map((a) => {
+    const txtCor = a.corTexto || "#fff";
+    return `
+    <article class="affil-card">
+      <span class="affil-badge">AFILIADO</span>
+      <div class="affil-art">${a.art}</div>
+      <div class="affil-info">
+        <span class="affil-name">${escapeHTML(a.nome)}</span>
+        <span class="affil-price">${money(a.preco)}</span>
+        <a class="affil-btn" href="${a.url}" target="_blank" rel="noopener nofollow sponsored"
+           style="background:${a.cor};color:${txtCor}"
+           onclick="track('affiliate_click',{loja:'${a.loja}',produto:'${a.id}'})">
+          Ver na ${escapeHTML(a.loja)}
+        </a>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+/* ---------- Contador da Oferta do Dia ---------- */
+function startOfferTimer() {
+  const el = $("#offer-timer");
+  if (!el) return;
+  // Conta regressiva até a próxima meia-noite (reinicia todo dia)
+  function tick() {
+    const agora = new Date();
+    const fim = new Date(agora);
+    fim.setHours(24, 0, 0, 0);
+    let s = Math.max(0, Math.floor((fim - agora) / 1000));
+    const h = String(Math.floor(s / 3600)).padStart(2, "0");
+    const m = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+    const seg = String(s % 60).padStart(2, "0");
+    el.textContent = `${h}:${m}:${seg}`;
+  }
+  tick();
+  clearInterval(window._offerTimer);
+  window._offerTimer = setInterval(tick, 1000);
+}
+
+/* ---------- Busca do cabeçalho (desktop) ---------- */
+function doDeskSearch() {
+  const inp = $("#desk-search-input");
+  if (!inp) return;
+  const q = inp.value.trim();
+  if (q.length >= 2) {
+    const sg = $("#desk-suggest");
+    if (sg) sg.hidden = true;
+    track("search", { search_term: q });
+    openList("busca:" + q);
+  }
+}
+
 function renderHome() {
   const homeGrid = $("#home-grid");
   const promoGrid = $("#promo-grid");
@@ -273,9 +319,6 @@ function renderHome() {
 }
 
 /* ---------- Busca com sugestões instantâneas ---------- */
-const searchInput = $("#search-input");
-const suggest = $("#suggest");
-
 function productMatches(p, q) {
   const cat = CATEGORIES.find((c) => c.id === p.cat);
   return [p.nome, p.desc, p.unidade, cat && cat.nome]
@@ -283,46 +326,55 @@ function productMatches(p, q) {
     .some((v) => v.toLowerCase().includes(q));
 }
 
-function renderSuggest(term) {
+function renderSuggestInto(term, box) {
+  if (!box) return;
   const q = term.trim().toLowerCase();
-  if (q.length < 2) { suggest.hidden = true; return; }
+  if (q.length < 2) { box.hidden = true; return; }
   const hits = PRODUCTS.filter((p) => productMatches(p, q)).slice(0, 6);
   if (!hits.length) {
-    suggest.innerHTML = `<div class="sug-empty">Nenhum produto encontrado para “${escapeHTML(term)}”.</div>`;
+    box.innerHTML = `<div class="sug-empty">Nenhum produto encontrado para “${escapeHTML(term)}”.</div>`;
   } else {
-    suggest.innerHTML = hits.map((p) => `
+    box.innerHTML = hits.map((p) => `
       <button class="sug" onclick="suggestGo('${p.id}')">
         <span class="sug-art">${productMedia(p)}</span>
-        <span class="sug-name">${p.nome}</span>
+        <span class="sug-name">${escapeHTML(p.nome)}</span>
         <span class="sug-price">${money(p.preco)}</span>
       </button>`).join("");
   }
-  suggest.hidden = false;
+  box.hidden = false;
 }
 
 function suggestGo(id) {
-  if (suggest) suggest.hidden = true;
-  if (searchInput) searchInput.value = "";
+  document.querySelectorAll(".suggest").forEach((s) => (s.hidden = true));
+  document.querySelectorAll("input[type=search]").forEach((i) => (i.value = ""));
   openProduct(id);
 }
 
-if (searchInput) {
-  searchInput.addEventListener("input", (e) => renderSuggest(e.target.value));
-  searchInput.addEventListener("focus", (e) => renderSuggest(e.target.value));
-  searchInput.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") suggest.hidden = true;
+// Conecta um campo de busca + caixa de sugestões
+function wireSearch(inputId, boxId) {
+  const input = document.getElementById(inputId);
+  const box = document.getElementById(boxId);
+  if (!input) return;
+  input.addEventListener("input", (e) => renderSuggestInto(e.target.value, box));
+  input.addEventListener("focus", (e) => renderSuggestInto(e.target.value, box));
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && box) box.hidden = true;
     if (e.key === "Enter") {
       const q = e.target.value.trim();
       if (q.length >= 2) {
-        suggest.hidden = true;
+        if (box) box.hidden = true;
         track("search", { search_term: q });
         openList("busca:" + q);
       }
     }
   });
 }
+wireSearch("desk-search-input", "desk-suggest");
+
 document.addEventListener("click", (e) => {
-  if (suggest && !e.target.closest(".search-wrap")) suggest.hidden = true;
+  if (!e.target.closest(".desk-search")) {
+    document.querySelectorAll(".suggest").forEach((s) => (s.hidden = true));
+  }
 });
 
 /* ---------- Lista (categoria / ofertas / favoritos) ---------- */
@@ -1027,9 +1079,12 @@ function onGoogleCredential(resp) {
 function renderUser() {
   const u = JSON.parse(localStorage.getItem("paulex_user") || "null");
   const lv = clubLevel(clubPoints());
-  $("#account-name").textContent = u ? `Olá, ${u.nome.split(" ")[0]}!` : "Olá, cliente Paulex!";
-  $("#account-sub").textContent =
+  safe($("#account-name")).textContent = u ? `Olá, ${u.nome.split(" ")[0]}!` : "Olá, cliente Paulex!";
+  safe($("#account-sub")).textContent =
     (u && u.email ? u.email + " · " : "") + `Paulex Club ${lv.nome}`;
+  // Label da conta no cabeçalho (desktop)
+  const lbl = $("#desk-account-label");
+  if (lbl) lbl.textContent = logged && u ? u.nome.split(" ")[0] : "Entrar / Cadastrar";
 }
 
 /* ---------- Toast ---------- */
@@ -1058,6 +1113,8 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObse
 /* ---------- Init ---------- */
 renderCategories();
 renderHome();
+renderAffiliates();
+startOfferTimer();
 renderCart();
 renderOrders();
 updateBadges();
