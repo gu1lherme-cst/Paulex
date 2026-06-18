@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#002D8F">
+
+  <!-- SEO -->
+  <title>Paulex Armarinho | Papelaria, Utilidades, Informática e Muito Mais</title>
+  <meta name="description" content="Há mais de 40 anos oferecendo produtos de papelaria, utilidades, descartáveis, brinquedos, informática e cosméticos. Atacado e varejo com frete grátis acima de R$ 99.">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Paulex Armarinho">
+  <meta property="og:title" content="Paulex Armarinho | Papelaria, Utilidades, Informática e Muito Mais">
+  <meta property="og:description" content="Há mais de 40 anos facilitando o dia a dia dos brasileiros. Atacado e varejo com frete grátis acima de R$ 99.">
+  <meta property="og:image" content="img/logo.png">
+  <meta property="og:locale" content="pt_BR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Paulex Armarinho | Papelaria, Utilidades, Informática e Muito Mais">
+  <meta name="twitter:description" content="Há mais de 40 anos facilitando o dia a dia dos brasileiros. Atacado e varejo com frete grátis acima de R$ 99.">
+  <meta name="twitter:image" content="img/logo.png">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": "Paulex Armarinho",
+    "description": "Há mais de 40 anos oferecendo qualidade, confiança e variedade para famílias, estudantes, empresas e revendedores.",
+    "foundingDate": "1984",
+    "image": "img/logo.png",
+    "telephone": "+5521987578187",
+    "priceRange": "$",
+    "address": { "@type": "PostalAddress", "addressCountry": "BR" },
+    "sameAs": []
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="img/icon-192.png">
+  <link rel="apple-touch-icon" href="img/icon-180.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preload" as="image" href="img/logo.png">
+  <link rel="stylesheet" href="style.css?v=16">
+</head>
+<body>
+
+<!-- ===== SPLASH ===== -->
+<div class="splash" id="splash">
+  <div class="splash-inner">
+    <img src="img/logo.png" alt="Paulex" class="logo-img logo-img-xl" width="220" height="80">
+    <div class="desde">ARMARINHO · DESDE 1984</div>
+  </div>
+  <div class="splash-bar"><span></span></div>
+</div>
+
+<div class="app" id="app">
+
+  <!-- ===== NAVEGAÇÃO (desktop) ===== -->
+  <header class="desk-header">
+    <div class="wrap desk-wrap">
+      <button class="desk-logo" onclick="go('home')" aria-label="Início">
+        <img src="img/logo.png" alt="Paulex" class="logo-img logo-img-desk" width="82" height="30">
+      </button>
+      <nav class="desk-nav">
+        <button data-go="home" class="active">Início</button>
+        <button data-go="categorias">Categorias</button>
+        <button data-go="atacado">Atacado</button>
+        <button data-go="club">Paulex Club</button>
+        <button data-go="conta">Conta</button>
+        <button data-go="carrinho" class="desk-cart" aria-label="Carrinho">
+          <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+          <span class="badge cart-badge">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== INÍCIO ===== -->
+  <section class="screen active" id="screen-home" data-nav="home">
+    <header class="topbar home-topbar">
+      <button class="icon-btn" aria-label="Menu" onclick="go('categorias')">
+        <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <h1 class="home-logo"><img src="img/logo.png" alt="Paulex" class="logo-img logo-img-top" width="77" height="28"></h1>
+      <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+        <span class="badge cart-badge">0</span>
+      </button>
+    </header>
+
+    <!-- Hero -->
+    <div class="hero">
+      <p class="eyebrow">Paulex Armarinho · Desde 1984</p>
+      <h2>Há mais de 40 anos facilitando<br>o dia a dia dos brasileiros.</h2>
+      <p class="hero-sub">Produtos para papelaria, informática, utilidades,<br>brinquedos, descartáveis e muito mais.</p>
+      <div class="cta-row">
+        <button class="pill pill-white" onclick="openList('maisvendidos')">Comprar agora</button>
+        <button class="pill pill-ghost" onclick="openWhatsApp()">
+          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
+          Falar no WhatsApp
+        </button>
+      </div>
+      <ul class="hero-badges">
+        <li>✓ Desde 1984</li>
+        <li>✓ Atacado e Varejo</li>
+        <li>✓ Frete grátis acima de R$ 99</li>
+        <li>✓ Atendimento via WhatsApp</li>
+      </ul>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 220 130" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M80 44h60l-7 64H87l-7-64z" fill="rgba(255,255,255,.1)"/>
+          <path d="M94 44v-9a16 16 0 0 1 32 0v9"/>
+          <circle cx="178" cy="34" r="5" stroke="rgba(255,255,255,.45)" stroke-width="2.2"/>
+          <circle cx="40" cy="84" r="3.5" stroke="rgba(255,255,255,.3)" stroke-width="2.2"/>
+          <path d="M170 92l6 6m0-6-6 6" stroke="rgba(255,255,255,.35)" stroke-width="2.2"/>
+          <path d="M36 30l4 4m0-4-4 4" stroke="rgba(255,255,255,.3)" stroke-width="2.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Busca -->
+    <div class="search-wrap wrap">
+      <div class="search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <input type="search" id="search-input" placeholder="O que você está procurando?" autocomplete="off" aria-label="Buscar produtos">
+      </div>
+      <div class="suggest" id="suggest" hidden></div>
+    </div>
+
+    <!-- Vistos recentemente -->
+    <div class="recent" id="recent-section" hidden>
+      <div class="wrap">
+        <h3 class="rel-title">Vistos recentemente</h3>
+        <div class="suggest-row" id="recent-row"></div>
+      </div>
+    </div>
+
+    <!-- Sobre a Paulex -->
+    <div class="section about">
+      <div class="wrap">
+        <h3 class="sec-title">Sobre a Paulex.</h3>
+        <p class="sec-sub about-text">Desde 1984, a Paulex Armarinho atende clientes de todo o Brasil oferecendo variedade, qualidade e preços competitivos. Nosso compromisso é entregar confiança, atendimento próximo e soluções para o dia a dia.</p>
+        <div class="stats">
+          <div class="stat"><strong>40+</strong><small>anos de história</small></div>
+          <div class="stat"><strong>Milhares</strong><small>de clientes atendidos</small></div>
+          <div class="stat"><strong>Atacado</strong><small>e varejo</small></div>
+          <div class="stat"><strong>Atendimento</strong><small>especializado</small></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categorias -->
+    <div class="section alt">
+      <div class="wrap">
+        <h3 class="sec-title">Categorias.</h3>
+        <p class="sec-sub">Seis universos. Um só lugar.</p>
+        <div class="cat-row" id="cat-row"></div>
+      </div>
+    </div>
+
+    <!-- Mais vendidos -->
+    <div class="section vendidos">
+      <div class="wrap">
+        <h3 class="sec-title">Mais vendidos.</h3>
+        <p class="sec-sub">Os favoritos de quem compra todo mês.</p>
+        <div class="product-grid" id="home-grid"></div>
+        <button class="pill pill-blue sec-cta" onclick="openList('maisvendidos')">Ver todos</button>
+      </div>
+    </div>
+
+    <!-- Ofertas da semana -->
+    <div class="section alt">
+      <div class="wrap">
+        <h3 class="sec-title">Ofertas da semana.</h3>
+        <p class="sec-sub">Preços que valem o clique.</p>
+        <div class="product-grid" id="promo-grid"></div>
+        <button class="pill pill-red sec-cta" onclick="openList('promocoes')">Ver todas as ofertas</button>
+      </div>
+    </div>
+
+    <!-- Atacado para empresas -->
+    <div class="section alt biz-promo">
+      <div class="wrap">
+        <span class="biz-badge">Atacado</span>
+        <h3 class="sec-title">Para a sua empresa.</h3>
+        <p class="sec-sub">Acima de 12 peças, você paga preço de atacado. Atendimento dedicado para escolas, lojas e escritórios.</p>
+        <div class="biz-tags">
+          <span>🏫 Escolas</span>
+          <span>🏪 Lojas</span>
+          <span>🏢 Escritórios</span>
+          <span>📦 Revendedores</span>
+        </div>
+        <div class="cta-row">
+          <button class="pill pill-blue" onclick="go('atacado')">Ver vantagens do atacado</button>
+          <button class="pill pill-wa-ghost" onclick="orcamento()">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
+            Pedir orçamento
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paulex Club -->
+    <div class="section club-promo">
+      <div class="wrap">
+        <span class="club-promo-ico">
+          <svg viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1 11H5L4 8z"/></svg>
+        </span>
+        <h3 class="sec-title">Paulex Club.</h3>
+        <p class="sec-sub">Pontos, cupons, cashback e frete especial em todas as compras.</p>
+        <button class="pill pill-gold" onclick="go('club')">Conhecer o Club</button>
+      </div>
+    </div>
+
+    <!-- Por que comprar na Paulex -->
+    <div class="trust">
+      <div class="wrap">
+        <h3 class="sec-title why-title">Por que comprar na Paulex?</h3>
+        <div class="trust-grid">
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24"><path d="M4 9h16v11H4zM2 9l2-4h16l2 4M9 13h6"/></svg>
+            <strong>Empresa desde 1984</strong><small>Tradição que atravessa gerações</small>
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="m9 12 2 2 4-4"/></svg>
+            <strong>Compra 100% segura</strong><small>Seus dados protegidos</small>
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
+            <strong>Atendimento via WhatsApp</strong><small>Resposta rápida e próxima</small>
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>
+            <strong>Entrega rápida</strong><small>Frete grátis acima de R$ 99</small>
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="6"/><path d="m9 15-1.5 6L12 18.5 16.5 21 15 15"/></svg>
+            <strong>Produtos selecionados</strong><small>Qualidade garantida</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+      <div class="wrap footer-grid">
+        <div class="f-col f-brand">
+          <img src="img/logo.png" alt="Paulex" class="logo-img" width="110" height="40">
+          <p>Há mais de 40 anos oferecendo qualidade, confiança e variedade para famílias, estudantes, empresas e revendedores.</p>
+          <div class="f-social">
+            <button aria-label="WhatsApp" onclick="openWhatsApp()">
+              <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
+            </button>
+            <button aria-label="Instagram" onclick="toast('Em breve no Instagram!')">
+              <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17" cy="7" r=".8" fill="currentColor"/></svg>
+            </button>
+            <button aria-label="Facebook" onclick="toast('Em breve no Facebook!')">
+              <svg viewBox="0 0 24 24"><path d="M15 4h-2.5A3.5 3.5 0 0 0 9 7.5V10H7v3h2v7h3v-7h2.5l.5-3h-3V8a1 1 0 0 1 1-1h2V4z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="f-col">
+          <h4>Categorias</h4>
+          <div class="f-links" id="foot-cats"></div>
+        </div>
+        <div class="f-col">
+          <h4>Institucional</h4>
+          <div class="f-links">
+            <button onclick="window.scrollTo({top:0,behavior:'smooth'})">Sobre nós</button>
+            <button onclick="go('atacado')">Atacado para empresas</button>
+            <button onclick="go('club')">Paulex Club</button>
+            <button onclick="go('privacidade')">Política de Privacidade</button>
+            <button onclick="go('termos')">Termos de Uso</button>
+          </div>
+        </div>
+        <div class="f-col">
+          <h4>Atendimento</h4>
+          <div class="f-links">
+            <button onclick="openWhatsApp()">WhatsApp (21) 98757-8187</button>
+            <button onclick="openWhatsApp()">Fale com a gente</button>
+            <span class="f-note">Segunda a sábado, 8h às 18h</span>
+          </div>
+        </div>
+      </div>
+      <div class="wrap f-bottom">
+        <span><strong>Paulex Armarinho</strong> — Desde 1984. Todos os direitos reservados.</span>
+      </div>
+    </footer>
+  </section>
+
+  <!-- ===== CATEGORIAS ===== -->
+  <section class="screen" id="screen-categorias" data-nav="categorias">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Categorias</h2>
+      <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+        <span class="badge cart-badge">0</span>
+      </button>
+    </header>
+    <div class="wrap">
+      <div class="cat-list" id="cat-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== LISTA (categoria / ofertas / busca) ===== -->
+  <section class="screen" id="screen-list">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2 id="list-title">Produtos</h2>
+      <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+        <span class="badge cart-badge">0</span>
+      </button>
+    </header>
+    <div class="wrap">
+      <div class="sort-row" id="sort-row">
+        <button class="sort active" data-sort="relevancia" onclick="sortBy(this)">Relevância</button>
+        <button class="sort" data-sort="menor" onclick="sortBy(this)">Menor preço</button>
+        <button class="sort" data-sort="maior" onclick="sortBy(this)">Maior preço</button>
+        <button class="sort" data-sort="avaliados" onclick="sortBy(this)">Mais avaliados</button>
+      </div>
+      <div class="product-grid pad" id="list-grid"></div>
+      <p class="empty" id="list-empty" hidden>Nenhum produto encontrado.</p>
+    </div>
+  </section>
+
+  <!-- ===== PRODUTO ===== -->
+  <section class="screen" id="screen-produto">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2></h2>
+      <button class="icon-btn" id="p-fav" aria-label="Favoritar" onclick="toggleFav()">
+        <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9-9c-1.2-2.8.6-6 3.8-6C9 5 10.5 6.5 12 8.5 13.5 6.5 15 5 17.2 5c3.2 0 5 3.2 3.8 6-2 4.5-9 9-9 9z"/></svg>
+      </button>
+    </header>
+
+    <div class="wrap p-wrap">
+      <div class="p-photo" id="p-photo"></div>
+
+      <div class="p-body">
+        <h2 id="p-name">Produto</h2>
+        <small class="muted" id="p-unit">Unidade</small>
+        <div class="stars" id="p-stars"></div>
+        <div class="p-price" id="p-price"></div>
+        <div class="stock" id="p-stock"></div>
+        <p class="p-desc" id="p-desc"></p>
+
+        <div class="tiers" id="p-tiers">
+          <strong class="red">Preço de atacado a partir de 12 peças</strong>
+          <table>
+            <thead><tr><th>Quantidade</th><th>Preço unitário</th><th></th></tr></thead>
+            <tbody id="p-tiers-body"></tbody>
+          </table>
+          <button class="link tiers-cta" onclick="orcamento()">Precisa de mais? Peça um orçamento ›</button>
+        </div>
+
+        <div class="qty-row">
+          <span>Quantidade</span>
+          <div class="stepper">
+            <button onclick="pQty(-1)" aria-label="Diminuir">−</button>
+            <output id="p-qty">1</output>
+            <button onclick="pQty(1)" aria-label="Aumentar">+</button>
+          </div>
+        </div>
+        <div class="qty-total">
+          <span id="p-total-label">Total (1 unidade)</span>
+          <div>
+            <strong id="p-total">R$ 0,00</strong>
+            <small class="green" id="p-save" hidden></small>
+          </div>
+        </div>
+
+        <div class="p-actions">
+          <button class="pill pill-outline" onclick="addToCart()">Adicionar ao carrinho</button>
+          <button class="pill pill-blue" onclick="buyNow()">Comprar agora</button>
+        </div>
+
+        <div class="p-specs">
+          <h3>Especificações</h3>
+          <dl id="p-specs-body"></dl>
+        </div>
+
+        <div class="p-reviews">
+          <h3>Avaliações</h3>
+          <div class="rev-summary">
+            <div class="rev-score">
+              <strong id="p-rev-score">4,5</strong>
+              <span class="stars" id="p-rev-stars"></span>
+              <small class="muted" id="p-rev-count"></small>
+            </div>
+            <div class="rev-bars" id="p-rev-bars"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap p-related-wrap" id="p-related-wrap">
+      <h3 class="rel-title">Você também pode gostar</h3>
+      <div class="product-grid" id="p-related"></div>
+    </div>
+  </section>
+
+  <!-- ===== CARRINHO ===== -->
+  <section class="screen" id="screen-carrinho" data-nav="carrinho">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Carrinho</h2>
+      <button class="link" onclick="clearCart()">Limpar</button>
+    </header>
+
+    <div class="wrap cart-wrap">
+      <div id="cart-items"></div>
+
+      <div class="cart-empty" id="cart-empty" hidden>
+        <span class="empty-ico">
+          <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+        </span>
+        <p>Seu carrinho está vazio.</p>
+        <button class="pill pill-blue" onclick="go('home')">Ver produtos</button>
+      </div>
+
+      <div class="cart-summary" id="cart-summary">
+        <div class="ship-progress">
+          <small id="ship-msg"></small>
+          <div class="ship-bar"><span id="ship-fill"></span></div>
+        </div>
+        <div class="coupon-form" id="coupon-form">
+          <input id="coupon-input" placeholder="Tem um cupom?" autocomplete="off"
+            onkeydown="if(event.key==='Enter')applyCupom()">
+          <button class="pill pill-outline" onclick="applyCupom()">Aplicar</button>
+        </div>
+        <div class="row" id="cart-coupon-row" hidden>
+          <span id="cart-coupon-label"></span><span class="red" id="cart-coupon"></span>
+        </div>
+        <div class="row"><span id="cart-subtotal-label">Subtotal</span><span id="cart-subtotal"></span></div>
+        <div class="row" id="cart-discount-row"><span>Desconto por quantidade</span><span class="red" id="cart-discount"></span></div>
+        <div class="row"><span>Frete</span><span id="cart-frete"></span></div>
+        <div class="row total"><span>Total</span><strong id="cart-total"></strong></div>
+        <button class="pill pill-wa" onclick="checkoutWhatsApp()">
+          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
+          Finalizar pelo WhatsApp
+        </button>
+        <small class="pay-note">Pagamento online em breve — Cartão, Pix e boleto</small>
+      </div>
+
+      <div class="cart-suggest" id="cart-suggest" hidden>
+        <h3>Continue comprando</h3>
+        <div class="suggest-row" id="cart-suggest-row"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PAULEX CLUB ===== -->
+  <section class="screen" id="screen-club" data-nav="club">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Paulex Club</h2>
+      <span class="icon-btn" aria-hidden="true"></span>
+    </header>
+
+    <div class="wrap club-wrap">
+      <div class="club-card" id="club-points">
+        <div class="club-crown">
+          <svg viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1 11H5L4 8z"/></svg>
+        </div>
+        <small>Seus pontos</small>
+        <strong id="club-pts">0 <span>pts</span></strong>
+        <small class="club-next" id="club-next-msg"></small>
+        <div class="club-progress"><span id="club-fill" style="width:0%"></span></div>
+        <div class="club-levels"><span id="club-lv-a">Bronze</span><span id="club-lv-b">Prata</span></div>
+      </div>
+
+      <div class="club-login-cta" id="club-login-cta" hidden>
+        <p>Entre na sua conta para acompanhar seus pontos e resgatar benefícios.</p>
+        <button class="pill pill-blue" onclick="go('login')">Entrar ou criar conta</button>
+      </div>
+
+      <div class="club-grid">
+        <button class="club-item" onclick="clubDetail('cupons')">
+          <span class="ci red"><svg viewBox="0 0 24 24"><path d="M4 9a2 2 0 0 0 0 6v3h16v-3a2 2 0 0 1 0-6V6H4v3z"/><path d="M13 7v10" stroke-dasharray="2 3"/></svg></span>
+          <strong>Cupons</strong><small>Toque para ver</small>
+        </button>
+        <button class="club-item" onclick="clubDetail('cashback')">
+          <span class="ci green"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v11M14.8 9c-.4-1-1.5-1.6-2.8-1.6-1.7 0-3 .9-3 2.1 0 3 6 1.4 6 4.4 0 1.2-1.3 2.1-3 2.1-1.3 0-2.4-.6-2.8-1.6"/></svg></span>
+          <strong>Cashback</strong><small>Por nível</small>
+        </button>
+        <button class="club-item" onclick="clubDetail('pontos')">
+          <span class="ci gold"><svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.3.9-4.5 4.4 1 6.1-5.5-2.9L6.5 20l1-6.1L3 9.5l6.3-.9L12 3z"/></svg></span>
+          <strong>Meus pontos</strong><small>Histórico</small>
+        </button>
+        <button class="club-item" onclick="clubDetail('beneficios')">
+          <span class="ci blue"><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg></span>
+          <strong>Benefícios</strong><small>Por nível</small>
+        </button>
+      </div>
+
+      <div class="club-panel" id="club-detail" hidden></div>
+
+      <h3 class="levels-title" id="levels-title">Níveis do Club</h3>
+      <div class="levels">
+        <div class="level" data-level="Bronze">
+          <span class="level-medal bronze"><svg viewBox="0 0 24 24"><circle cx="12" cy="15" r="5"/><path d="M9 10.5 6 3h4l2 5 2-5h4l-3 7.5"/></svg></span>
+          <strong>Bronze</strong>
+          <small>0 – 999 pts</small>
+          <ul>
+            <li>Cupons mensais</li>
+            <li>Cashback de 1%</li>
+          </ul>
+        </div>
+        <div class="level" data-level="Prata">
+          <span class="level-medal prata"><svg viewBox="0 0 24 24"><circle cx="12" cy="15" r="5"/><path d="M9 10.5 6 3h4l2 5 2-5h4l-3 7.5"/></svg></span>
+          <strong>Prata</strong>
+          <small>1.000 – 4.999 pts</small>
+          <ul>
+            <li>Cashback de 2%</li>
+            <li>Cupons exclusivos</li>
+            <li>Ofertas antecipadas</li>
+          </ul>
+        </div>
+        <div class="level" data-level="Ouro">
+          <span class="level-medal ouro"><svg viewBox="0 0 24 24"><circle cx="12" cy="15" r="5"/><path d="M9 10.5 6 3h4l2 5 2-5h4l-3 7.5"/></svg></span>
+          <strong>Ouro</strong>
+          <small>5.000+ pts</small>
+          <ul>
+            <li>Cashback de 3%</li>
+            <li>Frete especial</li>
+            <li>Atendimento prioritário</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="club-panel club-cta">
+        <span class="club-gift">
+          <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7h18v3H3zM12 7v13"/><path d="M12 7c-4 0-5-4-2.5-4S12 7 12 7zm0 0c4 0 5-4 2.5-4S12 7 12 7z"/></svg>
+        </span>
+        <div>
+          <strong>Como ganhar pontos</strong>
+          <small>A cada R$ 1 em compras, você acumula 1 ponto. Indique amigos e avalie produtos para ganhar ainda mais.</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LOGIN ===== -->
+  <section class="screen" id="screen-login" data-nav="conta">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Bem-vindo à Paulex</h2>
+      <span class="icon-btn" aria-hidden="true"></span>
+    </header>
+    <p class="center muted">Faça login para continuar</p>
+
+    <div class="wrap narrow">
+      <div class="tabs" id="login-tabs">
+        <button class="tab active" onclick="loginTab(this,'entrar')">Entrar</button>
+        <button class="tab" onclick="loginTab(this,'cadastrar')">Cadastrar</button>
+      </div>
+
+      <form class="form" id="form-entrar" onsubmit="doLogin(event)">
+        <label class="field">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <input type="text" id="login-user" placeholder="E-mail ou nome" required>
+        </label>
+        <label class="field">
+          <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          <input type="password" placeholder="Senha" required>
+        </label>
+        <button type="button" class="link right" onclick="openWhatsApp('Olá, Paulex! Esqueci minha senha do site e preciso de ajuda.')">Esqueceu sua senha?</button>
+        <button class="pill pill-blue pill-lg" type="submit">Entrar</button>
+        <div class="or" id="or-row" hidden><span>ou</span></div>
+        <div class="google-slot" id="google-btn-slot" hidden></div>
+      </form>
+
+      <form class="form" id="form-cadastrar" hidden onsubmit="doLogin(event)">
+        <label class="field"><input type="text" id="cad-nome" placeholder="Nome completo" required></label>
+        <label class="field"><input type="email" id="cad-email" placeholder="E-mail" required></label>
+        <label class="field"><input type="password" placeholder="Crie uma senha" required></label>
+        <button class="pill pill-blue pill-lg" type="submit">Criar conta</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== CONTA ===== -->
+  <section class="screen" id="screen-conta" data-nav="conta">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Minha Conta</h2>
+      <span class="icon-btn" aria-hidden="true"></span>
+    </header>
+
+    <div class="wrap narrow">
+      <div class="account-head">
+        <span class="avatar">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
+        </span>
+        <div><strong id="account-name">Olá, cliente Paulex!</strong><small class="muted" id="account-sub">Cliente Paulex Club · Prata</small></div>
+      </div>
+
+      <div class="menu">
+        <button class="menu-item" onclick="go('pedidos')">
+          <svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3M9 11h6"/></svg>
+          <span>Meus Pedidos</span>
+          <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <button class="menu-item" onclick="go('enderecos')">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <span>Meus Endereços</span>
+          <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <button class="menu-item" onclick="openList('favoritos')">
+          <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9-9c-1.2-2.8.6-6 3.8-6C9 5 10.5 6.5 12 8.5 13.5 6.5 15 5 17.2 5c3.2 0 5 3.2 3.8 6-2 4.5-9 9-9 9z"/></svg>
+          <span>Favoritos</span>
+          <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <button class="menu-item" onclick="go('club')">
+          <svg viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1 11H5L4 8z"/></svg>
+          <span>Paulex Club</span>
+          <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <button class="menu-item" onclick="logout()">
+          <svg viewBox="0 0 24 24"><path d="M9 4H5v16h4M14 8l4 4-4 4M18 12H9"/></svg>
+          <span>Sair</span>
+          <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PEDIDOS ===== -->
+  <section class="screen" id="screen-pedidos">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Meus Pedidos</h2>
+      <span class="icon-btn" aria-hidden="true"></span>
+    </header>
+
+    <div class="wrap narrow">
+      <div class="tabs scroll" id="order-tabs">
+        <button class="tab active" onclick="orderTab(this,'todos')">Todos</button>
+        <button class="tab" onclick="orderTab(this,'andamento')">Em andamento</button>
+        <button class="tab" onclick="orderTab(this,'entregues')">Entregues</button>
+        <button class="tab" onclick="orderTab(this,'cancelados')">Cancelados</button>
+      </div>
+      <div class="orders" id="orders"></div>
+      <div class="empty orders-zero" id="orders-empty" hidden>
+        <p>Nenhum pedido aqui ainda.</p>
+        <button class="pill pill-blue" onclick="go('home')">Ver produtos</button>
+      </div>
+      <p class="store-note">Os pedidos feitos pelo site ficam salvos neste aparelho e são confirmados pelo WhatsApp.</p>
+    </div>
+  </section>
+
+  <!-- ===== ENDEREÇOS ===== -->
+  <section class="screen" id="screen-enderecos">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Meus Endereços</h2>
+      <button class="icon-btn" aria-label="Adicionar endereço" onclick="showAddrForm()">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </header>
+
+    <div class="wrap narrow">
+      <div class="addresses" id="addr-list"></div>
+      <div class="empty orders-zero" id="addr-empty" hidden>
+        <p>Nenhum endereço salvo ainda.</p>
+        <button class="pill pill-blue" onclick="showAddrForm()">Adicionar endereço</button>
+      </div>
+
+      <form class="form addr-form" id="addr-form" hidden onsubmit="saveAddr(event)">
+        <label class="field"><input id="addr-nome" placeholder="Nome do endereço (ex.: Casa)" required></label>
+        <label class="field"><input id="addr-cep" placeholder="CEP" inputmode="numeric" maxlength="9" onblur="cepLookup()"></label>
+        <label class="field"><input id="addr-rua" placeholder="Rua e número" required></label>
+        <label class="field"><input id="addr-bairro" placeholder="Bairro e cidade" required></label>
+        <button class="pill pill-blue pill-lg" type="submit">Salvar endereço</button>
+        <button class="pill pill-outline pill-lg" type="button" onclick="hideAddrForm()">Cancelar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== ATACADO / EMPRESAS ===== -->
+  <section class="screen" id="screen-atacado" data-nav="atacado">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Atacado</h2>
+      <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+        <span class="badge cart-badge">0</span>
+      </button>
+    </header>
+
+    <div class="biz-hero">
+      <span class="biz-badge light">Atacado e varejo desde 1984</span>
+      <h2>Compre em quantidade,<br>pague preço de atacado.</h2>
+      <p>Acima de <strong>12 peças</strong> do mesmo produto, o desconto de atacado é aplicado automaticamente — sem cadastro e sem pedido mínimo de valor.</p>
+      <div class="cta-row">
+        <button class="pill pill-white" onclick="orcamento()">
+          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
+          Pedir orçamento
+        </button>
+        <button class="pill pill-ghost" onclick="openList('maisvendidos')">Ver produtos</button>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="section">
+        <h3 class="sec-title">Feito para quem compra em volume.</h3>
+        <p class="sec-sub">Atendemos empresas de todos os tamanhos com preço, prazo e atenção que o varejo não dá.</p>
+        <div class="biz-grid">
+          <div class="biz-card">
+            <span class="biz-ico">🏫</span>
+            <strong>Escolas e creches</strong>
+            <small>Listas de material, papelaria e descartáveis para o ano todo.</small>
+          </div>
+          <div class="biz-card">
+            <span class="biz-ico">🏪</span>
+            <strong>Lojas e revendedores</strong>
+            <small>Reposição de estoque com margem para revender.</small>
+          </div>
+          <div class="biz-card">
+            <span class="biz-ico">🏢</span>
+            <strong>Escritórios e empresas</strong>
+            <small>Suprimentos, informática e utilidades para o dia a dia.</small>
+          </div>
+          <div class="biz-card">
+            <span class="biz-ico">🎉</span>
+            <strong>Eventos e festas</strong>
+            <small>Descartáveis e itens em grande quantidade.</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="section alt">
+        <h3 class="sec-title">Como funciona.</h3>
+        <div class="steps">
+          <div class="step"><span>1</span><div><strong>Monte seu pedido</strong><small>Adicione 12 ou mais peças do mesmo item e o preço de atacado aparece sozinho.</small></div></div>
+          <div class="step"><span>2</span><div><strong>Ou peça um orçamento</strong><small>Tem uma lista grande? Mande pelo WhatsApp que preparamos a melhor condição.</small></div></div>
+          <div class="step"><span>3</span><div><strong>Confirmação e entrega</strong><small>Combinamos pagamento, nota e prazo de entrega pelo WhatsApp.</small></div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="sec-title">Vantagens do atacado Paulex.</h3>
+        <div class="biz-benefits">
+          <div class="biz-benefit"><strong>Preço de atacado</strong><small>Automático a partir de 12 peças</small></div>
+          <div class="biz-benefit"><strong>Sem pedido mínimo</strong><small>de valor para começar</small></div>
+          <div class="biz-benefit"><strong>Atendimento dedicado</strong><small>direto pelo WhatsApp</small></div>
+          <div class="biz-benefit"><strong>Variedade real</strong><small>6 categorias num só lugar</small></div>
+          <div class="biz-benefit"><strong>Tradição desde 1984</strong><small>40 anos de mercado</small></div>
+          <div class="biz-benefit"><strong>Entrega para o Brasil</strong><small>combinada por pedido</small></div>
+        </div>
+        <button class="pill pill-wa sec-cta" onclick="orcamento()">
+          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
+          Falar com o atacado
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== POLÍTICA DE PRIVACIDADE ===== -->
+  <section class="screen" id="screen-privacidade">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Política de Privacidade</h2>
+      <span class="icon-btn" aria-hidden="true"></span>
+    </header>
+    <div class="wrap narrow legal">
+      <p class="muted">Última atualização: junho de 2026</p>
+      <p>A <strong>Paulex Armarinho</strong> respeita a sua privacidade. Esta política explica, de forma simples, como tratamos as suas informações quando você usa o nosso site.</p>
+      <h3>Quais dados coletamos</h3>
+      <p>O site funciona sem cadastro obrigatório. Guardamos no <strong>seu próprio navegador</strong> (e não em nossos servidores) o conteúdo do carrinho, os favoritos, os produtos vistos recentemente e o cupom aplicado — para que sua experiência continue de onde parou.</p>
+      <p>Se você optar por entrar com o Google, recebemos apenas o seu nome e e-mail, usados para identificá-lo dentro do site.</p>
+      <h3>Pedidos pelo WhatsApp</h3>
+      <p>Ao finalizar um pedido, o resumo é enviado pelo WhatsApp para o nosso atendimento. A conversa passa a ser regida pela política de privacidade do WhatsApp, e usamos as informações apenas para concluir a sua compra e a entrega.</p>
+      <h3>O que não fazemos</h3>
+      <p>Não vendemos nem compartilhamos seus dados com terceiros para fins de marketing. Não armazenamos dados de pagamento.</p>
+      <h3>Seus direitos (LGPD)</h3>
+      <p>Nos termos da Lei Geral de Proteção de Dados (Lei 13.709/2018), você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento pelo nosso WhatsApp: <strong>(21) 98757-8187</strong>. Para apagar os dados guardados no navegador, basta limpar os dados de navegação do site.</p>
+    </div>
+  </section>
+
+  <!-- ===== TERMOS DE USO ===== -->
+  <section class="screen" id="screen-termos">
+    <header class="topbar topbar-title">
+      <button class="icon-btn" aria-label="Voltar" onclick="back()">
+        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <h2>Termos de Uso</h2>
+      <span class="icon-btn" aria-hidden="true"></span>
+    </header>
+    <div class="wrap narrow legal">
+      <p class="muted">Última atualização: junho de 2026</p>
+      <p>Ao usar o site da <strong>Paulex Armarinho</strong>, você concorda com os termos abaixo.</p>
+      <h3>Sobre a loja</h3>
+      <p>A Paulex Armarinho atua desde 1984 nos segmentos de papelaria, utilidades, descartáveis, brinquedos, informática e cosméticos, em atacado e varejo.</p>
+      <h3>Preços e disponibilidade</h3>
+      <p>Os preços, condições de desconto por quantidade e a disponibilidade de estoque exibidos no site são informativos e podem ser atualizados sem aviso prévio. O valor final de cada pedido é <strong>confirmado no atendimento pelo WhatsApp</strong>, antes do pagamento.</p>
+      <h3>Pedidos, frete e pagamento</h3>
+      <p>Os pedidos iniciados no site são concluídos pelo WhatsApp, onde combinamos pagamento, prazo e forma de entrega. A condição de frete grátis em compras acima de R$ 99 está sujeita à região de entrega, confirmada no atendimento.</p>
+      <h3>Trocas e devoluções</h3>
+      <p>Seguimos o Código de Defesa do Consumidor: em compras a distância, você pode desistir em até 7 dias corridos após o recebimento. Produtos com defeito são trocados conforme a lei. Fale com a gente pelo WhatsApp para iniciar qualquer solicitação.</p>
+      <h3>Paulex Club</h3>
+      <p>O programa de fidelidade Paulex Club concede pontos e benefícios de caráter promocional, que podem ser ajustados ou descontinuados mediante aviso no site.</p>
+      <h3>Contato</h3>
+      <p>Dúvidas sobre estes termos: WhatsApp <strong>(21) 98757-8187</strong>, de segunda a sábado, das 8h às 18h.</p>
+    </div>
+  </section>
+
+  <!-- ===== BOTTOM NAV (mobile) ===== -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <button data-go="home" class="active">
+      <svg viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9h-5v-6h-6v6H4v-9z"/></svg>
+      <span>Início</span>
+    </button>
+    <button data-go="categorias">
+      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
+      <span>Categorias</span>
+    </button>
+    <button data-go="carrinho" class="has-badge">
+      <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+      <span>Carrinho</span>
+      <span class="badge cart-badge">0</span>
+    </button>
+    <button data-go="club">
+      <svg viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1 11H5L4 8z"/></svg>
+      <span>Club</span>
+    </button>
+    <button data-go="conta">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
+      <span>Conta</span>
+    </button>
+  </nav>
+
+  <div class="toast" id="toast" role="status"></div>
+</div>
+
+<script src="produtos.js?v=16"></script>
+<script src="script.js?v=16"></script>
+</body>
+</html>
