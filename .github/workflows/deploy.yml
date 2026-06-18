@@ -2,7 +2,7 @@ name: Deploy (GitHub Pages)
 
 on:
   push:
-    branches: [main]
+    branches: [main, claude/app-code-improvement-lf4bbm]
   workflow_dispatch:
 
 permissions:
@@ -23,6 +23,10 @@ jobs:
         with:
           node-version: 20
           cache: npm
+      # Habilita o GitHub Pages automaticamente na primeira execução
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - run: npm ci
       - run: npm run build
         env:
