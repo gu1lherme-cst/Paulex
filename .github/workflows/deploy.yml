@@ -2,7 +2,7 @@ name: Deploy (GitHub Pages)
 
 on:
   push:
-    branches: [main, claude/app-code-improvement-lf4bbm]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
