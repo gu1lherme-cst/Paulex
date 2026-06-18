@@ -49,4 +49,8 @@ export const ICONS = {
   card: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/>',
   store: '<path d="M4 9h16v11H4zM2 9l2-4h16l2 4M9 13h6"/>',
   star: '<path d="M12 3l2.7 5.6 6.3.9-4.5 4.4 1 6.1-5.5-2.9L6.5 20l1-6.1L3 9.5l6.3-.9L12 3z"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/>',
+  check: '<path d="m5 12 5 5L20 7"/>',
+  shieldCheck: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="m9 12 2 2 4-4"/>',
 } as const;

@@ -2,6 +2,7 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { StoreProvider } from "./context/StoreContext";
 import { ToastProvider } from "./context/ToastContext";
+import { UIProvider } from "./context/UIContext";
 import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
 import { Categorias } from "./pages/Categorias";
@@ -26,6 +27,7 @@ export default function App() {
     <AuthProvider>
       <StoreProvider>
         <ToastProvider>
+          <UIProvider>
           <HashRouter>
             <Routes>
               <Route element={<Layout />}>
@@ -54,6 +56,7 @@ export default function App() {
               </Route>
             </Routes>
           </HashRouter>
+          </UIProvider>
         </ToastProvider>
       </StoreProvider>
     </AuthProvider>

@@ -7,9 +7,11 @@ import { Footer } from "../components/Footer";
 import { Icon, ICONS } from "../components/Icon";
 import { money } from "../lib/format";
 import { openWhatsApp } from "../lib/whatsapp";
+import { useUI } from "../context/UIContext";
 
 export function Home() {
   const navigate = useNavigate();
+  const { openMenu } = useUI();
   const { products, recent, cartCount } = useStore();
 
   const maisVendidos = products.filter((p) => p.maisVendido);
@@ -21,7 +23,7 @@ export function Home() {
   return (
     <section className="screen active">
       <header className="topbar home-topbar">
-        <button className="icon-btn" aria-label="Menu" onClick={() => navigate("/categorias")}>
+        <button className="icon-btn" aria-label="Abrir menu" onClick={openMenu}>
           <Icon path={ICONS.menu} />
         </button>
         <h1 className="home-logo">
