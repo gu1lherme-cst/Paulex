@@ -6,3 +6,6 @@ dist-ssr
 .env.local
 .DS_Store
 .vite
+
+# TypeScript incremental build cache
+*.tsbuildinfo
