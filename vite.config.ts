@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
-// base "./" => funciona em GitHub Pages (projeto) e em qualquer subpasta.
 export default defineConfig({
   base: "./",
   plugins: [
@@ -11,17 +10,17 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["img/logo.png", "img/icon-192.png", "img/icon-512.png"],
       manifest: {
-        name: "Paulex Armarinho",
-        short_name: "Paulex",
+        name: "Px - O sistema operacional do estudante",
+        short_name: "Px",
         description:
-          "Papelaria, utilidades, informática, brinquedos, cosméticos e descartáveis. Atacado e varejo desde 1984.",
+          "Notas, tarefas, calendário, metas, Pomodoro, comunidade e IA para estudantes.",
         lang: "pt-BR",
         start_url: "./",
         scope: "./",
         display: "standalone",
         orientation: "portrait",
         background_color: "#FFFFFF",
-        theme_color: "#002D8F",
+        theme_color: "#0457ff",
         icons: [
           { src: "img/icon-192.png", sizes: "192x192", type: "image/png" },
           { src: "img/icon-512.png", sizes: "512x512", type: "image/png" },
@@ -39,7 +38,10 @@ export default defineConfig({
           {
             urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
             handler: "CacheFirst",
-            options: { cacheName: "google-fonts", expiration: { maxEntries: 20 } },
+            options: {
+              cacheName: "google-fonts",
+              expiration: { maxEntries: 20 },
+            },
           },
         ],
       },

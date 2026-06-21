@@ -1,9 +1,9 @@
 {
-  "name": "paulex-app",
+  "name": "px-edtech-landing",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Paulex Armarinho — loja, Paulex Club e painel administrativo (React + Vite).",
+  "description": "Landing page da Px, ecossistema educacional para estudantes.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
