@@ -1,413 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#2D5BFF">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0457ff" />
+    <meta name="color-scheme" content="light" />
 
-  <!-- SEO -->
-  <title>Px · O sistema operacional do estudante</title>
-  <meta name="description" content="Notas, tarefas, calendário, metas, Pomodoro, comunidade e IA para estudantes. Estude, organize e evolua em um só lugar.">
-  <meta name="robots" content="index, follow">
+    <title>Px | O sistema operacional do estudante</title>
+    <meta
+      name="description"
+      content="Notas, tarefas, calendário, metas, Pomodoro, comunidade e IA para estudantes que querem aprender melhor, se organizar e construir o futuro."
+    />
+    <meta name="robots" content="index, follow" />
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Px">
-  <meta property="og:title" content="Px · O sistema operacional do estudante">
-  <meta property="og:description" content="Estude, organize e evolua em um só lugar. Notas, tarefas, calendário, metas, Pomodoro, comunidade e IA para estudantes.">
-  <meta property="og:image" content="img/logo-cube.png">
-  <meta property="og:locale" content="pt_BR">
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Px" />
+    <meta property="og:title" content="Px | Estude, organize e evolua" />
+    <meta
+      property="og:description"
+      content="O ecossistema completo para estudantes aprenderem, se organizarem e evoluírem em um só lugar."
+    />
+    <meta property="og:image" content="img/logo.png" />
+    <meta property="og:locale" content="pt_BR" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="img/favicon-32.png">
-  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-  <link rel="apple-touch-icon" href="img/favicon-192.png">
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=2">
-</head>
-<body>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Px | O sistema operacional do estudante" />
+    <meta
+      name="twitter:description"
+      content="Organize estudos, tarefas, calendário, metas, Pomodoro, comunidade e IA em um só lugar."
+    />
+    <meta name="twitter:image" content="img/logo.png" />
 
-<!-- ===== HEADER ===== -->
-<header class="nav" id="top">
-  <div class="wrap nav-wrap">
-    <a class="brand" href="#top" aria-label="Px — início">
-      <img src="img/logo-cube.png" alt="Px" width="31" height="32">
-    </a>
-    <nav class="nav-links" id="nav-links">
-      <a href="#produto">Produto</a>
-      <a href="#recursos">Recursos</a>
-      <a href="#comunidade">Comunidade</a>
-      <a href="#planos">Planos</a>
-      <a href="#carreira">Carreira</a>
-    </nav>
-    <div class="nav-actions">
-      <a class="btn-ghost" href="#cta">Entrar</a>
-      <a class="btn-primary" href="#cta">Começar grátis</a>
-    </div>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false">
-      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-    </button>
-  </div>
-</header>
-
-<main>
-
-  <!-- ===== HERO ===== -->
-  <section class="hero" id="produto">
-    <div class="wrap hero-wrap">
-      <span class="eyebrow">
-        <span class="dot"></span> O sistema operacional do estudante
-      </span>
-      <h1 class="reveal">Estude, organize e <span class="hl">evolua</span><br>em um só lugar.</h1>
-      <p class="lead reveal">Notas, tarefas, calendário, metas, Pomodoro, comunidade e IA para estudantes que querem aprender melhor e construir o futuro.</p>
-      <div class="hero-cta reveal">
-        <a class="btn-primary lg" href="#cta">Começar gratuitamente</a>
-        <a class="btn-soft lg" href="#demo">
-          <svg viewBox="0 0 24 24" class="ic-play"><path d="M8 5v14l11-7z"/></svg>
-          Ver demonstração
-        </a>
-      </div>
-      <div class="social-proof reveal">
-        <div class="avatars">
-          <span class="av" style="--c1:#2D5BFF;--c2:#5B8CFF">JL</span>
-          <span class="av" style="--c1:#7C5CFC;--c2:#A78BFA">MR</span>
-          <span class="av" style="--c1:#E5484D;--c2:#FB7185">AC</span>
-          <span class="av" style="--c1:#0EA5A5;--c2:#34D399">BS</span>
-          <span class="av" style="--c1:#F59E0B;--c2:#FCD34D">TF</span>
-        </div>
-        <div class="proof-txt">
-          <div class="stars">★★★★★</div>
-          <span>Mais de <strong>50 mil estudantes</strong> já estão evoluindo com a Px.</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- chips flutuantes do ecossistema -->
-    <div class="float-chips" aria-hidden="true">
-      <span class="chip chip-1"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg> Notas</span>
-      <span class="chip chip-2"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M4 11h16M8 4v4M16 4v4"/></svg> Calendário</span>
-      <span class="chip chip-3"><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/><circle cx="19" cy="18" r="2"/></svg> Tarefas</span>
-      <span class="chip chip-4"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 3h6"/></svg> Pomodoro</span>
-      <span class="chip chip-5"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.8-.5z"/></svg> IA</span>
-      <span class="chip chip-6"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="11" r="2.4"/><path d="M3 20c.6-3.2 3-5 6-5s5.4 1.8 6 5"/></svg> Comunidade</span>
-      <span class="chip chip-7"><svg viewBox="0 0 24 24"><path d="M4 8h16v11H4z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg> Carreira</span>
-    </div>
-  </section>
-
-  <!-- ===== MOCKUP DO PRODUTO ===== -->
-  <section class="mockup-section" id="demo">
-    <div class="wrap">
-      <div class="app-window reveal">
-        <div class="app-topbar">
-          <span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>
-          <span class="app-url">app.px.com / dashboard</span>
-        </div>
-        <div class="app-body">
-          <!-- Sidebar -->
-          <aside class="app-side">
-            <div class="app-brand"><img src="img/logo-cube.png" alt="Px" width="22" height="22"></div>
-            <nav class="side-nav">
-              <a class="active"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>Início</a>
-              <a><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 4v4M16 4v4M4 11h16"/></svg>Agenda</a>
-              <a><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></svg>Tarefas</a>
-              <a><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6"/></svg>Notas</a>
-              <a><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/></svg>Pomodoro</a>
-              <a><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>Metas</a>
-              <a><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.8-.5z"/></svg>IA Assistente</a>
-              <a><svg viewBox="0 0 24 24"><path d="M5 4h14v16l-7-3-7 3z"/></svg>Simulados</a>
-              <a><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="11" r="2.4"/><path d="M3 20c.6-3.2 3-5 6-5s5.4 1.8 6 5"/></svg>Comunidade</a>
-              <a><svg viewBox="0 0 24 24"><path d="M4 8h16v11H4z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>Carreira</a>
-            </nav>
-          </aside>
-
-          <!-- Conteúdo -->
-          <div class="app-main">
-            <div class="app-head">
-              <div>
-                <h3>Olá, estudante! 👋</h3>
-                <p>Aqui está o resumo do seu dia.</p>
-              </div>
-              <div class="app-head-right">
-                <span class="app-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>Buscar</span>
-                <span class="app-avatar">E</span>
-              </div>
-            </div>
-
-            <!-- Stats -->
-            <div class="stat-row">
-              <div class="stat-card">
-                <span class="stat-ic blue"><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></svg></span>
-                <strong>3</strong><small>Tarefas hoje</small>
-              </div>
-              <div class="stat-card">
-                <span class="stat-ic teal"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
-                <strong>2h30</strong><small>De foco</small>
-              </div>
-              <div class="stat-card">
-                <span class="stat-ic red"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 4v4M16 4v4"/></svg></span>
-                <strong>1</strong><small>Aula / prova</small>
-              </div>
-              <div class="stat-card">
-                <span class="stat-ic purple"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span>
-                <strong>85%</strong><small>Meta diária</small>
-              </div>
-            </div>
-
-            <div class="panel-grid">
-              <!-- Agenda -->
-              <div class="panel">
-                <div class="panel-head"><h4>Agenda do dia</h4><span class="link-mini">Ver tudo</span></div>
-                <ul class="agenda">
-                  <li><span class="ag-dot blue"></span><div><strong>Matemática</strong><small>08:00 — Funções</small></div><span class="badge-soft">Agora</span></li>
-                  <li><span class="ag-dot teal"></span><div><strong>História</strong><small>10:00 — Revolução Industrial</small></div></li>
-                  <li><span class="ag-dot red"></span><div><strong>Física</strong><small>14:00 — Cinemática</small></div></li>
-                </ul>
-              </div>
-
-              <!-- Pomodoro -->
-              <div class="panel pomo">
-                <div class="panel-head"><h4>Pomodoro</h4></div>
-                <div class="pomo-ring">
-                  <svg viewBox="0 0 120 120">
-                    <circle cx="60" cy="60" r="52" class="ring-bg"/>
-                    <circle cx="60" cy="60" r="52" class="ring-fg" id="pomo-ring-fg"/>
-                  </svg>
-                  <div class="pomo-time" id="pomo-time">25:00</div>
-                </div>
-                <button class="btn-primary block" id="pomo-btn">Iniciar</button>
-              </div>
-
-              <!-- Próximas entregas -->
-              <div class="panel">
-                <div class="panel-head"><h4>Próximas entregas</h4></div>
-                <ul class="deliver">
-                  <li><span class="chk"></span><div><strong>Relatório de Biologia</strong><small>Entrega amanhã</small></div></li>
-                  <li><span class="chk"></span><div><strong>Lista de Exercícios</strong><small>Em 2 dias</small></div></li>
-                  <li><span class="chk"></span><div><strong>Revisão de Física</strong><small>Sexta-feira</small></div></li>
-                </ul>
-              </div>
-
-              <!-- IA -->
-              <div class="panel ai-panel">
-                <div class="panel-head"><h4><span class="ai-dot"></span> IA Assistente</h4></div>
-                <p class="ai-q">Como posso ajudar nos seus estudos?</p>
-                <div class="ai-chips">
-                  <span>Resumir conteúdo</span>
-                  <span>Criar plano de estudos</span>
-                  <span>Gerar exercícios</span>
-                  <span>Explicar conceito</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PROVA SOCIAL (instituições) ===== -->
-  <section class="logos">
-    <div class="wrap">
-      <p class="logos-title">Utilizado por estudantes e instituições que estão transformando a educação</p>
-      <div class="logo-row">
-        <span>Universidade Alpha</span>
-        <span>Instituto Beta</span>
-        <span>Escola Next</span>
-        <span>Campus Digital</span>
-        <span>EduLab</span>
-        <span>Future Academy</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== RECURSOS ===== -->
-  <section class="section" id="recursos">
-    <div class="wrap">
-      <div class="sec-head center reveal">
-        <span class="tag">Recursos</span>
-        <h2>Tudo que você precisa para estudar melhor</h2>
-        <p>Um ecossistema integrado — da primeira anotação até o seu primeiro emprego.</p>
-      </div>
-      <div class="feat-grid">
-        <article class="feat reveal"><span class="feat-ic blue"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span><h3>Bloco de notas</h3><p>Organize ideias, aulas e resumos em um só lugar.</p></article>
-        <article class="feat reveal"><span class="feat-ic teal"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 4v4M16 4v4M4 11h16"/></svg></span><h3>Calendário de estudos</h3><p>Planeje sua rotina acadêmica sem perder prazos.</p></article>
-        <article class="feat reveal"><span class="feat-ic blue"><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/><circle cx="19" cy="18" r="2"/></svg></span><h3>Tarefas inteligentes</h3><p>Priorize trabalhos, provas e entregas importantes.</p></article>
-        <article class="feat reveal"><span class="feat-ic purple"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span><h3>Metas e hábitos</h3><p>Acompanhe sua evolução e mantenha consistência.</p></article>
-        <article class="feat reveal"><span class="feat-ic red"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 3h6"/></svg></span><h3>Pomodoro</h3><p>Estude com foco usando ciclos de produtividade.</p></article>
-        <article class="feat reveal"><span class="feat-ic purple"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.8-.5z"/></svg></span><h3>IA para estudos</h3><p>Resuma textos, explique conteúdos e gere exercícios.</p></article>
-        <article class="feat reveal"><span class="feat-ic teal"><svg viewBox="0 0 24 24"><path d="M5 4h14v16l-7-3-7 3z"/></svg></span><h3>Simulados</h3><p>Pratique com questões e acompanhe seu desempenho.</p></article>
-        <article class="feat reveal"><span class="feat-ic blue"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="M8 13l-1 8 5-3 5 3-1-8"/></svg></span><h3>Certificados</h3><p>Comprove habilidades e fortaleça seu currículo.</p></article>
-        <article class="feat reveal"><span class="feat-ic teal"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="11" r="2.4"/><path d="M3 20c.6-3.2 3-5 6-5s5.4 1.8 6 5"/></svg></span><h3>Comunidade</h3><p>Conecte-se com estudantes com os mesmos objetivos.</p></article>
-        <article class="feat reveal"><span class="feat-ic red"><svg viewBox="0 0 24 24"><path d="M4 8h16v11H4z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></span><h3>Carreira</h3><p>Encontre vagas, estágios e oportunidades profissionais.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== COMUNIDADE ===== -->
-  <section class="section soft" id="comunidade">
-    <div class="wrap">
-      <div class="sec-head center reveal">
-        <span class="tag">Comunidade</span>
-        <h2>Estude em comunidade</h2>
-        <p>Encontre grupos com os mesmos objetivos que você.</p>
-      </div>
-      <div class="comm-grid">
-        <article class="comm reveal"><div class="comm-top"><span class="comm-ic">⚙️</span><span class="status">Ativo</span></div><h3>Engenharia</h3><span class="members">12.842 membros</span><p>Projetos, listas, dúvidas e networking.</p></article>
-        <article class="comm reveal"><div class="comm-top"><span class="comm-ic">🩺</span><span class="status">Ativo</span></div><h3>Medicina</h3><span class="members">9.317 membros</span><p>Resumos, casos clínicos e grupos de estudo.</p></article>
-        <article class="comm reveal"><div class="comm-top"><span class="comm-ic">⚖️</span><span class="status">Ativo</span></div><h3>Direito</h3><span class="members">7.654 membros</span><p>Jurisprudência, peças e debates de provas.</p></article>
-        <article class="comm reveal"><div class="comm-top"><span class="comm-ic">📚</span><span class="status">Ativo</span></div><h3>Concursos</h3><span class="members">15.209 membros</span><p>Editais, cronogramas e questões comentadas.</p></article>
-        <article class="comm reveal"><div class="comm-top"><span class="comm-ic">💻</span><span class="status">Ativo</span></div><h3>Programação</h3><span class="members">18.430 membros</span><p>Projetos, desafios e revisão de código.</p></article>
-        <article class="comm reveal"><div class="comm-top"><span class="comm-ic">🎯</span><span class="status">Ativo</span></div><h3>ENEM</h3><span class="members">23.118 membros</span><p>Redação, simulados e plano de revisão.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== IA ===== -->
-  <section class="section" id="ia">
-    <div class="wrap ai-split">
-      <div class="ai-text reveal">
-        <span class="tag purple">Inteligência artificial</span>
-        <h2>Um assistente de estudos que entende sua rotina.</h2>
-        <p>A IA da Px ajuda você a transformar conteúdos em resumos, planos de estudo, flashcards, exercícios e revisões personalizadas.</p>
-        <a class="btn-primary" href="#cta">Experimentar a IA</a>
-      </div>
-      <div class="ai-cards reveal">
-        <span class="ai-card"><span class="ai-ic">✦</span> Resumir PDF</span>
-        <span class="ai-card"><span class="ai-ic">🗓️</span> Criar cronograma</span>
-        <span class="ai-card"><span class="ai-ic">❓</span> Gerar questões</span>
-        <span class="ai-card"><span class="ai-ic">💡</span> Explicar matéria</span>
-        <span class="ai-card wide"><span class="ai-ic">📖</span> Revisar antes da prova</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== CARREIRA ===== -->
-  <section class="section soft" id="carreira">
-    <div class="wrap">
-      <div class="sec-head center reveal">
-        <span class="tag">Carreira</span>
-        <h2>Do estudo à carreira.</h2>
-        <p>Acompanhe sua evolução acadêmica, desenvolva habilidades e descubra oportunidades de estágio, emprego, mentorias e crescimento profissional.</p>
-      </div>
-      <div class="career-grid">
-        <article class="career reveal"><span class="career-ic"><svg viewBox="0 0 24 24"><path d="M4 8h16v11H4z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></span><h3>Vagas</h3><p>Oportunidades alinhadas ao seu perfil.</p></article>
-        <article class="career reveal"><span class="career-ic"><svg viewBox="0 0 24 24"><path d="M4 8h16v11H4z"/><path d="M12 12v3"/></svg></span><h3>Estágios</h3><p>Primeiros passos no mercado de trabalho.</p></article>
-        <article class="career reveal"><span class="career-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 5-5 8-5s6.5 1 8 5"/></svg></span><h3>Mentorias</h3><p>Aprenda com quem já trilhou o caminho.</p></article>
-        <article class="career reveal"><span class="career-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="M8 13l-1 8 5-3 5 3-1-8"/></svg></span><h3>Certificados</h3><p>Valide conhecimentos e habilidades.</p></article>
-        <article class="career reveal"><span class="career-ic"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 12h6M9 16h4"/></svg></span><h3>Portfólio acadêmico</h3><p>Reúna projetos e conquistas em um só perfil.</p></article>
-        <article class="career reveal"><span class="career-ic"><svg viewBox="0 0 24 24"><path d="M4 18l5-5 4 3 7-8"/><path d="M16 8h4v4"/></svg></span><h3>Trilhas profissionais</h3><p>Caminhos guiados para a carreira dos sonhos.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PLANOS ===== -->
-  <section class="section" id="planos">
-    <div class="wrap">
-      <div class="sec-head center reveal">
-        <span class="tag">Planos</span>
-        <h2>Comece grátis. Evolua quando quiser.</h2>
-        <p>Sem cartão de crédito. Atualize para desbloquear todo o ecossistema.</p>
-      </div>
-      <div class="plans">
-        <article class="plan reveal">
-          <h3>Free</h3>
-          <div class="price">R$ 0<span>/mês</span></div>
-          <p class="plan-sub">Para começar a se organizar.</p>
-          <ul><li>Notas e tarefas</li><li>Calendário de estudos</li><li>Pomodoro</li><li>Comunidades</li></ul>
-          <a class="btn-soft block" href="#cta">Começar grátis</a>
-        </article>
-        <article class="plan featured reveal">
-          <span class="plan-badge">Mais popular</span>
-          <h3>Pro</h3>
-          <div class="price">R$ 19<span>/mês</span></div>
-          <p class="plan-sub">Para quem quer acelerar.</p>
-          <ul><li>Tudo do Free</li><li>IA de estudos ilimitada</li><li>Simulados e desempenho</li><li>Metas avançadas</li></ul>
-          <a class="btn-primary block" href="#cta">Assinar o Pro</a>
-        </article>
-        <article class="plan reveal">
-          <h3>Campus</h3>
-          <div class="price">Sob consulta</div>
-          <p class="plan-sub">Para escolas e instituições.</p>
-          <ul><li>Tudo do Pro</li><li>Painel para turmas</li><li>Relatórios e gestão</li><li>Suporte dedicado</li></ul>
-          <a class="btn-soft block" href="#cta">Falar com vendas</a>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== CTA FINAL ===== -->
-  <section class="cta-final" id="cta">
-    <div class="wrap cta-box reveal">
-      <h2>Pronto para transformar sua rotina de estudos?</h2>
-      <p>Crie sua conta gratuita e descubra como a Px pode ajudar você a aprender, se organizar e evoluir todos os dias.</p>
-      <a class="btn-white lg" href="#top">Começar gratuitamente</a>
-    </div>
-  </section>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="footer">
-    <div class="wrap footer-grid">
-      <div class="f-brand">
-        <img src="img/logo-cube.png" alt="Px" width="31" height="32" loading="lazy">
-        <p>O ecossistema completo para estudantes aprenderem, se organizarem e evoluírem.</p>
-        <div class="f-social">
-          <a aria-label="Instagram" href="#"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17" cy="7" r=".9" fill="currentColor"/></svg></a>
-          <a aria-label="X" href="#"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
-          <a aria-label="LinkedIn" href="#"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4"/></svg></a>
-          <a aria-label="YouTube" href="#"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M11 9l4 3-4 3z" fill="currentColor"/></svg></a>
-        </div>
-      </div>
-      <div class="f-col"><h4>Produto</h4><a href="#produto">Visão geral</a><a href="#demo">Demonstração</a><a href="#planos">Planos</a><a href="#ia">IA de estudos</a></div>
-      <div class="f-col"><h4>Recursos</h4><a href="#recursos">Notas e tarefas</a><a href="#recursos">Pomodoro</a><a href="#recursos">Simulados</a><a href="#recursos">Certificados</a></div>
-      <div class="f-col"><h4>Comunidade</h4><a href="#comunidade">Grupos</a><a href="#comunidade">Eventos</a><a href="#carreira">Carreira</a><a href="#carreira">Mentorias</a></div>
-      <div class="f-col"><h4>Empresa</h4><a href="#">Sobre</a><a href="#">Blog</a><a href="#">Carreiras</a><a href="#">Contato</a></div>
-      <div class="f-col"><h4>Suporte</h4><a href="#">Central de ajuda</a><a href="#">Privacidade</a><a href="#">Termos</a><a href="#">Status</a></div>
-    </div>
-    <div class="wrap f-bottom">
-      <span>© 2026 Px. Todos os direitos reservados.</span>
-      <span>Feito para estudantes que querem evoluir.</span>
-    </div>
-  </footer>
-
-</main>
-
-<!-- ===== MODAL DE AUTENTICAÇÃO ===== -->
-<div class="modal" id="auth-modal" hidden>
-  <div class="modal-overlay" data-close></div>
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
-    <button class="modal-x" data-close aria-label="Fechar">
-      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-    <img class="modal-logo" src="img/logo-cube.png" alt="Px" width="44" height="45">
-    <div class="auth-tabs">
-      <button data-tab="signup" class="active">Criar conta</button>
-      <button data-tab="login">Entrar</button>
-    </div>
-    <h3 id="auth-title">Crie sua conta gratuita</h3>
-    <p class="auth-sub" id="auth-sub">Comece a organizar seus estudos em menos de 1 minuto.</p>
-    <form id="auth-form" novalidate>
-      <label class="field" id="field-nome">
-        <span>Nome</span>
-        <input type="text" name="nome" autocomplete="name" placeholder="Seu nome">
-      </label>
-      <label class="field">
-        <span>E-mail</span>
-        <input type="email" name="email" autocomplete="email" placeholder="voce@email.com" required>
-      </label>
-      <label class="field">
-        <span>Senha</span>
-        <input type="password" name="senha" autocomplete="current-password" placeholder="Mínimo 6 caracteres" minlength="6" required>
-      </label>
-      <button class="btn-primary block lg" type="submit" id="auth-submit">Começar gratuitamente</button>
-    </form>
-    <p class="auth-foot">Ao continuar, você concorda com os Termos e a Política de Privacidade.</p>
-  </div>
-</div>
-
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<script src="script.js?v=2"></script>
-</body>
+    <link rel="icon" type="image/png" href="img/logo.png" />
+    <link rel="apple-touch-icon" href="img/icon-192.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
