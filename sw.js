@@ -1,13 +1,13 @@
 /* Service worker Px — instala como app e navega com internet instável. */
 
-const CACHE = "px-v1";
+const CACHE = "px-v2";
 const ASSETS = [
   "./",
   "index.html",
-  "style.css?v=1",
-  "script.js?v=1",
+  "style.css?v=2",
+  "script.js?v=2",
   "manifest.json",
-  "img/px-logo.png",
+  "img/logo-cube.png",
   "img/favicon-192.png",
   "img/favicon-512.png",
 ];

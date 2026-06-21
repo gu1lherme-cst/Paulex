@@ -15,7 +15,7 @@
   <meta property="og:site_name" content="Px">
   <meta property="og:title" content="Px · O sistema operacional do estudante">
   <meta property="og:description" content="Estude, organize e evolua em um só lugar. Notas, tarefas, calendário, metas, Pomodoro, comunidade e IA para estudantes.">
-  <meta property="og:image" content="img/px-logo.png">
+  <meta property="og:image" content="img/logo-cube.png">
   <meta property="og:locale" content="pt_BR">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +25,7 @@
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="apple-touch-icon" href="img/favicon-192.png">
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=1">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
@@ -33,7 +33,7 @@
 <header class="nav" id="top">
   <div class="wrap nav-wrap">
     <a class="brand" href="#top" aria-label="Px — início">
-      <img src="img/px-logo.png" alt="Px" width="40" height="32">
+      <img src="img/logo-cube.png" alt="Px" width="31" height="32">
     </a>
     <nav class="nav-links" id="nav-links">
       <a href="#produto">Produto</a>
@@ -107,7 +107,7 @@
         <div class="app-body">
           <!-- Sidebar -->
           <aside class="app-side">
-            <div class="app-brand"><img src="img/px-logo.png" alt="Px" width="28" height="22"></div>
+            <div class="app-brand"><img src="img/logo-cube.png" alt="Px" width="22" height="22"></div>
             <nav class="side-nav">
               <a class="active"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>Início</a>
               <a><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 4v4M16 4v4M4 11h16"/></svg>Agenda</a>
@@ -350,7 +350,7 @@
   <footer class="footer">
     <div class="wrap footer-grid">
       <div class="f-brand">
-        <img src="img/px-logo.png" alt="Px" width="40" height="32" loading="lazy">
+        <img src="img/logo-cube.png" alt="Px" width="31" height="32" loading="lazy">
         <p>O ecossistema completo para estudantes aprenderem, se organizarem e evoluírem.</p>
         <div class="f-social">
           <a aria-label="Instagram" href="#"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17" cy="7" r=".9" fill="currentColor"/></svg></a>
@@ -373,6 +373,41 @@
 
 </main>
 
-<script src="script.js?v=1"></script>
+<!-- ===== MODAL DE AUTENTICAÇÃO ===== -->
+<div class="modal" id="auth-modal" hidden>
+  <div class="modal-overlay" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <button class="modal-x" data-close aria-label="Fechar">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <img class="modal-logo" src="img/logo-cube.png" alt="Px" width="44" height="45">
+    <div class="auth-tabs">
+      <button data-tab="signup" class="active">Criar conta</button>
+      <button data-tab="login">Entrar</button>
+    </div>
+    <h3 id="auth-title">Crie sua conta gratuita</h3>
+    <p class="auth-sub" id="auth-sub">Comece a organizar seus estudos em menos de 1 minuto.</p>
+    <form id="auth-form" novalidate>
+      <label class="field" id="field-nome">
+        <span>Nome</span>
+        <input type="text" name="nome" autocomplete="name" placeholder="Seu nome">
+      </label>
+      <label class="field">
+        <span>E-mail</span>
+        <input type="email" name="email" autocomplete="email" placeholder="voce@email.com" required>
+      </label>
+      <label class="field">
+        <span>Senha</span>
+        <input type="password" name="senha" autocomplete="current-password" placeholder="Mínimo 6 caracteres" minlength="6" required>
+      </label>
+      <button class="btn-primary block lg" type="submit" id="auth-submit">Começar gratuitamente</button>
+    </form>
+    <p class="auth-foot">Ao continuar, você concorda com os Termos e a Política de Privacidade.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="script.js?v=2"></script>
 </body>
 </html>

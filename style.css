@@ -353,5 +353,47 @@ h2 { font-size: clamp(26px, 4.5vw, 40px); font-weight: 800; letter-spacing: -.03
   .cta-box { padding: 72px 40px; }
 }
 
+/* ---------- Modal de autenticação ---------- */
+.modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal[hidden] { display: none; }
+.modal-overlay { position: absolute; inset: 0; background: rgba(10,12,30,.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); animation: fade .2s var(--ease); }
+.modal-card {
+  position: relative; z-index: 1; width: 100%; max-width: 400px;
+  background: #fff; border-radius: var(--r-lg); padding: 30px 26px 24px;
+  box-shadow: var(--shadow-lg); text-align: center;
+  animation: pop .26s var(--ease);
+}
+@keyframes fade { from { opacity: 0; } }
+@keyframes pop { from { opacity: 0; transform: translateY(12px) scale(.97); } }
+.modal-x { position: absolute; top: 14px; right: 14px; width: 34px; height: 34px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); }
+.modal-x:hover { background: var(--soft); color: var(--ink); }
+.modal-x svg { width: 18px; height: 18px; }
+.modal-logo { height: 44px; width: auto; margin: 0 auto 14px; }
+.auth-tabs { display: inline-flex; background: var(--soft); border-radius: 11px; padding: 4px; gap: 4px; margin-bottom: 18px; }
+.auth-tabs button { padding: 8px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: var(--muted); }
+.auth-tabs button.active { background: #fff; color: var(--ink); box-shadow: var(--shadow-sm); }
+.modal-card h3 { font-size: 21px; font-weight: 800; letter-spacing: -.02em; }
+.auth-sub { font-size: 13.5px; color: var(--muted); margin: 6px 0 20px; }
+#auth-form { display: flex; flex-direction: column; gap: 12px; text-align: left; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field span { font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
+.field input { border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 13px; font-size: 14.5px; outline: none; transition: border-color .15s, box-shadow .15s; }
+.field input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(45,91,255,.15); }
+.field input.err { border-color: var(--red); box-shadow: 0 0 0 3px rgba(229,72,77,.14); }
+#auth-form .btn-primary { margin-top: 6px; }
+.auth-foot { font-size: 11.5px; color: var(--muted); margin-top: 16px; line-height: 1.5; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 24px);
+  z-index: 200; background: var(--ink); color: #fff;
+  font-size: 14px; font-weight: 600; padding: 13px 20px; border-radius: 12px;
+  box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none;
+  transition: opacity .25s var(--ease), transform .25s var(--ease); max-width: 90vw;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+body.modal-open { overflow: hidden; }
+
 /* foco acessível */
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 8px; }
