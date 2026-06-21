@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://gu1lherme-cst.github.io/Paulex/sitemap.xml
