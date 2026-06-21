@@ -4,12 +4,14 @@
 
 html {
   scroll-behavior: smooth;
-  background: #ffffff;
+  text-size-adjust: 100%;
 }
 
 body {
-  margin: 0;
   min-width: 320px;
+  margin: 0;
+  color: #070b18;
+  background: #ffffff;
   font-family:
     Inter,
     ui-sans-serif,
@@ -18,10 +20,15 @@ body {
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  color: #070b18;
-  background: #ffffff;
-  -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
   text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 button,
@@ -31,17 +38,23 @@ select {
   font: inherit;
 }
 
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
-}
-
 img,
 svg {
   display: block;
 }
 
-::selection {
-  color: #ffffff;
-  background: #0457ff;
+#root {
+  min-height: 100vh;
+  isolation: isolate;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(4, 87, 255, 0.35);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
