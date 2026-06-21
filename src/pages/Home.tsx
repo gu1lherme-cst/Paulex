@@ -431,7 +431,7 @@ const Header = memo(function Header() {
           ))}
         </div>
         <div className="px-nav-actions">
-          <a className="px-login" href="#entrar">
+          <a className="px-login" href="#planos">
             Entrar
           </a>
           <a className="px-button px-button-primary" href="#planos">
