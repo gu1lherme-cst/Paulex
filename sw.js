@@ -1,26 +1,20 @@
-/* Service worker Paulex — permite instalar como aplicativo e
-   navegar com internet instável (os arquivos ficam em cache). */
+/* Service worker Px — instala como app e navega com internet instável. */
 
-const CACHE = "paulex-v27";
+const CACHE = "px-v1";
 const ASSETS = [
   "./",
   "index.html",
-  "style.css?v=27",
-  "script.js?v=27",
-  "produtos.js?v=27",
+  "style.css?v=1",
+  "script.js?v=1",
   "manifest.json",
-  "img/logo.png",
   "img/px-logo.png",
   "img/favicon-192.png",
   "img/favicon-512.png",
 ];
 
 self.addEventListener("install", (e) => {
-  // Pré-cacheia o que der; ignora falhas individuais para não travar a instalação
   e.waitUntil(
-    caches.open(CACHE).then((c) =>
-      Promise.allSettled(ASSETS.map((a) => c.add(a)))
-    )
+    caches.open(CACHE).then((c) => Promise.allSettled(ASSETS.map((a) => c.add(a))))
   );
   self.skipWaiting();
 });
@@ -38,8 +32,6 @@ self.addEventListener("fetch", (e) => {
   const req = e.request;
   if (req.method !== "GET") return;
 
-  // Páginas: tenta a rede primeiro (para receber atualizações),
-  // cai para o cache se estiver offline
   if (req.mode === "navigate") {
     e.respondWith(
       fetch(req)
@@ -53,7 +45,6 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // Demais arquivos: cache primeiro, rede como complemento
   e.respondWith(
     caches.match(req).then(
       (hit) =>

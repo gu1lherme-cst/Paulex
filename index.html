@@ -3,1083 +3,376 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#002D8F">
+  <meta name="theme-color" content="#2D5BFF">
 
   <!-- SEO -->
-  <title>Paulex Armarinho | Papelaria, Utilidades, Informática e Muito Mais</title>
-  <meta name="description" content="Há mais de 40 anos oferecendo produtos de papelaria, utilidades, descartáveis, brinquedos, informática e cosméticos. Atacado e varejo com frete grátis acima de R$ 99.">
+  <title>Px · O sistema operacional do estudante</title>
+  <meta name="description" content="Notas, tarefas, calendário, metas, Pomodoro, comunidade e IA para estudantes. Estude, organize e evolua em um só lugar.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://gu1lherme-cst.github.io/Paulex/">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://gu1lherme-cst.github.io/Paulex/">
-  <meta property="og:site_name" content="Paulex Armarinho">
-  <meta property="og:title" content="Paulex Armarinho | Papelaria, Utilidades, Informática e Muito Mais">
-  <meta property="og:description" content="Há mais de 40 anos facilitando o dia a dia dos clientes no Rio de Janeiro. Atacado e varejo com frete grátis acima de R$ 99.">
-  <meta property="og:image" content="img/logo.png">
+  <meta property="og:site_name" content="Px">
+  <meta property="og:title" content="Px · O sistema operacional do estudante">
+  <meta property="og:description" content="Estude, organize e evolua em um só lugar. Notas, tarefas, calendário, metas, Pomodoro, comunidade e IA para estudantes.">
+  <meta property="og:image" content="img/px-logo.png">
   <meta property="og:locale" content="pt_BR">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Paulex Armarinho | Papelaria, Utilidades, Informática e Muito Mais">
-  <meta name="twitter:description" content="Há mais de 40 anos facilitando o dia a dia dos clientes no Rio de Janeiro. Atacado e varejo com frete grátis acima de R$ 99.">
-  <meta name="twitter:image" content="img/logo.png">
-
-  <!-- Schema.org -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Store",
-    "name": "Paulex Armarinho",
-    "description": "Há mais de 40 anos oferecendo qualidade, confiança e variedade para famílias, estudantes, empresas e revendedores.",
-    "foundingDate": "1984",
-    "image": "img/logo.png",
-    "telephone": "+5521987578187",
-    "priceRange": "$",
-    "address": { "@type": "PostalAddress", "addressCountry": "BR" },
-    "sameAs": ["https://www.instagram.com/paulexarmarinho/"]
-  }
-  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="img/favicon-32.png">
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="apple-touch-icon" href="img/favicon-192.png">
   <link rel="manifest" href="manifest.json">
-  <link rel="preload" as="image" href="img/logo.png">
-  <link rel="stylesheet" href="style.css?v=27">
+  <link rel="stylesheet" href="style.css?v=1">
 </head>
 <body>
 
-<!-- ===== SPLASH ===== -->
-<div class="splash" id="splash">
-  <div class="splash-inner">
-    <img src="img/logo.png" alt="Paulex" class="logo-img logo-img-xl" width="220" height="80">
-    <div class="desde">ARMARINHO · DESDE 1984</div>
+<!-- ===== HEADER ===== -->
+<header class="nav" id="top">
+  <div class="wrap nav-wrap">
+    <a class="brand" href="#top" aria-label="Px — início">
+      <img src="img/px-logo.png" alt="Px" width="40" height="32">
+    </a>
+    <nav class="nav-links" id="nav-links">
+      <a href="#produto">Produto</a>
+      <a href="#recursos">Recursos</a>
+      <a href="#comunidade">Comunidade</a>
+      <a href="#planos">Planos</a>
+      <a href="#carreira">Carreira</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn-ghost" href="#cta">Entrar</a>
+      <a class="btn-primary" href="#cta">Começar grátis</a>
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
   </div>
-  <div class="splash-bar"><span></span></div>
-</div>
+</header>
 
-<div class="app" id="app">
+<main>
 
-  <!-- ===== CABEÇALHO (desktop) ===== -->
-  <header class="desk-header">
-    <!-- Barra superior de informações -->
-    <div class="info-bar">
-      <div class="wrap info-bar-wrap">
-        <span class="info-bar-item">
-          <svg viewBox="0 0 24 24"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/></svg>
-          Empresa carioca desde 1984
-        </span>
-        <span class="info-bar-sep"></span>
-        <span class="info-bar-item">
-          <svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>
-          Entrega rápida para todo o RJ
-        </span>
-        <span class="info-bar-sep"></span>
-        <span class="info-bar-item">
-          <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M3 12h18M12 8V21"/><path d="M12 8S10 3 7.5 4 8 8 12 8s5-3 3.5-4-3.5 4-3.5 4z"/></svg>
-          Frete grátis acima de R$ 99
-        </span>
-        <span class="info-bar-sep"></span>
-        <button class="info-bar-item info-bar-wa" onclick="openWhatsApp()">
-          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
-          Atendimento via WhatsApp
-        </button>
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="produto">
+    <div class="wrap hero-wrap">
+      <span class="eyebrow">
+        <span class="dot"></span> O sistema operacional do estudante
+      </span>
+      <h1 class="reveal">Estude, organize e <span class="hl">evolua</span><br>em um só lugar.</h1>
+      <p class="lead reveal">Notas, tarefas, calendário, metas, Pomodoro, comunidade e IA para estudantes que querem aprender melhor e construir o futuro.</p>
+      <div class="hero-cta reveal">
+        <a class="btn-primary lg" href="#cta">Começar gratuitamente</a>
+        <a class="btn-soft lg" href="#demo">
+          <svg viewBox="0 0 24 24" class="ic-play"><path d="M8 5v14l11-7z"/></svg>
+          Ver demonstração
+        </a>
+      </div>
+      <div class="social-proof reveal">
+        <div class="avatars">
+          <span class="av" style="--c1:#2D5BFF;--c2:#5B8CFF">JL</span>
+          <span class="av" style="--c1:#7C5CFC;--c2:#A78BFA">MR</span>
+          <span class="av" style="--c1:#E5484D;--c2:#FB7185">AC</span>
+          <span class="av" style="--c1:#0EA5A5;--c2:#34D399">BS</span>
+          <span class="av" style="--c1:#F59E0B;--c2:#FCD34D">TF</span>
+        </div>
+        <div class="proof-txt">
+          <div class="stars">★★★★★</div>
+          <span>Mais de <strong>50 mil estudantes</strong> já estão evoluindo com a Px.</span>
+        </div>
       </div>
     </div>
 
-    <!-- Header principal: logo + busca + conta + carrinho -->
-    <div class="wrap desk-main">
-      <button class="desk-logo" onclick="go('home')" aria-label="Início">
-        <img src="img/px-logo.png" alt="Paulex" class="logo-img logo-img-desk" width="50" height="40">
-      </button>
-      <div class="desk-search">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input type="search" id="desk-search-input" placeholder="Buscar produtos…" autocomplete="off" aria-label="Buscar produtos">
-        <button class="desk-search-go" onclick="doDeskSearch()">Buscar</button>
-        <div class="suggest" id="desk-suggest" hidden></div>
-      </div>
-      <div class="desk-actions">
-        <button class="desk-account" onclick="go('conta')">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-          <span class="desk-account-txt"><small>Minha conta</small><strong id="desk-account-label">Entrar / Cadastrar</strong></span>
-        </button>
-        <button data-go="carrinho" class="desk-cart-btn" aria-label="Carrinho">
-          <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-          <span class="badge cart-badge">0</span>
-          <span class="desk-cart-txt">Carrinho</span>
-        </button>
-      </div>
+    <!-- chips flutuantes do ecossistema -->
+    <div class="float-chips" aria-hidden="true">
+      <span class="chip chip-1"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg> Notas</span>
+      <span class="chip chip-2"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M4 11h16M8 4v4M16 4v4"/></svg> Calendário</span>
+      <span class="chip chip-3"><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/><circle cx="19" cy="18" r="2"/></svg> Tarefas</span>
+      <span class="chip chip-4"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 3h6"/></svg> Pomodoro</span>
+      <span class="chip chip-5"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.8-.5z"/></svg> IA</span>
+      <span class="chip chip-6"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="11" r="2.4"/><path d="M3 20c.6-3.2 3-5 6-5s5.4 1.8 6 5"/></svg> Comunidade</span>
+      <span class="chip chip-7"><svg viewBox="0 0 24 24"><path d="M4 8h16v11H4z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg> Carreira</span>
     </div>
+  </section>
 
-    <!-- Menu de navegação -->
-    <div class="desk-nav-wrap">
-      <nav class="wrap desk-nav">
-        <button data-go="home" class="active">Início</button>
-        <button onclick="openList('cat:papelaria')">Papelaria</button>
-        <button onclick="openList('cat:utilidades')">Utilidades</button>
-        <button onclick="openList('cat:descartaveis')">Descartáveis</button>
-        <button onclick="openList('cat:brinquedos')">Brinquedos</button>
-        <button onclick="openList('cat:informatica')">Informática</button>
-        <button onclick="openList('cat:cosmeticos')">Cosméticos</button>
-        <button onclick="openList('maisvendidos')">Mais Vendidos</button>
-        <button class="nav-ofertas" onclick="openList('promocoes')">
-          <svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-2 8 9-12h-7l2-8z"/></svg>
-          Ofertas do Dia
-        </button>
-      </nav>
-    </div>
-  </header>
+  <!-- ===== MOCKUP DO PRODUTO ===== -->
+  <section class="mockup-section" id="demo">
+    <div class="wrap">
+      <div class="app-window reveal">
+        <div class="app-topbar">
+          <span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>
+          <span class="app-url">app.px.com / dashboard</span>
+        </div>
+        <div class="app-body">
+          <!-- Sidebar -->
+          <aside class="app-side">
+            <div class="app-brand"><img src="img/px-logo.png" alt="Px" width="28" height="22"></div>
+            <nav class="side-nav">
+              <a class="active"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>Início</a>
+              <a><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 4v4M16 4v4M4 11h16"/></svg>Agenda</a>
+              <a><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></svg>Tarefas</a>
+              <a><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6"/></svg>Notas</a>
+              <a><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/></svg>Pomodoro</a>
+              <a><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>Metas</a>
+              <a><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.8-.5z"/></svg>IA Assistente</a>
+              <a><svg viewBox="0 0 24 24"><path d="M5 4h14v16l-7-3-7 3z"/></svg>Simulados</a>
+              <a><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="11" r="2.4"/><path d="M3 20c.6-3.2 3-5 6-5s5.4 1.8 6 5"/></svg>Comunidade</a>
+              <a><svg viewBox="0 0 24 24"><path d="M4 8h16v11H4z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>Carreira</a>
+            </nav>
+          </aside>
 
-  <!-- ===== INÍCIO ===== -->
-  <section class="screen active" id="screen-home" data-nav="home">
-    <header class="topbar home-topbar">
-      <button class="icon-btn" aria-label="Menu" onclick="go('categorias')">
-        <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-      </button>
-      <h1 class="home-logo"><img src="img/logo.png" alt="Paulex" class="logo-img logo-img-top" width="77" height="28"></h1>
-      <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
-        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
-        <span class="badge cart-badge">0</span>
-      </button>
-    </header>
+          <!-- Conteúdo -->
+          <div class="app-main">
+            <div class="app-head">
+              <div>
+                <h3>Olá, estudante! 👋</h3>
+                <p>Aqui está o resumo do seu dia.</p>
+              </div>
+              <div class="app-head-right">
+                <span class="app-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>Buscar</span>
+                <span class="app-avatar">E</span>
+              </div>
+            </div>
 
-    <!-- Hero + card de oferta -->
-    <div class="wrap home-top">
-      <div class="hero">
-        <div class="hero-inner">
-          <div class="hero-text">
-            <p class="eyebrow">Paulex Armarinho · Desde 1984</p>
-            <h2>Há mais de 40 anos<br>facilitando o dia a dia<br>dos cariocas.</h2>
-            <p class="hero-sub">Mais de 2 mil produtos para casa, escritório, escola e empresa.</p>
-            <div class="cta-row">
-              <button class="pill pill-red" onclick="openList('maisvendidos')">Ver produtos</button>
-              <button class="pill pill-ghost" onclick="openWhatsApp()">
-                <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
-                Falar no WhatsApp
-              </button>
+            <!-- Stats -->
+            <div class="stat-row">
+              <div class="stat-card">
+                <span class="stat-ic blue"><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></svg></span>
+                <strong>3</strong><small>Tarefas hoje</small>
+              </div>
+              <div class="stat-card">
+                <span class="stat-ic teal"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+                <strong>2h30</strong><small>De foco</small>
+              </div>
+              <div class="stat-card">
+                <span class="stat-ic red"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 4v4M16 4v4"/></svg></span>
+                <strong>1</strong><small>Aula / prova</small>
+              </div>
+              <div class="stat-card">
+                <span class="stat-ic purple"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span>
+                <strong>85%</strong><small>Meta diária</small>
+              </div>
+            </div>
+
+            <div class="panel-grid">
+              <!-- Agenda -->
+              <div class="panel">
+                <div class="panel-head"><h4>Agenda do dia</h4><span class="link-mini">Ver tudo</span></div>
+                <ul class="agenda">
+                  <li><span class="ag-dot blue"></span><div><strong>Matemática</strong><small>08:00 — Funções</small></div><span class="badge-soft">Agora</span></li>
+                  <li><span class="ag-dot teal"></span><div><strong>História</strong><small>10:00 — Revolução Industrial</small></div></li>
+                  <li><span class="ag-dot red"></span><div><strong>Física</strong><small>14:00 — Cinemática</small></div></li>
+                </ul>
+              </div>
+
+              <!-- Pomodoro -->
+              <div class="panel pomo">
+                <div class="panel-head"><h4>Pomodoro</h4></div>
+                <div class="pomo-ring">
+                  <svg viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="52" class="ring-bg"/>
+                    <circle cx="60" cy="60" r="52" class="ring-fg" id="pomo-ring-fg"/>
+                  </svg>
+                  <div class="pomo-time" id="pomo-time">25:00</div>
+                </div>
+                <button class="btn-primary block" id="pomo-btn">Iniciar</button>
+              </div>
+
+              <!-- Próximas entregas -->
+              <div class="panel">
+                <div class="panel-head"><h4>Próximas entregas</h4></div>
+                <ul class="deliver">
+                  <li><span class="chk"></span><div><strong>Relatório de Biologia</strong><small>Entrega amanhã</small></div></li>
+                  <li><span class="chk"></span><div><strong>Lista de Exercícios</strong><small>Em 2 dias</small></div></li>
+                  <li><span class="chk"></span><div><strong>Revisão de Física</strong><small>Sexta-feira</small></div></li>
+                </ul>
+              </div>
+
+              <!-- IA -->
+              <div class="panel ai-panel">
+                <div class="panel-head"><h4><span class="ai-dot"></span> IA Assistente</h4></div>
+                <p class="ai-q">Como posso ajudar nos seus estudos?</p>
+                <div class="ai-chips">
+                  <span>Resumir conteúdo</span>
+                  <span>Criar plano de estudos</span>
+                  <span>Gerar exercícios</span>
+                  <span>Explicar conceito</span>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="hero-visual" aria-hidden="true">
-            <svg viewBox="0 0 380 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="190" cy="210" r="180" fill="#00114A" opacity=".85"/>
-              <rect x="148" y="42" width="13" height="150" rx="6.5" fill="#FFD600" transform="rotate(-18 148 42)"/>
-              <rect x="164" y="38" width="13" height="148" rx="6.5" fill="#FF4444" transform="rotate(-9 164 38)"/>
-              <rect x="179" y="36" width="13" height="148" rx="6.5" fill="#4CAF50" transform="rotate(0 179 36)"/>
-              <rect x="194" y="38" width="13" height="148" rx="6.5" fill="#2196F3" transform="rotate(9 194 38)"/>
-              <rect x="208" y="42" width="13" height="150" rx="6.5" fill="#FF9800" transform="rotate(18 208 42)"/>
-              <rect x="228" y="158" width="108" height="140" rx="8" fill="#EEF4FF"/>
-              <rect x="228" y="158" width="11" height="140" rx="4" fill="#002D8F"/>
-              <text x="245" y="200" font-family="Georgia,serif" font-size="34" font-weight="bold" fill="#002D8F">Px</text>
-              <line x1="245" y1="218" x2="328" y2="218" stroke="#C0D0EC" stroke-width="1.8"/>
-              <line x1="245" y1="230" x2="328" y2="230" stroke="#C0D0EC" stroke-width="1.8"/>
-              <line x1="245" y1="242" x2="328" y2="242" stroke="#C0D0EC" stroke-width="1.8"/>
-              <line x1="245" y1="254" x2="328" y2="254" stroke="#C0D0EC" stroke-width="1.8"/>
-              <path d="M140 258 L130 328 L192 328 L182 258 Z" fill="#002D8F"/>
-              <ellipse cx="161" cy="258" rx="26" ry="6" fill="#0B3BA7"/>
-              <text x="142" y="302" font-family="Georgia,serif" font-size="18" font-weight="bold" fill="white">Px</text>
-              <path d="M182 280 Q202 280 202 296 Q202 312 182 312" stroke="#001F6A" stroke-width="7" fill="none" stroke-linecap="round"/>
-              <path d="M88 272 L81 330 L115 330 L108 272 Z" fill="#CC0011"/>
-              <ellipse cx="98" cy="272" rx="15" ry="4" fill="#FF0A18"/>
-              <text x="82" y="308" font-family="Georgia,serif" font-size="13" font-weight="bold" fill="white">Px</text>
-              <rect x="238" y="318" width="88" height="36" rx="7" fill="#1A237E"/>
-              <rect x="252" y="307" width="58" height="26" rx="5" fill="#283593"/>
-              <rect x="258" y="311" width="18" height="14" rx="2.5" fill="#90CAF9"/>
-              <rect x="282" y="311" width="18" height="14" rx="2.5" fill="#90CAF9"/>
-              <circle cx="258" cy="354" r="11" fill="#111"/><circle cx="258" cy="354" r="6" fill="#666"/>
-              <circle cx="318" cy="354" r="11" fill="#111"/><circle cx="318" cy="354" r="6" fill="#666"/>
-              <circle cx="342" cy="132" r="5" fill="rgba(255,220,60,.8)"/>
-              <circle cx="60" cy="356" r="4" fill="rgba(100,200,255,.6)"/>
-              <circle cx="356" cy="282" r="3.5" fill="rgba(255,255,255,.45)"/>
-              <circle cx="350" cy="344" r="3" fill="rgba(255,140,80,.5)"/>
-            </svg>
-            <div class="hero-badge"><strong>+2 mil</strong><span>produtos<br>para casa</span></div>
-          </div>
         </div>
-      </div>
-
-      <!-- Card lateral: Ofertas do Dia -->
-      <aside class="offer-card">
-        <div class="offer-head">
-          <svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-2 8 9-12h-7l2-8z"/></svg>
-          Ofertas do Dia
-        </div>
-        <div class="offer-timer-row">
-          <span class="offer-timer-label">Acaba em</span>
-          <span class="offer-timer" id="offer-timer">08:45:32</span>
-        </div>
-        <button class="offer-product" onclick="openProduct('headphone-bluetooth')">
-          <span class="offer-badge">22% OFF</span>
-          <span class="offer-art">
-            <svg viewBox="0 0 64 64" fill="none" stroke="#0B3BA7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 38v-6a18 18 0 0 1 36 0v6"/><rect x="9" y="36" width="13" height="20" rx="6" fill="#DEE8FB"/><rect x="42" y="36" width="13" height="20" rx="6" fill="#DEE8FB"/></svg>
-          </span>
-          <strong class="offer-name">Headphone Bluetooth Sem Fio</strong>
-          <span class="offer-prices">
-            <span class="offer-old">R$ 229,90</span>
-            <span class="offer-new">R$ 179,90</span>
-          </span>
-        </button>
-        <button class="offer-btn" onclick="openProduct('headphone-bluetooth')">Ver oferta</button>
-      </aside>
-    </div>
-
-    <!-- Faixa de confiança -->
-    <div class="wrap hero-trust-row">
-      <div class="hero-trust-item">
-        <svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg>
-        <span><strong>Entrega rápida</strong> para todo o RJ</span>
-      </div>
-      <div class="hero-trust-item">
-        <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M3 12h18M12 8V21"/><path d="M12 8S10 3 7.5 4 8 8 12 8s5-3 3.5-4-3.5 4-3.5 4z"/></svg>
-        <span><strong>Frete grátis</strong> acima de R$ 99</span>
-      </div>
-      <div class="hero-trust-item">
-        <svg viewBox="0 0 24 24"><path d="M4 8l8-4 8 4v9l-8 4-8-4V8z"/><path d="M4 8l8 4 8-4M12 12v9"/></svg>
-        <span><strong>Atacado e varejo</strong> para todos</span>
-      </div>
-      <div class="hero-trust-item">
-        <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
-        <span><strong>Atendimento</strong> via WhatsApp</span>
       </div>
     </div>
+  </section>
 
-    <!-- Cartão flutuante de benefícios (5 itens) -->
+  <!-- ===== PROVA SOCIAL (instituições) ===== -->
+  <section class="logos">
     <div class="wrap">
-      <div class="benefits-card benefits-card-5">
-        <div class="benefit-item">
-          <div class="benefit-ico">
-            <svg viewBox="0 0 24 24"><path d="M5 9l7-5 7 5-2.5 1.5M5 9v6l7 4 7-4V9M5 9l7 4 7-4M9 20l3-2 3 2"/></svg>
-          </div>
-          <div><strong>+40 anos de tradição</strong><p>Desde 1984</p></div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-ico">
-            <svg viewBox="0 0 24 24"><path d="M4 8l8-4 8 4v9l-8 4-8-4V8z"/><path d="M4 8l8 4 8-4M12 12v9"/></svg>
-          </div>
-          <div><strong>+2 mil produtos</strong><p>para você</p></div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-ico">
-            <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M3 12h18M12 8V21"/><path d="M12 8S10 3 7.5 4 8 8 12 8s5-3 3.5-4-3.5 4-3.5 4z"/></svg>
-          </div>
-          <div><strong>Frete grátis</strong><p>acima de R$ 99</p></div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-ico">
-            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
-          </div>
-          <div><strong>Atendimento rápido</strong><p>via WhatsApp</p></div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-ico">
-            <svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="m9 12 2 2 4-4"/></svg>
-          </div>
-          <div><strong>Compra 100% segura</strong><p>Seus dados protegidos</p></div>
-        </div>
+      <p class="logos-title">Utilizado por estudantes e instituições que estão transformando a educação</p>
+      <div class="logo-row">
+        <span>Universidade Alpha</span>
+        <span>Instituto Beta</span>
+        <span>Escola Next</span>
+        <span>Campus Digital</span>
+        <span>EduLab</span>
+        <span>Future Academy</span>
       </div>
     </div>
-
-    <!-- Vistos recentemente -->
-    <div class="recent" id="recent-section" hidden>
-      <div class="wrap">
-        <h3 class="rel-title">Vistos recentemente</h3>
-        <div class="suggest-row" id="recent-row"></div>
-      </div>
-    </div>
-
-    <!-- Compre por categoria -->
-    <div class="section">
-      <div class="wrap">
-        <div class="sec-head">
-          <h3 class="sec-title-left">Compre por categoria</h3>
-          <button class="sec-link" onclick="go('categorias')">Ver todas as categorias
-            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-        </div>
-        <div class="cat-row" id="cat-row"></div>
-      </div>
-    </div>
-
-    <!-- Mais vendidos -->
-    <div class="section">
-      <div class="wrap">
-        <div class="sec-head">
-          <div>
-            <h3 class="sec-title-left">Mais vendidos</h3>
-            <p class="sec-sub-left">Os favoritos de quem compra todo mês.</p>
-          </div>
-          <button class="sec-link" onclick="openList('maisvendidos')">Ver todos
-            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-        </div>
-        <div class="product-grid" id="home-grid"></div>
-      </div>
-    </div>
-
-    <!-- Ofertas da semana -->
-    <div class="section">
-      <div class="wrap">
-        <div class="sec-head">
-          <div>
-            <h3 class="sec-title-left">Ofertas da semana</h3>
-            <p class="sec-sub-left">Preços que valem o clique.</p>
-          </div>
-          <button class="sec-link" onclick="openList('promocoes')">Ver todas
-            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-        </div>
-        <div class="product-grid" id="promo-grid"></div>
-      </div>
-    </div>
-
-    <!-- Produtos afiliados -->
-    <div class="section">
-      <div class="wrap">
-        <div class="affil-head">
-          <span class="affil-eyebrow">Parceiros oficiais</span>
-          <h3 class="sec-title-left">Produtos selecionados com os melhores preços</h3>
-          <p class="affil-sub">Trabalhamos com as melhores lojas parceiras para oferecer qualidade, preço baixo e segurança na sua compra.</p>
-          <div class="affil-partners">
-            <span class="affil-partner">Amazon</span>
-            <span class="affil-partner">Shopee</span>
-            <span class="affil-partner">Magalu</span>
-            <span class="affil-partner">Mercado Livre</span>
-          </div>
-        </div>
-        <div class="affil-grid" id="affil-grid"></div>
-      </div>
-    </div>
-
-    <!-- Para a sua empresa (Atacado) -->
-    <div class="section">
-      <div class="wrap">
-        <div class="biz-banner">
-          <div class="biz-text">
-            <span class="biz-eyebrow">Atacado para empresas</span>
-            <h3>Para a sua empresa.</h3>
-            <p>Acima de 12 peças, você paga preço de atacado. Atendimento dedicado para escolas, lojas e escritórios.</p>
-            <div class="biz-tags">
-              <span>
-                <svg viewBox="0 0 24 24"><path d="M3 21V9l9-5 9 5v12"/><path d="M3 21h18M9 21v-5h6v5M8 12h.01M16 12h.01"/></svg>
-                Escolas
-              </span>
-              <span>
-                <svg viewBox="0 0 24 24"><path d="M4 9l1-4h14l1 4M4 9h16v11H4zM4 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/></svg>
-                Lojas
-              </span>
-              <span>
-                <svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/></svg>
-                Escritórios
-              </span>
-              <span>
-                <svg viewBox="0 0 24 24"><path d="M4 8l8-4 8 4v9l-8 4-8-4V8z"/><path d="M4 8l8 4 8-4M12 12v9"/></svg>
-                Revendedores
-              </span>
-            </div>
-            <div class="cta-row">
-              <button class="pill pill-white" onclick="go('atacado')">Ver vantagens do atacado</button>
-              <button class="pill pill-wa-ghost" onclick="orcamento()">
-                <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
-                Pedir orçamento
-              </button>
-            </div>
-          </div>
-          <div class="biz-visual" aria-hidden="true">
-            <svg viewBox="0 0 360 320" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-              <rect x="0" y="0" width="360" height="320" fill="#0A368F"/>
-              <rect x="0" y="0" width="360" height="320" fill="url(#bizGlow)"/>
-              <defs>
-                <radialGradient id="bizGlow" cx="30%" cy="20%" r="80%">
-                  <stop offset="0%" stop-color="#1A4FC0" stop-opacity=".55"/>
-                  <stop offset="100%" stop-color="#0A368F" stop-opacity="0"/>
-                </radialGradient>
-              </defs>
-              <!-- Estrutura da estante -->
-              <g stroke="#2C5CD0" stroke-width="5" stroke-linecap="round">
-                <path d="M40 40v250M180 40v250M320 40v250"/>
-                <path d="M30 120h300M30 210h300"/>
-              </g>
-              <!-- Chão -->
-              <path d="M20 290h320" stroke="#2C5CD0" stroke-width="6" stroke-linecap="round"/>
-              <!-- Prateleira superior: caixas -->
-              <g>
-                <rect x="58" y="66" width="56" height="48" rx="4" fill="#D8A064"/><rect x="58" y="66" width="56" height="15" rx="4" fill="#C18B4F"/><path d="M86 66v48" stroke="#A9763E" stroke-width="2"/>
-                <text x="74" y="100" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#0A368F">Px</text>
-                <rect x="124" y="74" width="48" height="40" rx="4" fill="#C9905A"/><rect x="124" y="74" width="48" height="13" rx="4" fill="#B27E48"/>
-                <rect x="198" y="66" width="56" height="48" rx="4" fill="#D8A064"/><rect x="198" y="66" width="56" height="15" rx="4" fill="#C18B4F"/><path d="M226 66v48" stroke="#A9763E" stroke-width="2"/>
-                <text x="214" y="100" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#0A368F">Px</text>
-                <rect x="264" y="74" width="48" height="40" rx="4" fill="#C9905A"/><rect x="264" y="74" width="48" height="13" rx="4" fill="#B27E48"/>
-              </g>
-              <!-- Prateleira do meio: caixas -->
-              <g>
-                <rect x="58" y="158" width="50" height="46" rx="4" fill="#C9905A"/><rect x="58" y="158" width="50" height="14" rx="4" fill="#B27E48"/>
-                <rect x="118" y="158" width="54" height="46" rx="4" fill="#D8A064"/><rect x="118" y="158" width="54" height="14" rx="4" fill="#C18B4F"/><path d="M145 158v46" stroke="#A9763E" stroke-width="2"/>
-                <text x="132" y="190" font-family="Georgia,serif" font-size="15" font-weight="bold" fill="#0A368F">Px</text>
-                <rect x="198" y="158" width="54" height="46" rx="4" fill="#D8A064"/><rect x="198" y="158" width="54" height="14" rx="4" fill="#C18B4F"/><path d="M225 158v46" stroke="#A9763E" stroke-width="2"/>
-                <text x="212" y="190" font-family="Georgia,serif" font-size="15" font-weight="bold" fill="#0A368F">Px</text>
-                <rect x="262" y="158" width="50" height="46" rx="4" fill="#C9905A"/><rect x="262" y="158" width="50" height="14" rx="4" fill="#B27E48"/>
-              </g>
-              <!-- Pallet no chão -->
-              <g>
-                <rect x="120" y="240" width="120" height="44" rx="4" fill="#D8A064"/><rect x="120" y="240" width="120" height="14" rx="4" fill="#C18B4F"/><path d="M180 240v44" stroke="#A9763E" stroke-width="2"/>
-                <text x="160" y="270" font-family="Georgia,serif" font-size="18" font-weight="bold" fill="#0A368F">Px</text>
-                <rect x="118" y="284" width="124" height="8" rx="2" fill="#7C5A30"/>
-              </g>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Faixa de confiança (pré-rodapé) -->
-    <div class="section trust-strip-section">
-      <div class="wrap trust-strip">
-        <div class="trust-strip-item">
-          <svg viewBox="0 0 24 24"><path d="M5 9l7-5 7 5-2.5 1.5M5 9v6l7 4 7-4V9M5 9l7 4 7-4M9 20l3-2 3 2"/></svg>
-          <div><strong>Mais de 40 anos de tradição</strong><small>Desde 1984</small></div>
-        </div>
-        <div class="trust-strip-item">
-          <svg viewBox="0 0 24 24"><path d="M4 8l8-4 8 4v9l-8 4-8-4V8z"/><path d="M4 8l8 4 8-4M12 12v9"/></svg>
-          <div><strong>Mais de 2 mil produtos</strong><small>para você</small></div>
-        </div>
-        <div class="trust-strip-item">
-          <svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg>
-          <div><strong>Frete grátis acima de R$ 99</strong><small>Entregas rápidas para todo o Rio de Janeiro</small></div>
-        </div>
-        <div class="trust-strip-item">
-          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
-          <div><strong>Atendimento rápido via WhatsApp</strong><small>Tire dúvidas e finalize seus pedidos</small></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Rodapé -->
-    <footer class="footer">
-      <div class="wrap footer-grid">
-        <div class="f-col f-brand">
-          <div class="f-brand-logo">
-            <img src="img/px-logo.png" alt="Paulex" width="44" height="35" loading="lazy" decoding="async">
-            <span>Paulex Armarinho</span>
-          </div>
-          <p>Há mais de 40 anos oferecendo qualidade, confiança e variedade para famílias, estudantes, empresas e revendedores.</p>
-          <div class="f-social">
-            <button aria-label="WhatsApp" onclick="openWhatsApp()" title="WhatsApp">
-              <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
-            </button>
-            <button aria-label="Instagram paulexarmarinho" onclick="window.open('https://www.instagram.com/paulexarmarinho/','_blank','noopener')" title="Instagram">
-              <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17" cy="7" r=".8" fill="currentColor"/></svg>
-            </button>
-            <button aria-label="Facebook" onclick="window.open('https://www.facebook.com/paulexarmarinho/','_blank','noopener')" title="Facebook">
-              <svg viewBox="0 0 24 24"><path d="M15 4h-2.5A3.5 3.5 0 0 0 9 7.5V10H7v3h2v7h3v-7h2.5l.5-3h-3V8a1 1 0 0 1 1-1h2V4z"/></svg>
-            </button>
-            <button aria-label="E-mail" onclick="window.location.href='mailto:contato@paulex.com.br'" title="E-mail">
-              <svg viewBox="0 0 24 24"><path d="M4 4h16c.55 0 1 .45 1 1v14c0 .55-.45 1-1 1H4c-.55 0-1-.45-1-1V5c0-.55.45-1 1-1z"/><path d="M21 6l-8.5 6L3 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="f-col">
-          <h4>Categorias</h4>
-          <div class="f-links" id="foot-cats"></div>
-        </div>
-        <div class="f-col">
-          <h4>Institucional</h4>
-          <div class="f-links">
-            <button onclick="window.scrollTo({top:0,behavior:'smooth'})">Sobre nós</button>
-            <button onclick="go('atacado')">Atacado para empresas</button>
-            <button onclick="go('privacidade')">Política de Privacidade</button>
-            <button onclick="go('termos')">Termos de Uso</button>
-            <button onclick="openWhatsApp('Olá! Gostaria de informações sobre trocas e devoluções.')">Trocas e Devoluções</button>
-          </div>
-        </div>
-        <div class="f-col">
-          <h4>Atendimento</h4>
-          <div class="f-links">
-            <button onclick="openWhatsApp()">WhatsApp (21) 98757-8187</button>
-            <button onclick="window.location.href='mailto:contato@paulex.com.br'">contato@paulex.com.br</button>
-            <span class="f-note">Segunda a sábado<br>08h às 18h</span>
-          </div>
-        </div>
-      </div>
-      <div class="wrap f-bottom">
-        <span><strong>Paulex Armarinho</strong> — Desde 1984. Todos os direitos reservados.</span>
-      </div>
-    </footer>
   </section>
 
-  <!-- ===== CATEGORIAS ===== -->
-  <section class="screen" id="screen-categorias" data-nav="categorias">
-    <header class="topbar topbar-title">
-      <button class="icon-btn" aria-label="Voltar" onclick="back()">
-        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <h2>Categorias</h2>
-      <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
-        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
-        <span class="badge cart-badge">0</span>
-      </button>
-    </header>
+  <!-- ===== RECURSOS ===== -->
+  <section class="section" id="recursos">
     <div class="wrap">
-      <div class="cat-list" id="cat-list"></div>
+      <div class="sec-head center reveal">
+        <span class="tag">Recursos</span>
+        <h2>Tudo que você precisa para estudar melhor</h2>
+        <p>Um ecossistema integrado — da primeira anotação até o seu primeiro emprego.</p>
+      </div>
+      <div class="feat-grid">
+        <article class="feat reveal"><span class="feat-ic blue"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span><h3>Bloco de notas</h3><p>Organize ideias, aulas e resumos em um só lugar.</p></article>
+        <article class="feat reveal"><span class="feat-ic teal"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 4v4M16 4v4M4 11h16"/></svg></span><h3>Calendário de estudos</h3><p>Planeje sua rotina acadêmica sem perder prazos.</p></article>
+        <article class="feat reveal"><span class="feat-ic blue"><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/><circle cx="19" cy="18" r="2"/></svg></span><h3>Tarefas inteligentes</h3><p>Priorize trabalhos, provas e entregas importantes.</p></article>
+        <article class="feat reveal"><span class="feat-ic purple"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span><h3>Metas e hábitos</h3><p>Acompanhe sua evolução e mantenha consistência.</p></article>
+        <article class="feat reveal"><span class="feat-ic red"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 3h6"/></svg></span><h3>Pomodoro</h3><p>Estude com foco usando ciclos de produtividade.</p></article>
+        <article class="feat reveal"><span class="feat-ic purple"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.8-.5z"/></svg></span><h3>IA para estudos</h3><p>Resuma textos, explique conteúdos e gere exercícios.</p></article>
+        <article class="feat reveal"><span class="feat-ic teal"><svg viewBox="0 0 24 24"><path d="M5 4h14v16l-7-3-7 3z"/></svg></span><h3>Simulados</h3><p>Pratique com questões e acompanhe seu desempenho.</p></article>
+        <article class="feat reveal"><span class="feat-ic blue"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="M8 13l-1 8 5-3 5 3-1-8"/></svg></span><h3>Certificados</h3><p>Comprove habilidades e fortaleça seu currículo.</p></article>
+        <article class="feat reveal"><span class="feat-ic teal"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="11" r="2.4"/><path d="M3 20c.6-3.2 3-5 6-5s5.4 1.8 6 5"/></svg></span><h3>Comunidade</h3><p>Conecte-se com estudantes com os mesmos objetivos.</p></article>
+        <article class="feat reveal"><span class="feat-ic red"><svg viewBox="0 0 24 24"><path d="M4 8h16v11H4z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></span><h3>Carreira</h3><p>Encontre vagas, estágios e oportunidades profissionais.</p></article>
+      </div>
     </div>
   </section>
 
-  <!-- ===== LISTA (categoria / ofertas / busca) ===== -->
-  <section class="screen" id="screen-list">
-    <header class="topbar topbar-title">
-      <button class="icon-btn" aria-label="Voltar" onclick="back()">
-        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <h2 id="list-title">Produtos</h2>
-      <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
-        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
-        <span class="badge cart-badge">0</span>
-      </button>
-    </header>
+  <!-- ===== COMUNIDADE ===== -->
+  <section class="section soft" id="comunidade">
     <div class="wrap">
-      <div class="sort-row" id="sort-row">
-        <button class="sort active" data-sort="relevancia" onclick="sortBy(this)">Relevância</button>
-        <button class="sort" data-sort="menor" onclick="sortBy(this)">Menor preço</button>
-        <button class="sort" data-sort="maior" onclick="sortBy(this)">Maior preço</button>
-        <button class="sort" data-sort="avaliados" onclick="sortBy(this)">Mais avaliados</button>
+      <div class="sec-head center reveal">
+        <span class="tag">Comunidade</span>
+        <h2>Estude em comunidade</h2>
+        <p>Encontre grupos com os mesmos objetivos que você.</p>
       </div>
-      <div class="product-grid pad" id="list-grid"></div>
-      <p class="empty" id="list-empty" hidden>Nenhum produto encontrado.</p>
-    </div>
-  </section>
-
-  <!-- ===== PRODUTO ===== -->
-  <section class="screen" id="screen-produto">
-    <header class="topbar topbar-title">
-      <button class="icon-btn" aria-label="Voltar" onclick="back()">
-        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <h2></h2>
-      <button class="icon-btn" id="p-fav" aria-label="Favoritar" onclick="toggleFav()">
-        <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9-9c-1.2-2.8.6-6 3.8-6C9 5 10.5 6.5 12 8.5 13.5 6.5 15 5 17.2 5c3.2 0 5 3.2 3.8 6-2 4.5-9 9-9 9z"/></svg>
-      </button>
-    </header>
-
-    <div class="wrap p-wrap">
-      <div class="p-photo" id="p-photo"></div>
-
-      <div class="p-body">
-        <h2 id="p-name">Produto</h2>
-        <small class="muted" id="p-unit">Unidade</small>
-        <div class="stars" id="p-stars"></div>
-        <div class="p-price" id="p-price"></div>
-        <div class="stock" id="p-stock"></div>
-        <p class="p-desc" id="p-desc"></p>
-
-        <div class="tiers" id="p-tiers">
-          <strong class="red">Preço de atacado a partir de 12 peças</strong>
-          <table>
-            <thead><tr><th>Quantidade</th><th>Preço unitário</th><th></th></tr></thead>
-            <tbody id="p-tiers-body"></tbody>
-          </table>
-          <button class="link tiers-cta" onclick="orcamento()">Precisa de mais? Peça um orçamento ›</button>
-        </div>
-
-        <div class="qty-row">
-          <span>Quantidade</span>
-          <div class="stepper">
-            <button onclick="pQty(-1)" aria-label="Diminuir">−</button>
-            <output id="p-qty">1</output>
-            <button onclick="pQty(1)" aria-label="Aumentar">+</button>
-          </div>
-        </div>
-        <div class="qty-total">
-          <span id="p-total-label">Total (1 unidade)</span>
-          <div>
-            <strong id="p-total">R$ 0,00</strong>
-            <small class="green" id="p-save" hidden></small>
-          </div>
-        </div>
-
-        <div class="p-actions">
-          <button class="pill pill-outline" onclick="addToCart()">Adicionar ao carrinho</button>
-          <button class="pill pill-blue" onclick="buyNow()">Comprar agora</button>
-        </div>
-
-        <div class="p-specs">
-          <h3>Especificações</h3>
-          <dl id="p-specs-body"></dl>
-        </div>
-
-        <div class="p-reviews">
-          <h3>Avaliações</h3>
-          <div class="rev-summary">
-            <div class="rev-score">
-              <strong id="p-rev-score">4,5</strong>
-              <span class="stars" id="p-rev-stars"></span>
-              <small class="muted" id="p-rev-count"></small>
-            </div>
-            <div class="rev-bars" id="p-rev-bars"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="wrap p-related-wrap" id="p-related-wrap">
-      <h3 class="rel-title">Você também pode gostar</h3>
-      <div class="product-grid" id="p-related"></div>
-    </div>
-  </section>
-
-  <!-- ===== CARRINHO ===== -->
-  <section class="screen" id="screen-carrinho" data-nav="carrinho">
-    <header class="topbar topbar-title">
-      <button class="icon-btn" aria-label="Voltar" onclick="back()">
-        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <h2>Carrinho</h2>
-      <button class="link" onclick="clearCart()">Limpar</button>
-    </header>
-
-    <div class="wrap cart-wrap">
-      <div id="cart-items"></div>
-
-      <div class="cart-empty" id="cart-empty" hidden>
-        <span class="empty-ico">
-          <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
-        </span>
-        <p>Seu carrinho está vazio.</p>
-        <button class="pill pill-blue" onclick="go('home')">Ver produtos</button>
-      </div>
-
-      <div class="cart-summary" id="cart-summary">
-        <div class="ship-progress">
-          <small id="ship-msg"></small>
-          <div class="ship-bar"><span id="ship-fill"></span></div>
-        </div>
-        <div class="coupon-form" id="coupon-form">
-          <input id="coupon-input" placeholder="Tem um cupom?" autocomplete="off"
-            onkeydown="if(event.key==='Enter')applyCupom()">
-          <button class="pill pill-outline" onclick="applyCupom()">Aplicar</button>
-        </div>
-        <div class="row" id="cart-coupon-row" hidden>
-          <span id="cart-coupon-label"></span><span class="red" id="cart-coupon"></span>
-        </div>
-        <div class="row"><span id="cart-subtotal-label">Subtotal</span><span id="cart-subtotal"></span></div>
-        <div class="row" id="cart-discount-row"><span>Desconto por quantidade</span><span class="red" id="cart-discount"></span></div>
-        <div class="row"><span>Frete</span><span id="cart-frete"></span></div>
-        <div class="row total"><span>Total</span><strong id="cart-total"></strong></div>
-        <button class="pill pill-wa" onclick="checkoutWhatsApp()">
-          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
-          Finalizar pelo WhatsApp
-        </button>
-        <small class="pay-note">Pagamento online em breve — Cartão, Pix e boleto</small>
-      </div>
-
-      <div class="cart-suggest" id="cart-suggest" hidden>
-        <h3>Continue comprando</h3>
-        <div class="suggest-row" id="cart-suggest-row"></div>
+      <div class="comm-grid">
+        <article class="comm reveal"><div class="comm-top"><span class="comm-ic">⚙️</span><span class="status">Ativo</span></div><h3>Engenharia</h3><span class="members">12.842 membros</span><p>Projetos, listas, dúvidas e networking.</p></article>
+        <article class="comm reveal"><div class="comm-top"><span class="comm-ic">🩺</span><span class="status">Ativo</span></div><h3>Medicina</h3><span class="members">9.317 membros</span><p>Resumos, casos clínicos e grupos de estudo.</p></article>
+        <article class="comm reveal"><div class="comm-top"><span class="comm-ic">⚖️</span><span class="status">Ativo</span></div><h3>Direito</h3><span class="members">7.654 membros</span><p>Jurisprudência, peças e debates de provas.</p></article>
+        <article class="comm reveal"><div class="comm-top"><span class="comm-ic">📚</span><span class="status">Ativo</span></div><h3>Concursos</h3><span class="members">15.209 membros</span><p>Editais, cronogramas e questões comentadas.</p></article>
+        <article class="comm reveal"><div class="comm-top"><span class="comm-ic">💻</span><span class="status">Ativo</span></div><h3>Programação</h3><span class="members">18.430 membros</span><p>Projetos, desafios e revisão de código.</p></article>
+        <article class="comm reveal"><div class="comm-top"><span class="comm-ic">🎯</span><span class="status">Ativo</span></div><h3>ENEM</h3><span class="members">23.118 membros</span><p>Redação, simulados e plano de revisão.</p></article>
       </div>
     </div>
   </section>
 
-  <!-- ===== PAULEX CLUB ===== -->
-  <section class="screen" id="screen-club" data-nav="club">
-    <header class="topbar topbar-title">
-      <button class="icon-btn" aria-label="Voltar" onclick="back()">
-        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <h2>Paulex Club</h2>
-      <span class="icon-btn" aria-hidden="true"></span>
-    </header>
-
-    <div class="wrap club-wrap">
-      <div class="club-card" id="club-points">
-        <div class="club-crown">
-          <svg viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1 11H5L4 8z"/></svg>
-        </div>
-        <small>Seus pontos</small>
-        <strong id="club-pts">0 <span>pts</span></strong>
-        <small class="club-next" id="club-next-msg"></small>
-        <div class="club-progress"><span id="club-fill" style="width:0%"></span></div>
-        <div class="club-levels"><span id="club-lv-a">Bronze</span><span id="club-lv-b">Prata</span></div>
+  <!-- ===== IA ===== -->
+  <section class="section" id="ia">
+    <div class="wrap ai-split">
+      <div class="ai-text reveal">
+        <span class="tag purple">Inteligência artificial</span>
+        <h2>Um assistente de estudos que entende sua rotina.</h2>
+        <p>A IA da Px ajuda você a transformar conteúdos em resumos, planos de estudo, flashcards, exercícios e revisões personalizadas.</p>
+        <a class="btn-primary" href="#cta">Experimentar a IA</a>
       </div>
-
-      <div class="club-login-cta" id="club-login-cta" hidden>
-        <p>Entre na sua conta para acompanhar seus pontos e resgatar benefícios.</p>
-        <button class="pill pill-blue" onclick="go('login')">Entrar ou criar conta</button>
-      </div>
-
-      <div class="club-grid">
-        <button class="club-item" onclick="clubDetail('cupons')">
-          <span class="ci red"><svg viewBox="0 0 24 24"><path d="M4 9a2 2 0 0 0 0 6v3h16v-3a2 2 0 0 1 0-6V6H4v3z"/><path d="M13 7v10" stroke-dasharray="2 3"/></svg></span>
-          <strong>Cupons</strong><small>Toque para ver</small>
-        </button>
-        <button class="club-item" onclick="clubDetail('cashback')">
-          <span class="ci green"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v11M14.8 9c-.4-1-1.5-1.6-2.8-1.6-1.7 0-3 .9-3 2.1 0 3 6 1.4 6 4.4 0 1.2-1.3 2.1-3 2.1-1.3 0-2.4-.6-2.8-1.6"/></svg></span>
-          <strong>Cashback</strong><small>Por nível</small>
-        </button>
-        <button class="club-item" onclick="clubDetail('pontos')">
-          <span class="ci gold"><svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.3.9-4.5 4.4 1 6.1-5.5-2.9L6.5 20l1-6.1L3 9.5l6.3-.9L12 3z"/></svg></span>
-          <strong>Meus pontos</strong><small>Histórico</small>
-        </button>
-        <button class="club-item" onclick="clubDetail('beneficios')">
-          <span class="ci blue"><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg></span>
-          <strong>Benefícios</strong><small>Por nível</small>
-        </button>
-      </div>
-
-      <div class="club-panel" id="club-detail" hidden></div>
-
-      <h3 class="levels-title" id="levels-title">Níveis do Club</h3>
-      <div class="levels">
-        <div class="level" data-level="Bronze">
-          <span class="level-medal bronze"><svg viewBox="0 0 24 24"><circle cx="12" cy="15" r="5"/><path d="M9 10.5 6 3h4l2 5 2-5h4l-3 7.5"/></svg></span>
-          <strong>Bronze</strong>
-          <small>0 – 999 pts</small>
-          <ul>
-            <li>Cupons mensais</li>
-            <li>Cashback de 1%</li>
-          </ul>
-        </div>
-        <div class="level" data-level="Prata">
-          <span class="level-medal prata"><svg viewBox="0 0 24 24"><circle cx="12" cy="15" r="5"/><path d="M9 10.5 6 3h4l2 5 2-5h4l-3 7.5"/></svg></span>
-          <strong>Prata</strong>
-          <small>1.000 – 4.999 pts</small>
-          <ul>
-            <li>Cashback de 2%</li>
-            <li>Cupons exclusivos</li>
-            <li>Ofertas antecipadas</li>
-          </ul>
-        </div>
-        <div class="level" data-level="Ouro">
-          <span class="level-medal ouro"><svg viewBox="0 0 24 24"><circle cx="12" cy="15" r="5"/><path d="M9 10.5 6 3h4l2 5 2-5h4l-3 7.5"/></svg></span>
-          <strong>Ouro</strong>
-          <small>5.000+ pts</small>
-          <ul>
-            <li>Cashback de 3%</li>
-            <li>Frete especial</li>
-            <li>Atendimento prioritário</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="club-panel club-cta">
-        <span class="club-gift">
-          <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7h18v3H3zM12 7v13"/><path d="M12 7c-4 0-5-4-2.5-4S12 7 12 7zm0 0c4 0 5-4 2.5-4S12 7 12 7z"/></svg>
-        </span>
-        <div>
-          <strong>Como ganhar pontos</strong>
-          <small>A cada R$ 1 em compras, você acumula 1 ponto. Indique amigos e avalie produtos para ganhar ainda mais.</small>
-        </div>
+      <div class="ai-cards reveal">
+        <span class="ai-card"><span class="ai-ic">✦</span> Resumir PDF</span>
+        <span class="ai-card"><span class="ai-ic">🗓️</span> Criar cronograma</span>
+        <span class="ai-card"><span class="ai-ic">❓</span> Gerar questões</span>
+        <span class="ai-card"><span class="ai-ic">💡</span> Explicar matéria</span>
+        <span class="ai-card wide"><span class="ai-ic">📖</span> Revisar antes da prova</span>
       </div>
     </div>
   </section>
 
-  <!-- ===== LOGIN ===== -->
-  <section class="screen" id="screen-login" data-nav="conta">
-    <header class="topbar topbar-title">
-      <button class="icon-btn" aria-label="Voltar" onclick="back()">
-        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <h2>Bem-vindo à Paulex</h2>
-      <span class="icon-btn" aria-hidden="true"></span>
-    </header>
-    <p class="center muted">Faça login para continuar</p>
-
-    <div class="wrap narrow">
-      <div class="tabs" id="login-tabs">
-        <button class="tab active" onclick="loginTab(this,'entrar')">Entrar</button>
-        <button class="tab" onclick="loginTab(this,'cadastrar')">Cadastrar</button>
-      </div>
-
-      <form class="form" id="form-entrar" onsubmit="doLogin(event)">
-        <label class="field">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-          <input type="text" id="login-user" placeholder="E-mail ou nome" required>
-        </label>
-        <label class="field">
-          <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-          <input type="password" placeholder="Senha" required>
-        </label>
-        <button type="button" class="link right" onclick="openWhatsApp('Olá, Paulex! Esqueci minha senha do site e preciso de ajuda.')">Esqueceu sua senha?</button>
-        <button class="pill pill-blue pill-lg" type="submit">Entrar</button>
-        <div class="or" id="or-row" hidden><span>ou</span></div>
-        <div class="google-slot" id="google-btn-slot" hidden></div>
-      </form>
-
-      <form class="form" id="form-cadastrar" hidden onsubmit="doLogin(event)">
-        <label class="field"><input type="text" id="cad-nome" placeholder="Nome completo" required></label>
-        <label class="field"><input type="email" id="cad-email" placeholder="E-mail" required></label>
-        <label class="field"><input type="password" placeholder="Crie uma senha" required></label>
-        <button class="pill pill-blue pill-lg" type="submit">Criar conta</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- ===== CONTA ===== -->
-  <section class="screen" id="screen-conta" data-nav="conta">
-    <header class="topbar topbar-title">
-      <button class="icon-btn" aria-label="Voltar" onclick="back()">
-        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <h2>Minha Conta</h2>
-      <span class="icon-btn" aria-hidden="true"></span>
-    </header>
-
-    <div class="wrap narrow">
-      <div class="account-head">
-        <span class="avatar">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
-        </span>
-        <div><strong id="account-name">Olá, cliente Paulex!</strong><small class="muted" id="account-sub">Cliente Paulex Club · Prata</small></div>
-      </div>
-
-      <div class="menu">
-        <button class="menu-item" onclick="go('pedidos')">
-          <svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 7l2-3h12l2 3M9 11h6"/></svg>
-          <span>Meus Pedidos</span>
-          <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
-        </button>
-        <button class="menu-item" onclick="go('enderecos')">
-          <svg viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-          <span>Meus Endereços</span>
-          <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
-        </button>
-        <button class="menu-item" onclick="openList('favoritos')">
-          <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9-9c-1.2-2.8.6-6 3.8-6C9 5 10.5 6.5 12 8.5 13.5 6.5 15 5 17.2 5c3.2 0 5 3.2 3.8 6-2 4.5-9 9-9 9z"/></svg>
-          <span>Favoritos</span>
-          <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
-        </button>
-        <button class="menu-item" onclick="go('club')">
-          <svg viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1 11H5L4 8z"/></svg>
-          <span>Paulex Club</span>
-          <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
-        </button>
-        <button class="menu-item" onclick="logout()">
-          <svg viewBox="0 0 24 24"><path d="M9 4H5v16h4M14 8l4 4-4 4M18 12H9"/></svg>
-          <span>Sair</span>
-          <svg class="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PEDIDOS ===== -->
-  <section class="screen" id="screen-pedidos">
-    <header class="topbar topbar-title">
-      <button class="icon-btn" aria-label="Voltar" onclick="back()">
-        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <h2>Meus Pedidos</h2>
-      <span class="icon-btn" aria-hidden="true"></span>
-    </header>
-
-    <div class="wrap narrow">
-      <div class="tabs scroll" id="order-tabs">
-        <button class="tab active" onclick="orderTab(this,'todos')">Todos</button>
-        <button class="tab" onclick="orderTab(this,'andamento')">Em andamento</button>
-        <button class="tab" onclick="orderTab(this,'entregues')">Entregues</button>
-        <button class="tab" onclick="orderTab(this,'cancelados')">Cancelados</button>
-      </div>
-      <div class="orders" id="orders"></div>
-      <div class="empty orders-zero" id="orders-empty" hidden>
-        <p>Nenhum pedido aqui ainda.</p>
-        <button class="pill pill-blue" onclick="go('home')">Ver produtos</button>
-      </div>
-      <p class="store-note">Os pedidos feitos pelo site ficam salvos neste aparelho e são confirmados pelo WhatsApp.</p>
-    </div>
-  </section>
-
-  <!-- ===== ENDEREÇOS ===== -->
-  <section class="screen" id="screen-enderecos">
-    <header class="topbar topbar-title">
-      <button class="icon-btn" aria-label="Voltar" onclick="back()">
-        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <h2>Meus Endereços</h2>
-      <button class="icon-btn" aria-label="Adicionar endereço" onclick="showAddrForm()">
-        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-      </button>
-    </header>
-
-    <div class="wrap narrow">
-      <div class="addresses" id="addr-list"></div>
-      <div class="empty orders-zero" id="addr-empty" hidden>
-        <p>Nenhum endereço salvo ainda.</p>
-        <button class="pill pill-blue" onclick="showAddrForm()">Adicionar endereço</button>
-      </div>
-
-      <form class="form addr-form" id="addr-form" hidden onsubmit="saveAddr(event)">
-        <label class="field"><input id="addr-nome" placeholder="Nome do endereço (ex.: Casa)" required></label>
-        <label class="field"><input id="addr-cep" placeholder="CEP" inputmode="numeric" maxlength="9" onblur="cepLookup()"></label>
-        <label class="field"><input id="addr-rua" placeholder="Rua e número" required></label>
-        <label class="field"><input id="addr-bairro" placeholder="Bairro e cidade" required></label>
-        <button class="pill pill-blue pill-lg" type="submit">Salvar endereço</button>
-        <button class="pill pill-outline pill-lg" type="button" onclick="hideAddrForm()">Cancelar</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- ===== ATACADO / EMPRESAS ===== -->
-  <section class="screen" id="screen-atacado" data-nav="atacado">
-    <header class="topbar topbar-title">
-      <button class="icon-btn" aria-label="Voltar" onclick="back()">
-        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <h2>Atacado</h2>
-      <button class="icon-btn has-badge" aria-label="Carrinho" onclick="go('carrinho')">
-        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
-        <span class="badge cart-badge">0</span>
-      </button>
-    </header>
-
-    <div class="biz-hero">
-      <span class="biz-badge light">Atacado e varejo desde 1984</span>
-      <h2>Compre em quantidade,<br>pague preço de atacado.</h2>
-      <p>Acima de <strong>12 peças</strong> do mesmo produto, o desconto de atacado é aplicado automaticamente — sem cadastro e sem pedido mínimo de valor.</p>
-      <div class="cta-row">
-        <button class="pill pill-white" onclick="orcamento()">
-          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
-          Pedir orçamento
-        </button>
-        <button class="pill pill-ghost" onclick="openList('maisvendidos')">Ver produtos</button>
-      </div>
-    </div>
-
+  <!-- ===== CARREIRA ===== -->
+  <section class="section soft" id="carreira">
     <div class="wrap">
-      <div class="section">
-        <h3 class="sec-title">Feito para quem compra em volume.</h3>
-        <p class="sec-sub">Atendemos empresas de todos os tamanhos com preço, prazo e atenção que o varejo não dá.</p>
-        <div class="biz-grid">
-          <div class="biz-card">
-            <span class="biz-ico">🏫</span>
-            <strong>Escolas e creches</strong>
-            <small>Listas de material, papelaria e descartáveis para o ano todo.</small>
-          </div>
-          <div class="biz-card">
-            <span class="biz-ico">🏪</span>
-            <strong>Lojas e revendedores</strong>
-            <small>Reposição de estoque com margem para revender.</small>
-          </div>
-          <div class="biz-card">
-            <span class="biz-ico">🏢</span>
-            <strong>Escritórios e empresas</strong>
-            <small>Suprimentos, informática e utilidades para o dia a dia.</small>
-          </div>
-          <div class="biz-card">
-            <span class="biz-ico">🎉</span>
-            <strong>Eventos e festas</strong>
-            <small>Descartáveis e itens em grande quantidade.</small>
-          </div>
-        </div>
+      <div class="sec-head center reveal">
+        <span class="tag">Carreira</span>
+        <h2>Do estudo à carreira.</h2>
+        <p>Acompanhe sua evolução acadêmica, desenvolva habilidades e descubra oportunidades de estágio, emprego, mentorias e crescimento profissional.</p>
       </div>
-
-      <div class="section alt">
-        <h3 class="sec-title">Como funciona.</h3>
-        <div class="steps">
-          <div class="step"><span>1</span><div><strong>Monte seu pedido</strong><small>Adicione 12 ou mais peças do mesmo item e o preço de atacado aparece sozinho.</small></div></div>
-          <div class="step"><span>2</span><div><strong>Ou peça um orçamento</strong><small>Tem uma lista grande? Mande pelo WhatsApp que preparamos a melhor condição.</small></div></div>
-          <div class="step"><span>3</span><div><strong>Confirmação e entrega</strong><small>Combinamos pagamento, nota e prazo de entrega pelo WhatsApp.</small></div></div>
-        </div>
-      </div>
-
-      <div class="section">
-        <h3 class="sec-title">Vantagens do atacado Paulex.</h3>
-        <div class="biz-benefits">
-          <div class="biz-benefit"><strong>Preço de atacado</strong><small>Automático a partir de 12 peças</small></div>
-          <div class="biz-benefit"><strong>Sem pedido mínimo</strong><small>de valor para começar</small></div>
-          <div class="biz-benefit"><strong>Atendimento dedicado</strong><small>direto pelo WhatsApp</small></div>
-          <div class="biz-benefit"><strong>Variedade real</strong><small>6 categorias num só lugar</small></div>
-          <div class="biz-benefit"><strong>Tradição desde 1984</strong><small>40 anos de mercado</small></div>
-          <div class="biz-benefit"><strong>Entrega no Rio de Janeiro</strong><small>e orçamento para outras regiões</small></div>
-        </div>
-        <button class="pill pill-wa sec-cta" onclick="orcamento()">
-          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-3.5 7.1L21 21l-1-3.4A8.9 8.9 0 0 0 21 12z"/></svg>
-          Falar com o atacado
-        </button>
+      <div class="career-grid">
+        <article class="career reveal"><span class="career-ic"><svg viewBox="0 0 24 24"><path d="M4 8h16v11H4z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></span><h3>Vagas</h3><p>Oportunidades alinhadas ao seu perfil.</p></article>
+        <article class="career reveal"><span class="career-ic"><svg viewBox="0 0 24 24"><path d="M4 8h16v11H4z"/><path d="M12 12v3"/></svg></span><h3>Estágios</h3><p>Primeiros passos no mercado de trabalho.</p></article>
+        <article class="career reveal"><span class="career-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 5-5 8-5s6.5 1 8 5"/></svg></span><h3>Mentorias</h3><p>Aprenda com quem já trilhou o caminho.</p></article>
+        <article class="career reveal"><span class="career-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="M8 13l-1 8 5-3 5 3-1-8"/></svg></span><h3>Certificados</h3><p>Valide conhecimentos e habilidades.</p></article>
+        <article class="career reveal"><span class="career-ic"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 12h6M9 16h4"/></svg></span><h3>Portfólio acadêmico</h3><p>Reúna projetos e conquistas em um só perfil.</p></article>
+        <article class="career reveal"><span class="career-ic"><svg viewBox="0 0 24 24"><path d="M4 18l5-5 4 3 7-8"/><path d="M16 8h4v4"/></svg></span><h3>Trilhas profissionais</h3><p>Caminhos guiados para a carreira dos sonhos.</p></article>
       </div>
     </div>
   </section>
 
-  <!-- ===== POLÍTICA DE PRIVACIDADE ===== -->
-  <section class="screen" id="screen-privacidade">
-    <header class="topbar topbar-title">
-      <button class="icon-btn" aria-label="Voltar" onclick="back()">
-        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <h2>Política de Privacidade</h2>
-      <span class="icon-btn" aria-hidden="true"></span>
-    </header>
-    <div class="wrap narrow legal">
-      <p class="muted">Última atualização: junho de 2026</p>
-      <p>A <strong>Paulex Armarinho</strong> respeita a sua privacidade. Esta política explica, de forma simples, como tratamos as suas informações quando você usa o nosso site.</p>
-      <h3>Quais dados coletamos</h3>
-      <p>O site funciona sem cadastro obrigatório. Guardamos no <strong>seu próprio navegador</strong> (e não em nossos servidores) o conteúdo do carrinho, os favoritos, os produtos vistos recentemente e o cupom aplicado — para que sua experiência continue de onde parou.</p>
-      <p>Se você optar por entrar com o Google, recebemos apenas o seu nome e e-mail, usados para identificá-lo dentro do site.</p>
-      <h3>Pedidos pelo WhatsApp</h3>
-      <p>Ao finalizar um pedido, o resumo é enviado pelo WhatsApp para o nosso atendimento. A conversa passa a ser regida pela política de privacidade do WhatsApp, e usamos as informações apenas para concluir a sua compra e a entrega.</p>
-      <h3>O que não fazemos</h3>
-      <p>Não vendemos nem compartilhamos seus dados com terceiros para fins de marketing. Não armazenamos dados de pagamento.</p>
-      <h3>Seus direitos (LGPD)</h3>
-      <p>Nos termos da Lei Geral de Proteção de Dados (Lei 13.709/2018), você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento pelo nosso WhatsApp: <strong>(21) 98757-8187</strong>. Para apagar os dados guardados no navegador, basta limpar os dados de navegação do site.</p>
+  <!-- ===== PLANOS ===== -->
+  <section class="section" id="planos">
+    <div class="wrap">
+      <div class="sec-head center reveal">
+        <span class="tag">Planos</span>
+        <h2>Comece grátis. Evolua quando quiser.</h2>
+        <p>Sem cartão de crédito. Atualize para desbloquear todo o ecossistema.</p>
+      </div>
+      <div class="plans">
+        <article class="plan reveal">
+          <h3>Free</h3>
+          <div class="price">R$ 0<span>/mês</span></div>
+          <p class="plan-sub">Para começar a se organizar.</p>
+          <ul><li>Notas e tarefas</li><li>Calendário de estudos</li><li>Pomodoro</li><li>Comunidades</li></ul>
+          <a class="btn-soft block" href="#cta">Começar grátis</a>
+        </article>
+        <article class="plan featured reveal">
+          <span class="plan-badge">Mais popular</span>
+          <h3>Pro</h3>
+          <div class="price">R$ 19<span>/mês</span></div>
+          <p class="plan-sub">Para quem quer acelerar.</p>
+          <ul><li>Tudo do Free</li><li>IA de estudos ilimitada</li><li>Simulados e desempenho</li><li>Metas avançadas</li></ul>
+          <a class="btn-primary block" href="#cta">Assinar o Pro</a>
+        </article>
+        <article class="plan reveal">
+          <h3>Campus</h3>
+          <div class="price">Sob consulta</div>
+          <p class="plan-sub">Para escolas e instituições.</p>
+          <ul><li>Tudo do Pro</li><li>Painel para turmas</li><li>Relatórios e gestão</li><li>Suporte dedicado</li></ul>
+          <a class="btn-soft block" href="#cta">Falar com vendas</a>
+        </article>
+      </div>
     </div>
   </section>
 
-  <!-- ===== TERMOS DE USO ===== -->
-  <section class="screen" id="screen-termos">
-    <header class="topbar topbar-title">
-      <button class="icon-btn" aria-label="Voltar" onclick="back()">
-        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <h2>Termos de Uso</h2>
-      <span class="icon-btn" aria-hidden="true"></span>
-    </header>
-    <div class="wrap narrow legal">
-      <p class="muted">Última atualização: junho de 2026</p>
-      <p>Ao usar o site da <strong>Paulex Armarinho</strong>, você concorda com os termos abaixo.</p>
-      <h3>Sobre a loja</h3>
-      <p>A Paulex Armarinho atua desde 1984 nos segmentos de papelaria, utilidades, descartáveis, brinquedos, informática e cosméticos, em atacado e varejo.</p>
-      <h3>Preços e disponibilidade</h3>
-      <p>Os preços, condições de desconto por quantidade e a disponibilidade de estoque exibidos no site são informativos e podem ser atualizados sem aviso prévio. O valor final de cada pedido é <strong>confirmado no atendimento pelo WhatsApp</strong>, antes do pagamento.</p>
-      <h3>Pedidos, frete e pagamento</h3>
-      <p>Os pedidos iniciados no site são concluídos pelo WhatsApp, onde combinamos pagamento, prazo e forma de entrega. A condição de frete grátis em compras acima de R$ 99 está sujeita à região de entrega, confirmada no atendimento.</p>
-      <h3>Trocas e devoluções</h3>
-      <p>Seguimos o Código de Defesa do Consumidor: em compras a distância, você pode desistir em até 7 dias corridos após o recebimento. Produtos com defeito são trocados conforme a lei. Fale com a gente pelo WhatsApp para iniciar qualquer solicitação.</p>
-      <h3>Paulex Club</h3>
-      <p>O programa de fidelidade Paulex Club concede pontos e benefícios de caráter promocional, que podem ser ajustados ou descontinuados mediante aviso no site.</p>
-      <h3>Contato</h3>
-      <p>Dúvidas sobre estes termos: WhatsApp <strong>(21) 98757-8187</strong>, de segunda a sábado, das 8h às 18h.</p>
+  <!-- ===== CTA FINAL ===== -->
+  <section class="cta-final" id="cta">
+    <div class="wrap cta-box reveal">
+      <h2>Pronto para transformar sua rotina de estudos?</h2>
+      <p>Crie sua conta gratuita e descubra como a Px pode ajudar você a aprender, se organizar e evoluir todos os dias.</p>
+      <a class="btn-white lg" href="#top">Começar gratuitamente</a>
     </div>
   </section>
 
-  <!-- ===== BOTTOM NAV (mobile) ===== -->
-  <nav class="bottom-nav" id="bottom-nav">
-    <button data-go="home" class="active">
-      <svg viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9h-5v-6h-6v6H4v-9z"/></svg>
-      <span>Início</span>
-    </button>
-    <button data-go="categorias">
-      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
-      <span>Categorias</span>
-    </button>
-    <button data-go="carrinho" class="has-badge">
-      <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
-      <span>Carrinho</span>
-      <span class="badge cart-badge">0</span>
-    </button>
-    <button data-go="club">
-      <svg viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1 11H5L4 8z"/></svg>
-      <span>Club</span>
-    </button>
-    <button data-go="conta">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
-      <span>Conta</span>
-    </button>
-  </nav>
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div class="f-brand">
+        <img src="img/px-logo.png" alt="Px" width="40" height="32" loading="lazy">
+        <p>O ecossistema completo para estudantes aprenderem, se organizarem e evoluírem.</p>
+        <div class="f-social">
+          <a aria-label="Instagram" href="#"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17" cy="7" r=".9" fill="currentColor"/></svg></a>
+          <a aria-label="X" href="#"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
+          <a aria-label="LinkedIn" href="#"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4"/></svg></a>
+          <a aria-label="YouTube" href="#"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M11 9l4 3-4 3z" fill="currentColor"/></svg></a>
+        </div>
+      </div>
+      <div class="f-col"><h4>Produto</h4><a href="#produto">Visão geral</a><a href="#demo">Demonstração</a><a href="#planos">Planos</a><a href="#ia">IA de estudos</a></div>
+      <div class="f-col"><h4>Recursos</h4><a href="#recursos">Notas e tarefas</a><a href="#recursos">Pomodoro</a><a href="#recursos">Simulados</a><a href="#recursos">Certificados</a></div>
+      <div class="f-col"><h4>Comunidade</h4><a href="#comunidade">Grupos</a><a href="#comunidade">Eventos</a><a href="#carreira">Carreira</a><a href="#carreira">Mentorias</a></div>
+      <div class="f-col"><h4>Empresa</h4><a href="#">Sobre</a><a href="#">Blog</a><a href="#">Carreiras</a><a href="#">Contato</a></div>
+      <div class="f-col"><h4>Suporte</h4><a href="#">Central de ajuda</a><a href="#">Privacidade</a><a href="#">Termos</a><a href="#">Status</a></div>
+    </div>
+    <div class="wrap f-bottom">
+      <span>© 2026 Px. Todos os direitos reservados.</span>
+      <span>Feito para estudantes que querem evoluir.</span>
+    </div>
+  </footer>
 
-  <div class="toast" id="toast" role="status"></div>
-</div>
+</main>
 
-<script src="produtos.js?v=27"></script>
-<script src="script.js?v=27"></script>
+<script src="script.js?v=1"></script>
 </body>
 </html>
