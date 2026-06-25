@@ -1,0 +1,83 @@
+{%- comment -%}
+  Featured collection carousel/grid. Reused for "Mais vendidos", "Novidades",
+  "Ofertas", "Lançamentos" — just point each instance at a different collection.
+{%- endcomment -%}
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  assign limit = section.settings.products_to_show
+  assign has_products = false
+  if collection != blank and collection.products.size > 0
+    assign has_products = true
+  endif
+-%}
+{%- comment -%}
+  Na loja publicada só renderizamos a section quando há produtos reais.
+  Sem coleção (ou coleção vazia) a section some — nada de "Produto exemplo"
+  ou "R$ 0,00" para o cliente. No editor de tema (request.design_mode)
+  mostramos um aviso/placeholder para o lojista saber onde configurar.
+{%- endcomment -%}
+{%- if has_products -%}
+  <section class="px-section" data-section-id="{{ section.id }}">
+    <div class="page-width">
+      <div class="px-section__head px-section__head--row" data-reveal>
+        <div>
+          {%- if section.settings.title != blank -%}
+            <h2 class="px-section__title">{{ section.settings.title }}</h2>
+          {%- endif -%}
+          {%- if section.settings.subtitle != blank -%}
+            <p class="px-section__subtitle">{{ section.settings.subtitle }}</p>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.show_view_all and collection != blank -%}
+          <a href="{{ collection.url }}" class="px-section__link">
+            {{ 'collections.general.view_all' | t }} {% render 'icon', name: 'arrow-right' %}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="px-product-grid{% if section.settings.layout == 'carousel' %} px-product-grid--carousel{% endif %}" data-product-grid>
+        {%- for product in collection.products limit: limit -%}
+          {% render 'px-product-card', product: product %}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- elsif request.design_mode -%}
+  {%- comment -%} Visível só no editor: orienta o lojista a configurar a coleção. {%- endcomment -%}
+  <section class="px-section" data-section-id="{{ section.id }}">
+    <div class="page-width">
+      <div class="px-section__editor-note">
+        <strong>{{ section.settings.title | default: 'Produtos em destaque' }}</strong>
+        <p>Selecione uma coleção nas configurações desta seção para exibir os produtos aqui. Esta seção fica oculta na loja publicada enquanto não houver produtos.</p>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.featured.name",
+  "tag": "section",
+  "class": "px-section-wrapper",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Mais vendidos" },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo" },
+    { "type": "collection", "id": "collection", "label": "Coleção" },
+    { "type": "range", "id": "products_to_show", "min": 2, "max": 12, "step": 1, "label": "Produtos a exibir", "default": 8 },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "grid", "label": "Grade" },
+        { "value": "carousel", "label": "Carrossel" }
+      ],
+      "default": "grid"
+    },
+    { "type": "checkbox", "id": "show_view_all", "label": "Exibir “Ver tudo”", "default": true }
+  ],
+  "presets": [
+    { "name": "t:sections.featured.name" }
+  ]
+}
+{% endschema %}

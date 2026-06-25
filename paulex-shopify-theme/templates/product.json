@@ -1,0 +1,31 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": { "type": "vendor", "settings": {} },
+        "title": { "type": "title", "settings": {} },
+        "rating": { "type": "rating", "settings": {} },
+        "price": { "type": "price", "settings": {} },
+        "form": { "type": "form", "settings": {} },
+        "shipping": { "type": "shipping", "settings": {} },
+        "description": { "type": "description", "settings": {} },
+        "delivery": {
+          "type": "collapsible",
+          "settings": {
+            "title": "Entrega e devolução",
+            "content": "<p>Enviamos para todo o Brasil. Trocas e devoluções em até 7 dias.</p>"
+          }
+        },
+        "share": { "type": "share", "settings": {} }
+      },
+      "block_order": ["vendor", "title", "rating", "price", "form", "shipping", "description", "delivery", "share"],
+      "settings": {}
+    },
+    "related": {
+      "type": "px-related-products",
+      "settings": { "title": "Você também pode gostar", "products_to_show": 4 }
+    }
+  },
+  "order": ["main", "related"]
+}

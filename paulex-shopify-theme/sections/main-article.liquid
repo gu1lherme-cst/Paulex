@@ -1,0 +1,34 @@
+{%- comment -%} Single article {%- endcomment -%}
+{% render 'breadcrumbs' %}
+<article class="px-page page-width" data-section-id="{{ section.id }}">
+  <header class="px-page__header" data-reveal>
+    <h1 class="px-page__title">{{ article.title }}</h1>
+    <p class="px-section__subtitle">{{ article.published_at | date: '%d/%m/%Y' }} · {{ article.author }}</p>
+  </header>
+  {%- if article.image -%}
+    <div data-reveal>{{ article.image | image_url: width: 1400 | image_tag: widths: '600,900,1200,1400', class: 'rte', alt: article.title }}</div>
+  {%- endif -%}
+  <div class="px-page__content rte" data-reveal>{{ article.content }}</div>
+
+  {%- if blog.comments_enabled? -%}
+    <section class="px-section">
+      <h2 class="px-section__title px-section__title--sm">Comentários</h2>
+      {%- for comment in article.comments -%}
+        <div class="px-review" style="margin-bottom:1.2rem">
+          <p class="px-review__text">{{ comment.content }}</p>
+          <figcaption class="px-review__author"><strong>{{ comment.author }}</strong></figcaption>
+        </div>
+      {%- endfor -%}
+      {%- form 'new_comment', article -%}
+        {{ form.errors | default_errors }}
+        <label>Nome</label>{{ form.author }}
+        <label>E-mail</label>{{ form.email }}
+        <label>Comentário</label>{{ form.body }}
+        <button type="submit" class="px-btn px-btn--primary">Enviar</button>
+      {%- endform -%}
+    </section>
+  {%- endif -%}
+</article>
+{% schema %}
+{ "name": "Artigo", "tag": "section", "settings": [] }
+{% endschema %}

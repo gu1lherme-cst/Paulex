@@ -1,0 +1,68 @@
+{%- comment -%}
+  Benefits / trust bar with icon blocks.
+{%- endcomment -%}
+<section class="px-section px-benefits-section" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    {%- if section.settings.title != blank -%}
+      <div class="px-section__head" data-reveal>
+        <h2 class="px-section__title">{{ section.settings.title }}</h2>
+      </div>
+    {%- endif -%}
+    <div class="px-benefits">
+      {%- for block in section.blocks -%}
+        <div class="px-benefit" data-reveal {{ block.shopify_attributes }}>
+          <span class="px-benefit__icon">{% render 'icon', name: block.settings.icon %}</span>
+          <div>
+            <h3 class="px-benefit__title">{{ block.settings.title }}</h3>
+            {%- if block.settings.text != blank -%}<p class="px-benefit__text">{{ block.settings.text }}</p>{%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.benefits.name",
+  "tag": "section",
+  "class": "px-section-wrapper",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título" }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefício",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Ícone",
+          "options": [
+            { "value": "truck", "label": "Frete" },
+            { "value": "shield", "label": "Segurança" },
+            { "value": "card", "label": "Pagamento" },
+            { "value": "headset", "label": "Atendimento" },
+            { "value": "check", "label": "Garantia" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "title", "label": "Título", "default": "Frete grátis" },
+        { "type": "text", "id": "text", "label": "Texto", "default": "Em compras acima de R$ 199" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.benefits.name",
+      "blocks": [
+        { "type": "benefit", "settings": { "icon": "truck", "title": "Frete grátis", "text": "Acima de R$ 199 para todo o Brasil" } },
+        { "type": "benefit", "settings": { "icon": "card", "title": "Até 12x", "text": "Parcele sem juros no cartão" } },
+        { "type": "benefit", "settings": { "icon": "shield", "title": "Compra segura", "text": "Ambiente 100% protegido" } },
+        { "type": "benefit", "settings": { "icon": "headset", "title": "Atendimento humano", "text": "Suporte rápido via WhatsApp" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

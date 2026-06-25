@@ -1,0 +1,19 @@
+{%- comment -%}
+  404 page.
+{%- endcomment -%}
+<section class="px-404 page-width" data-section-id="{{ section.id }}">
+  <div class="px-404__inner" data-reveal>
+    <p class="px-404__code">404</p>
+    <h1 class="px-404__title">{{ 'general.404.title' | t }}</h1>
+    <p class="px-404__text">{{ 'general.404.subtext' | t }}</p>
+    <a href="{{ routes.root_url }}" class="px-btn px-btn--primary">{{ 'general.404.link' | t }}</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Página 404",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

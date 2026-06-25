@@ -1,0 +1,67 @@
+{%- comment -%}
+  Customer testimonials grid.
+{%- endcomment -%}
+<section class="px-section px-reviews-section" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    <div class="px-section__head" data-reveal>
+      {%- if section.settings.title != blank -%}<h2 class="px-section__title">{{ section.settings.title }}</h2>{%- endif -%}
+      {%- if section.settings.subtitle != blank -%}<p class="px-section__subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
+    </div>
+    <div class="px-reviews">
+      {%- for block in section.blocks -%}
+        <figure class="px-review{% if settings.animations_hover_lift %} px-card--lift{% endif %}" data-reveal {{ block.shopify_attributes }}>
+          <div class="px-review__stars" aria-hidden="true">
+            {%- for i in (1..block.settings.rating) -%}{% render 'icon', name: 'star' %}{%- endfor -%}
+          </div>
+          <blockquote class="px-review__text">{{ block.settings.quote }}</blockquote>
+          <figcaption class="px-review__author">
+            {%- if block.settings.avatar != blank -%}
+              {{ block.settings.avatar | image_url: width: 96 | image_tag: loading: 'lazy', class: 'px-review__avatar', alt: block.settings.author }}
+            {%- else -%}
+              <span class="px-review__avatar px-review__avatar--initials">{{ block.settings.author | slice: 0 }}</span>
+            {%- endif -%}
+            <span>
+              <strong>{{ block.settings.author }}</strong>
+              {%- if block.settings.role != blank -%}<small>{{ block.settings.role }}</small>{%- endif -%}
+            </span>
+          </figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.reviews.name",
+  "tag": "section",
+  "class": "px-section-wrapper",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Quem compra, recomenda" },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "Milhares de clientes satisfeitos desde 1984." }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Avaliação",
+      "settings": [
+        { "type": "range", "id": "rating", "min": 1, "max": 5, "step": 1, "label": "Estrelas", "default": 5 },
+        { "type": "textarea", "id": "quote", "label": "Depoimento", "default": "Atendimento excelente e entrega super rápida. Virei cliente fiel!" },
+        { "type": "image_picker", "id": "avatar", "label": "Foto" },
+        { "type": "text", "id": "author", "label": "Nome", "default": "Maria S." },
+        { "type": "text", "id": "role", "label": "Descrição", "default": "Cliente verificada" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.reviews.name",
+      "blocks": [
+        { "type": "review", "settings": { "author": "Maria S.", "quote": "Atendimento excelente e entrega super rápida. Virei cliente fiel!" } },
+        { "type": "review", "settings": { "author": "João P.", "quote": "Variedade enorme e preços de atacado. Recomendo demais." } },
+        { "type": "review", "settings": { "author": "Ana L.", "quote": "Comprei material escolar para a empresa toda. Tudo perfeito." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

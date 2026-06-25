@@ -1,0 +1,34 @@
+{%- comment -%}
+  List of all collections.
+{%- endcomment -%}
+{% render 'breadcrumbs' %}
+<section class="px-section page-width" data-section-id="{{ section.id }}">
+  <header class="px-section__head" data-reveal>
+    <h1 class="px-section__title">{{ 'collections.general.title' | t }}</h1>
+  </header>
+  <div class="px-categories">
+    {%- for collection in collections -%}
+      <a class="px-category-card{% if settings.animations_hover_lift %} px-card--lift{% endif %}" href="{{ collection.url }}" data-reveal>
+        <div class="px-category-card__media">
+          {%- if collection.featured_image -%}
+            {{ collection.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300,450,600', class: 'px-category-card__image', alt: collection.title }}
+          {%- else -%}
+            {{ 'collection-1' | placeholder_svg_tag: 'px-category-card__image px-category-card__placeholder' }}
+          {%- endif -%}
+        </div>
+        <div class="px-category-card__overlay">
+          <span class="px-category-card__title">{{ collection.title }}</span>
+          <span class="px-category-card__cta">{% render 'icon', name: 'arrow-right' %}</span>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lista de coleções",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

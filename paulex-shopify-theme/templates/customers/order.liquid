@@ -1,0 +1,30 @@
+{%- comment -%} Single order detail {%- endcomment -%}
+<section class="px-account page-width px-account--wide">
+  <h1 class="px-account__title">{{ 'customer.orders.order_number' | t }} {{ order.name }}</h1>
+  <p class="px-account__meta">{{ order.created_at | date: '%d/%m/%Y %H:%M' }} — {{ order.financial_status_label }} / {{ order.fulfillment_status_label }}</p>
+
+  <table class="px-account__table">
+    <thead>
+      <tr><th>Produto</th><th>Qtd</th><th>Preço</th><th>Total</th></tr>
+    </thead>
+    <tbody>
+      {%- for line in order.line_items -%}
+        <tr>
+          <td>{{ line.title }}</td>
+          <td>{{ line.quantity }}</td>
+          <td>{{ line.price | money }}</td>
+          <td>{{ line.final_line_price | money }}</td>
+        </tr>
+      {%- endfor -%}
+    </tbody>
+    <tfoot>
+      <tr><td colspan="3">{{ 'cart.subtotal' | t }}</td><td>{{ order.line_items_subtotal_price | money }}</td></tr>
+      {%- for shipping in order.shipping_methods -%}
+        <tr><td colspan="3">{{ shipping.title }}</td><td>{{ shipping.price | money }}</td></tr>
+      {%- endfor -%}
+      <tr><td colspan="3"><strong>{{ 'cart.total' | t }}</strong></td><td><strong>{{ order.total_price | money }}</strong></td></tr>
+    </tfoot>
+  </table>
+
+  <a href="{{ routes.account_url }}" class="px-account__link">&larr; {{ 'customer.account.title' | t }}</a>
+</section>

@@ -1,0 +1,189 @@
+{%- comment -%}
+  Product page: gallery, info, variant picker, AJAX add-to-cart, buy now,
+  shipping (CEP) calculator and structured data.
+{%- endcomment -%}
+{% render 'breadcrumbs' %}
+
+<section class="px-product page-width" data-section-id="{{ section.id }}">
+  <div class="px-product__layout">
+    <div class="px-product__media">
+      {% render 'product-media-gallery', product: product %}
+    </div>
+
+    <div class="px-product__info">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'vendor' -%}
+            {%- if product.vendor != blank -%}
+              <p class="px-product__vendor" {{ block.shopify_attributes }}>{{ product.vendor }}</p>
+            {%- endif -%}
+
+          {%- when 'title' -%}
+            <h1 class="px-product__title" {{ block.shopify_attributes }}>{{ product.title }}</h1>
+
+          {%- when 'rating' -%}
+            <div {{ block.shopify_attributes }}>{% render 'rating', product: product %}</div>
+
+          {%- when 'price' -%}
+            <div class="px-product__price" data-price-block {{ block.shopify_attributes }}>
+              {% render 'price', product: product.selected_or_first_available_variant, show_installments: true %}
+            </div>
+
+          {%- when 'description' -%}
+            {%- if product.description != blank -%}
+              <div class="px-product__description rte" {{ block.shopify_attributes }}>{{ product.description }}</div>
+            {%- endif -%}
+
+          {%- when 'form' -%}
+            <product-form
+              class="px-product__form"
+              data-product-form
+              data-product-url="{{ product.url }}"
+              {{ block.shopify_attributes }}
+            >
+              {%- comment -%} Variant data for client-side switching {%- endcomment -%}
+              <script type="application/json" data-variant-json>
+                {{ product.variants | json }}
+              </script>
+
+              {%- unless product.has_only_default_variant -%}
+                <div class="px-variants" data-variant-selects>
+                  {%- for option in product.options_with_values -%}
+                    <div class="px-variant" data-option-index="{{ forloop.index0 }}">
+                      <label class="px-variant__label">{{ option.name }}</label>
+                      <div class="px-variant__values">
+                        {%- for value in option.values -%}
+                          <label class="px-variant__pill{% if option.selected_value == value %} is-selected{% endif %}">
+                            <input
+                              type="radio"
+                              name="option-{{ forloop.parentloop.index0 }}"
+                              value="{{ value | escape }}"
+                              {% if option.selected_value == value %}checked{% endif %}
+                              data-variant-option
+                            >
+                            <span>{{ value }}</span>
+                          </label>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                  {%- endfor -%}
+                </div>
+              {%- endunless -%}
+
+              {%- form 'product', product, id: 'ProductForm', class: 'px-product__add-form', novalidate: 'novalidate' -%}
+                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
+
+                <div class="px-product__purchase">
+                  <div class="px-qty px-qty--lg" data-qty>
+                    <button type="button" class="px-qty__btn" data-qty-down aria-label="{{ 'products.product.decrease' | t }}">{% render 'icon', name: 'minus' %}</button>
+                    <input class="px-qty__input" type="number" name="quantity" min="1" value="1" aria-label="{{ 'products.product.quantity' | t }}" data-qty-input>
+                    <button type="button" class="px-qty__btn" data-qty-up aria-label="{{ 'products.product.increase' | t }}">{% render 'icon', name: 'plus' %}</button>
+                  </div>
+
+                  <button
+                    type="submit"
+                    name="add"
+                    class="px-btn px-btn--primary px-btn--block px-product__add"
+                    data-add-to-cart
+                    {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+                  >
+                    <span data-add-text>
+                      {%- if product.selected_or_first_available_variant.available -%}
+                        {{ 'products.product.add_to_cart' | t }}
+                      {%- else -%}
+                        {{ 'products.product.sold_out' | t }}
+                      {%- endif -%}
+                    </span>
+                  </button>
+                </div>
+
+                {{ form | payment_button }}
+              {%- endform -%}
+            </product-form>
+
+          {%- when 'shipping' -%}
+            <shipping-calculator class="px-shipping" data-shipping {{ block.shopify_attributes }}>
+              <h3 class="px-shipping__title">{% render 'icon', name: 'truck' %} {{ 'products.product.shipping.title' | t }}</h3>
+              <div class="px-shipping__row">
+                <input type="text" inputmode="numeric" maxlength="9" placeholder="{{ 'products.product.shipping.placeholder' | t }}" data-cep-input aria-label="{{ 'products.product.shipping.placeholder' | t }}">
+                <button type="button" class="px-btn px-btn--ghost" data-cep-submit>{{ 'products.product.shipping.submit' | t }}</button>
+              </div>
+              <div class="px-shipping__result" data-cep-result aria-live="polite"></div>
+            </shipping-calculator>
+
+          {%- when 'collapsible' -%}
+            <details class="px-collapsible" {{ block.shopify_attributes }}>
+              <summary>{{ block.settings.title }} {% render 'icon', name: 'chevron-down' %}</summary>
+              <div class="px-collapsible__content rte">{{ block.settings.content }}</div>
+            </details>
+
+          {%- when 'share' -%}
+            <div class="px-product__share" {{ block.shopify_attributes }}>
+              <span>{{ 'products.product.share' | t }}:</span>
+              <a href="https://wa.me/?text={{ shop.url | append: product.url | url_encode }}" target="_blank" rel="noopener" aria-label="WhatsApp">{% render 'icon', name: 'whatsapp' %}</a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url | append: product.url | url_encode }}" target="_blank" rel="noopener" aria-label="Facebook">{% render 'icon', name: 'facebook' %}</a>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{%- comment -%} Buy together / complete the look {%- endcomment -%}
+{%- if product.metafields.shopify--discovery--product_recommendation.complementary_products.value != blank -%}
+  <section class="px-section page-width">
+    <div class="px-section__head"><h2 class="px-section__title px-section__title--sm">{{ 'products.product.complete_the_look' | t }}</h2></div>
+    <div class="px-product-grid">
+      {%- for rec in product.metafields.shopify--discovery--product_recommendation.complementary_products.value limit: 4 -%}
+        {% render 'px-product-card', product: rec %}
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% render 'product-schema', product: product %}
+
+{% schema %}
+{
+  "name": "Página de produto",
+  "tag": "section",
+  "class": "px-section-wrapper",
+  "settings": [
+    { "type": "header", "content": "Recomendações" }
+  ],
+  "blocks": [
+    { "type": "vendor", "name": "Marca", "limit": 1 },
+    { "type": "title", "name": "Título", "limit": 1 },
+    { "type": "rating", "name": "Avaliações", "limit": 1 },
+    { "type": "price", "name": "Preço", "limit": 1 },
+    { "type": "form", "name": "Comprar", "limit": 1 },
+    { "type": "shipping", "name": "Calcular frete (CEP)", "limit": 1 },
+    { "type": "description", "name": "Descrição", "limit": 1 },
+    {
+      "type": "collapsible",
+      "name": "Aba expansível",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Informações de entrega" },
+        { "type": "richtext", "id": "content", "label": "Conteúdo", "default": "<p>Enviamos para todo o Brasil.</p>" }
+      ]
+    },
+    { "type": "share", "name": "Compartilhar", "limit": 1 }
+  ],
+  "presets": [
+    {
+      "name": "Página de produto",
+      "blocks": [
+        { "type": "vendor" },
+        { "type": "title" },
+        { "type": "rating" },
+        { "type": "price" },
+        { "type": "form" },
+        { "type": "shipping" },
+        { "type": "description" },
+        { "type": "collapsible" },
+        { "type": "share" }
+      ]
+    }
+  ]
+}
+{% endschema %}

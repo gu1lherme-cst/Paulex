@@ -1,0 +1,178 @@
+{
+  "general": {
+    "meta": {
+      "tags": "Tagged with {{ tags }}",
+      "page": "Page {{ page }}"
+    },
+    "accessibility": {
+      "skip_to_text": "Skip to content",
+      "close": "Close",
+      "menu": "Menu",
+      "open_menu": "Open menu",
+      "close_menu": "Close menu",
+      "previous": "Previous",
+      "next": "Next",
+      "loading": "Loading…"
+    },
+    "search": {
+      "search": "Search",
+      "placeholder": "What are you looking for?",
+      "submit": "Search",
+      "results_for": "Results for “{{ terms }}”",
+      "no_results": "No results found for “{{ terms }}”.",
+      "products": "Products",
+      "collections": "Collections",
+      "pages": "Pages",
+      "suggestions": "Suggestions",
+      "view_all": "View all results"
+    },
+    "social": {
+      "whatsapp": "Chat on WhatsApp",
+      "share": "Share",
+      "follow_us": "Follow Paulex"
+    },
+    "newsletter": {
+      "label": "Email",
+      "placeholder": "Your best email",
+      "submit": "Subscribe",
+      "success": "You're on the Paulex list.",
+      "error": "Something went wrong. Try again."
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {{ number }}"
+    },
+    "404": {
+      "title": "Page not found",
+      "subtext": "The page you are looking for doesn't exist or was moved.",
+      "link": "Back to store"
+    },
+    "breadcrumb": {
+      "home": "Home",
+      "aria_label": "Breadcrumb"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "buy_now": "Buy now",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "added_to_cart": "Added to cart",
+      "add_to_cart_error": "Could not add the product.",
+      "on_sale": "Sale",
+      "from_price": "From {{ price }}",
+      "regular_price": "Regular price",
+      "sale_price": "Sale price",
+      "save_amount": "Save {{ amount }}",
+      "installments": "or {{ count }} interest-free payments of {{ amount }}",
+      "quantity": "Quantity",
+      "increase": "Increase quantity",
+      "decrease": "Decrease quantity",
+      "description": "Description",
+      "vendor": "Brand",
+      "sku": "SKU",
+      "in_stock": "In stock",
+      "low_stock": "Low stock",
+      "out_of_stock": "Out of stock",
+      "share": "Share this product",
+      "view_full_details": "View full details",
+      "media_gallery": "Product gallery",
+      "play_video": "Play video",
+      "zoom": "Zoom image",
+      "related": "You may also like",
+      "complete_the_look": "Buy together",
+      "add_selected": "Add selected",
+      "shipping": {
+        "title": "Calculate shipping",
+        "placeholder": "Enter your ZIP code",
+        "submit": "Calculate",
+        "error": "Invalid ZIP code.",
+        "loading": "Calculating…",
+        "free": "Free shipping"
+      }
+    },
+    "facets": {
+      "filter": "Filter",
+      "sort_by": "Sort by",
+      "clear": "Clear",
+      "clear_all": "Clear all",
+      "apply": "Apply",
+      "price_from": "From",
+      "price_to": "To",
+      "results": "{{ count }} products",
+      "results_one": "{{ count }} product",
+      "filter_by": "Filter by"
+    }
+  },
+  "collections": {
+    "general": {
+      "title": "Collections",
+      "empty": "No products found in this collection.",
+      "view_all": "View all",
+      "products_count": "{{ count }} products",
+      "products_count_one": "{{ count }} product"
+    }
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "continue_shopping": "Continue shopping",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "taxes_and_shipping": "Taxes and shipping calculated at checkout.",
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "update": "Update",
+    "quantity": "Quantity",
+    "item_count": "{{ count }} items",
+    "item_count_one": "{{ count }} item",
+    "note": "Order notes",
+    "note_placeholder": "Special instructions",
+    "coupon": "Discount code",
+    "coupon_placeholder": "Enter your code",
+    "coupon_apply": "Apply",
+    "coupon_note": "The code is applied at checkout.",
+    "free_shipping_progress": "{{ amount }} away from free shipping!",
+    "free_shipping_reached": "You've earned free shipping! 🎉",
+    "errors": {
+      "quantity": "Not enough stock for that quantity."
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "My account",
+      "details": "Account details",
+      "view_addresses": "View addresses",
+      "logout": "Log out",
+      "orders": "Orders"
+    },
+    "login": {
+      "title": "Sign in",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "forgot_password": "Forgot password?",
+      "create_account": "Create account",
+      "guest": "Continue as guest"
+    },
+    "register": {
+      "title": "Create account",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Create account"
+    },
+    "orders": {
+      "title": "Order history",
+      "order_number": "Order",
+      "date": "Date",
+      "status": "Status",
+      "total": "Total",
+      "none": "You haven't placed any orders yet."
+    }
+  }
+}

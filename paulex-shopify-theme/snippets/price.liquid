@@ -1,0 +1,34 @@
+{%- comment -%}
+  Renders a formatted price block with sale/compare handling.
+  Accepts:
+    product   {Object} product or variant (required)
+    show_installments {Boolean} optional
+{%- endcomment -%}
+{%- liquid
+  if product.price_varies and product.price_min
+    assign price = product.price_min
+    assign price_varies = true
+  else
+    assign price = product.price
+  endif
+  assign compare_at = product.compare_at_price
+  assign formatted_price = price | money
+-%}
+<div class="px-price{% if compare_at > price %} px-price--on-sale{% endif %}">
+  {%- if price_varies -%}
+    <span class="px-price__from">{{ 'products.product.from_price' | t: price: formatted_price }}</span>
+  {%- else -%}
+    {%- if compare_at > price -%}
+      <span class="visually-hidden">{{ 'products.product.sale_price' | t }}</span>
+      <span class="px-price__current">{{ price | money }}</span>
+      <s class="px-price__compare">{{ compare_at | money }}</s>
+    {%- else -%}
+      <span class="px-price__current">{{ price | money }}</span>
+    {%- endif -%}
+  {%- endif -%}
+  {%- if show_installments -%}
+    {%- assign installment = price | divided_by: 12 -%}
+    {%- assign formatted_installment = installment | money -%}
+    <span class="px-price__installments">{{ 'products.product.installments' | t: count: 12, amount: formatted_installment }}</span>
+  {%- endif -%}
+</div>

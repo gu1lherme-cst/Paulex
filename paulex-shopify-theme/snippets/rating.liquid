@@ -1,0 +1,27 @@
+{%- comment -%}
+  Renders a star rating from a product metafield (reviews.rating).
+  Falls back silently if the metafield is not present.
+  Accepts: product (required)
+{%- endcomment -%}
+{%- if product.metafields.reviews.rating.value != blank -%}
+  {%- liquid
+    assign rating = product.metafields.reviews.rating.value.rating | default: product.metafields.reviews.rating.value
+    assign rating_max = product.metafields.reviews.rating.value.scale_max | default: 5
+    assign count = product.metafields.reviews.rating_count | default: 0
+    assign rounded = rating | round
+  -%}
+  <div class="px-rating" role="img" aria-label="{{ rating }} / {{ rating_max }}">
+    <span class="px-rating__stars" aria-hidden="true">
+      {%- for i in (1..rating_max) -%}
+        {%- if i <= rounded -%}
+          {% render 'icon', name: 'star', class: 'is-filled' %}
+        {%- else -%}
+          {% render 'icon', name: 'star', class: 'is-empty' %}
+        {%- endif -%}
+      {%- endfor -%}
+    </span>
+    {%- if count != blank and count > 0 -%}
+      <span class="px-rating__count">({{ count }})</span>
+    {%- endif -%}
+  </div>
+{%- endif -%}

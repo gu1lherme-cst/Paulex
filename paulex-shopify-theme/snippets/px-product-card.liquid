@@ -1,0 +1,106 @@
+{%- comment -%}
+  Reusable product card.
+  Accepts:
+    product   {Object} (required)
+    ratio     {String} square | portrait | landscape (optional, defaults to theme setting)
+    quick_add {Boolean} (optional, defaults to theme setting)
+    lazy      {Boolean} (optional, default true)
+{%- endcomment -%}
+{%- liquid
+  assign ratio = ratio | default: settings.card_image_ratio
+  if quick_add == nil
+    assign quick_add = settings.card_quick_add
+  endif
+  if lazy == nil
+    assign lazy = true
+  endif
+  assign loading = 'lazy'
+  if lazy == false
+    assign loading = 'eager'
+  endif
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+-%}
+{%- if product and product != empty -%}
+  <div class="px-card{% if settings.animations_hover_lift %} px-card--lift{% endif %}" data-reveal>
+    <a class="px-card__media-link" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+      <div class="px-card__media px-card__media--{{ ratio }}">
+        {%- if product.featured_media -%}
+          {{
+            product.featured_media
+            | image_url: width: 600
+            | image_tag:
+              loading: loading,
+              widths: '180,260,360,460,600,720',
+              sizes: '(min-width: 990px) 23vw, (min-width: 750px) 30vw, 45vw',
+              class: 'px-card__image px-card__image--primary',
+              alt: product.featured_media.alt | default: product.title
+          }}
+          {%- if product.media[1] -%}
+            {{
+              product.media[1]
+              | image_url: width: 600
+              | image_tag:
+                loading: 'lazy',
+                widths: '180,260,360,460,600',
+                sizes: '(min-width: 990px) 23vw, 45vw',
+                class: 'px-card__image px-card__image--secondary',
+                alt: product.media[1].alt | default: product.title
+            }}
+          {%- endif -%}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'px-card__image px-card__placeholder' }}
+        {%- endif -%}
+
+        <div class="px-card__badges">
+          {%- if on_sale -%}
+            {%- assign saved = product.compare_at_price | minus: product.price -%}
+            <span class="px-badge px-badge--sale">-{{ saved | times: 100 | divided_by: product.compare_at_price }}%</span>
+          {%- endif -%}
+          {%- unless product.available -%}
+            <span class="px-badge px-badge--soldout">{{ 'products.product.sold_out' | t }}</span>
+          {%- endunless -%}
+        </div>
+      </div>
+    </a>
+
+    <div class="px-card__body">
+      {%- if settings.card_show_vendor and product.vendor != blank -%}
+        <p class="px-card__vendor">{{ product.vendor }}</p>
+      {%- endif -%}
+      <h3 class="px-card__title">
+        <a href="{{ product.url }}">{{ product.title }}</a>
+      </h3>
+      {%- if settings.card_show_rating -%}
+        {% render 'rating', product: product %}
+      {%- endif -%}
+      {% render 'price', product: product, show_installments: true %}
+
+      {%- if quick_add and product.available -%}
+        {%- if product.variants.size == 1 -%}
+          <product-form class="px-card__form">
+            {%- form 'product', product, class: 'px-card__quick-form' -%}
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              <button
+                type="submit"
+                name="add"
+                class="px-btn px-btn--soft px-card__add"
+                data-quick-add
+              >
+                {% render 'icon', name: 'plus' %}
+                <span>{{ 'products.product.add_to_cart' | t }}</span>
+              </button>
+            {%- endform -%}
+          </product-form>
+        {%- else -%}
+          <a href="{{ product.url }}" class="px-btn px-btn--soft px-card__add">
+            <span>{{ 'products.product.view_full_details' | t }}</span>
+            {% render 'icon', name: 'arrow-right' %}
+          </a>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

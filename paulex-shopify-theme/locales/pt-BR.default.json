@@ -1,0 +1,178 @@
+{
+  "general": {
+    "meta": {
+      "tags": "Marcadas com {{ tags }}",
+      "page": "Página {{ page }}"
+    },
+    "accessibility": {
+      "skip_to_text": "Pular para o conteúdo",
+      "close": "Fechar",
+      "menu": "Menu",
+      "open_menu": "Abrir menu",
+      "close_menu": "Fechar menu",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "loading": "Carregando…"
+    },
+    "search": {
+      "search": "Buscar",
+      "placeholder": "O que você procura?",
+      "submit": "Buscar",
+      "results_for": "Resultados para “{{ terms }}”",
+      "no_results": "Nenhum resultado encontrado para “{{ terms }}”.",
+      "products": "Produtos",
+      "collections": "Categorias",
+      "pages": "Páginas",
+      "suggestions": "Sugestões",
+      "view_all": "Ver todos os resultados"
+    },
+    "social": {
+      "whatsapp": "Fale no WhatsApp",
+      "share": "Compartilhar",
+      "follow_us": "Siga a Paulex"
+    },
+    "newsletter": {
+      "label": "E-mail",
+      "placeholder": "Seu melhor e-mail",
+      "submit": "Inscrever",
+      "success": "Pronto! Você está na lista da Paulex.",
+      "error": "Algo deu errado. Tente novamente."
+    },
+    "pagination": {
+      "label": "Paginação",
+      "previous": "Anterior",
+      "next": "Próxima",
+      "page": "Página {{ number }}"
+    },
+    "404": {
+      "title": "Página não encontrada",
+      "subtext": "A página que você procura não existe ou foi movida.",
+      "link": "Voltar para a loja"
+    },
+    "breadcrumb": {
+      "home": "Início",
+      "aria_label": "Navegação estrutural"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Adicionar ao carrinho",
+      "buy_now": "Comprar agora",
+      "sold_out": "Esgotado",
+      "unavailable": "Indisponível",
+      "added_to_cart": "Produto adicionado ao carrinho",
+      "add_to_cart_error": "Não foi possível adicionar o produto.",
+      "on_sale": "Oferta",
+      "from_price": "A partir de {{ price }}",
+      "regular_price": "Preço normal",
+      "sale_price": "Preço promocional",
+      "save_amount": "Economize {{ amount }}",
+      "installments": "ou {{ count }}x de {{ amount }} sem juros",
+      "quantity": "Quantidade",
+      "increase": "Aumentar quantidade",
+      "decrease": "Diminuir quantidade",
+      "description": "Descrição",
+      "vendor": "Marca",
+      "sku": "SKU",
+      "in_stock": "Em estoque",
+      "low_stock": "Últimas unidades",
+      "out_of_stock": "Sem estoque",
+      "share": "Compartilhar este produto",
+      "view_full_details": "Ver todos os detalhes",
+      "media_gallery": "Galeria do produto",
+      "play_video": "Reproduzir vídeo",
+      "zoom": "Ampliar imagem",
+      "related": "Você também pode gostar",
+      "complete_the_look": "Compre junto",
+      "add_selected": "Adicionar selecionados",
+      "shipping": {
+        "title": "Calcular frete e prazo",
+        "placeholder": "Digite seu CEP",
+        "submit": "Calcular",
+        "error": "CEP inválido. Confira e tente novamente.",
+        "loading": "Calculando frete…",
+        "free": "Frete grátis"
+      }
+    },
+    "facets": {
+      "filter": "Filtrar",
+      "sort_by": "Ordenar por",
+      "clear": "Limpar",
+      "clear_all": "Limpar tudo",
+      "apply": "Aplicar",
+      "price_from": "De",
+      "price_to": "Até",
+      "results": "{{ count }} produtos",
+      "results_one": "{{ count }} produto",
+      "filter_by": "Filtrar por"
+    }
+  },
+  "collections": {
+    "general": {
+      "title": "Categorias",
+      "empty": "Nenhum produto encontrado nesta categoria.",
+      "view_all": "Ver tudo",
+      "products_count": "{{ count }} produtos",
+      "products_count_one": "{{ count }} produto"
+    }
+  },
+  "cart": {
+    "title": "Seu carrinho",
+    "empty": "Seu carrinho está vazio.",
+    "continue_shopping": "Continuar comprando",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "taxes_and_shipping": "Impostos e frete calculados no checkout.",
+    "checkout": "Finalizar compra",
+    "remove": "Remover",
+    "update": "Atualizar",
+    "quantity": "Quantidade",
+    "item_count": "{{ count }} itens",
+    "item_count_one": "{{ count }} item",
+    "note": "Observações do pedido",
+    "note_placeholder": "Instruções especiais para o pedido",
+    "coupon": "Cupom de desconto",
+    "coupon_placeholder": "Digite seu cupom",
+    "coupon_apply": "Aplicar",
+    "coupon_note": "O cupom é aplicado no checkout.",
+    "free_shipping_progress": "Faltam {{ amount }} para o frete grátis!",
+    "free_shipping_reached": "Você ganhou frete grátis! 🎉",
+    "errors": {
+      "quantity": "Não há estoque suficiente para essa quantidade."
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "Minha conta",
+      "details": "Dados da conta",
+      "view_addresses": "Ver endereços",
+      "logout": "Sair",
+      "orders": "Pedidos"
+    },
+    "login": {
+      "title": "Entrar",
+      "email": "E-mail",
+      "password": "Senha",
+      "submit": "Entrar",
+      "forgot_password": "Esqueceu a senha?",
+      "create_account": "Criar conta",
+      "guest": "Continuar como convidado"
+    },
+    "register": {
+      "title": "Criar conta",
+      "first_name": "Nome",
+      "last_name": "Sobrenome",
+      "email": "E-mail",
+      "password": "Senha",
+      "submit": "Criar conta"
+    },
+    "orders": {
+      "title": "Histórico de pedidos",
+      "order_number": "Pedido",
+      "date": "Data",
+      "status": "Status",
+      "total": "Total",
+      "none": "Você ainda não fez nenhum pedido."
+    }
+  }
+}

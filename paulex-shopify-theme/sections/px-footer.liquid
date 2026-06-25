@@ -1,0 +1,95 @@
+{%- comment -%}
+  Premium footer with link columns, payment icons and social links.
+{%- endcomment -%}
+{%- assign whatsapp_number = settings.social_whatsapp | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')' | remove: '.' -%}
+<footer class="px-footer" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    <div class="px-footer__top">
+      <div class="px-footer__brand">
+        <a href="{{ routes.root_url }}" class="px-footer__logo" aria-label="{{ shop.name }}">
+          <img src="{{ 'px-logo.jpeg' | asset_url }}" alt="{{ shop.name }}" width="96" height="72" loading="lazy">
+        </a>
+        {%- if section.settings.tagline != blank -%}
+          <p class="px-footer__tagline">{{ section.settings.tagline }}</p>
+        {%- endif -%}
+        <div class="px-footer__social">
+          {%- if settings.social_instagram != blank -%}<a href="{{ settings.social_instagram }}" aria-label="Instagram" target="_blank" rel="noopener">{% render 'icon', name: 'instagram' %}</a>{%- endif -%}
+          {%- if settings.social_facebook != blank -%}<a href="{{ settings.social_facebook }}" aria-label="Facebook" target="_blank" rel="noopener">{% render 'icon', name: 'facebook' %}</a>{%- endif -%}
+          {%- if settings.social_youtube != blank -%}<a href="{{ settings.social_youtube }}" aria-label="YouTube" target="_blank" rel="noopener">{% render 'icon', name: 'youtube' %}</a>{%- endif -%}
+          {%- if settings.social_tiktok != blank -%}<a href="{{ settings.social_tiktok }}" aria-label="TikTok" target="_blank" rel="noopener">{% render 'icon', name: 'tiktok' %}</a>{%- endif -%}
+          {%- if whatsapp_number != blank -%}<a href="https://wa.me/{{ whatsapp_number }}" aria-label="WhatsApp" target="_blank" rel="noopener">{% render 'icon', name: 'whatsapp' %}</a>{%- endif -%}
+        </div>
+      </div>
+
+      <div class="px-footer__cols">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'menu' -%}
+            <div class="px-footer__col" {{ block.shopify_attributes }}>
+              {%- if block.settings.title != blank -%}<h3 class="px-footer__col-title">{{ block.settings.title }}</h3>{%- endif -%}
+              <ul class="px-footer__links">
+                {%- for link in block.settings.menu.links -%}
+                  <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- elsif block.type == 'text' -%}
+            <div class="px-footer__col" {{ block.shopify_attributes }}>
+              {%- if block.settings.title != blank -%}<h3 class="px-footer__col-title">{{ block.settings.title }}</h3>{%- endif -%}
+              <div class="px-footer__rte rte">{{ block.settings.content }}</div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="px-footer__bottom">
+      <p class="px-footer__copy">© {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright_text }}</p>
+      {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+        <div class="px-footer__payments" aria-label="Formas de pagamento">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag: class: 'px-payment-icon' }}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "settings": [
+    { "type": "textarea", "id": "tagline", "label": "Slogan", "default": "Paulex Armarinho — desde 1984 facilitando o seu dia a dia." },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Exibir formas de pagamento", "default": true },
+    { "type": "text", "id": "copyright_text", "label": "Texto do rodapé", "default": "Todos os direitos reservados." }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Coluna de menu",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Institucional" },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Coluna de texto",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Atendimento" },
+        { "type": "richtext", "id": "content", "label": "Conteúdo", "default": "<p>Seg a Sex, 8h às 18h<br>contato@paulex.com.br</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.footer.name",
+      "blocks": [
+        { "type": "menu", "settings": { "title": "Institucional" } },
+        { "type": "menu", "settings": { "title": "Ajuda" } },
+        { "type": "text" }
+      ]
+    }
+  ]
+}
+{% endschema %}

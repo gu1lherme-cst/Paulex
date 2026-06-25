@@ -1,0 +1,53 @@
+{%- comment -%}
+  Accessible breadcrumb navigation with BreadcrumbList structured data.
+  Honors the global SEO setting `seo_enable_breadcrumbs`.
+{%- endcomment -%}
+{%- if settings.seo_enable_breadcrumbs and request.page_type != 'index' -%}
+  <nav class="px-breadcrumb page-width" aria-label="{{ 'general.breadcrumb.aria_label' | t }}">
+    <ol class="px-breadcrumb__list" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li class="px-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="{{ routes.root_url }}" itemprop="item"><span itemprop="name">{{ 'general.breadcrumb.home' | t }}</span></a>
+        <meta itemprop="position" content="1">
+        {% render 'icon', name: 'chevron-right', class: 'px-breadcrumb__sep' %}
+      </li>
+
+      {%- case request.page_type -%}
+        {%- when 'product' -%}
+          {%- if collection.url -%}
+            <li class="px-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+              <a href="{{ collection.url }}" itemprop="item"><span itemprop="name">{{ collection.title }}</span></a>
+              <meta itemprop="position" content="2">
+              {% render 'icon', name: 'chevron-right', class: 'px-breadcrumb__sep' %}
+            </li>
+          {%- endif -%}
+          <li class="px-breadcrumb__item px-breadcrumb__item--current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+            <span itemprop="name">{{ product.title }}</span>
+            <meta itemprop="position" content="3">
+          </li>
+
+        {%- when 'collection' -%}
+          <li class="px-breadcrumb__item px-breadcrumb__item--current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+            <span itemprop="name">{{ collection.title }}</span>
+            <meta itemprop="position" content="2">
+          </li>
+
+        {%- when 'article' -%}
+          <li class="px-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a href="{{ blog.url }}" itemprop="item"><span itemprop="name">{{ blog.title }}</span></a>
+            <meta itemprop="position" content="2">
+            {% render 'icon', name: 'chevron-right', class: 'px-breadcrumb__sep' %}
+          </li>
+          <li class="px-breadcrumb__item px-breadcrumb__item--current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+            <span itemprop="name">{{ article.title }}</span>
+            <meta itemprop="position" content="3">
+          </li>
+
+        {%- else -%}
+          <li class="px-breadcrumb__item px-breadcrumb__item--current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+            <span itemprop="name">{{ page_title }}</span>
+            <meta itemprop="position" content="2">
+          </li>
+      {%- endcase -%}
+    </ol>
+  </nav>
+{%- endif -%}
