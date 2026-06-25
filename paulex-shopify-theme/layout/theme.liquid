@@ -35,6 +35,20 @@
       assign body_font = settings.font_body
       assign heading_font = settings.font_heading
       assign body_font_bold = body_font | font_modify: 'weight', 'bold'
+
+      # Fallbacks da marca: garantem cores válidas mesmo se a Shopify não
+      # importar alguma configuração (ex.: o gradiente color_background no
+      # upload por ZIP), evitando hero/seções em branco.
+      assign c_primary = settings.color_primary | default: '#003DFF'
+      assign c_accent = settings.color_accent | default: '#14D8FF'
+      assign c_sale = settings.color_sale | default: '#FF1D25'
+      assign c_text = settings.color_text | default: '#111111'
+      assign c_bg = settings.color_background | default: '#FFFFFF'
+      assign c_surface = settings.color_surface | default: '#F7F7F7'
+      assign grad_hero = settings.gradient_hero
+      if grad_hero == blank
+        assign grad_hero = 'linear-gradient(135deg, ' | append: c_primary | append: ' 0%, ' | append: c_accent | append: ' 100%)'
+      endif
     -%}
     {% style %}
       {{ body_font | font_face: font_display: 'swap' }}
@@ -42,18 +56,18 @@
       {{ heading_font | font_face: font_display: 'swap' }}
 
       :root {
-        --color-primary: {{ settings.color_primary }};
-        --color-primary-rgb: {{ settings.color_primary | color_to_rgb | remove: 'rgb(' | remove: ')' }};
-        --color-accent: {{ settings.color_accent }};
-        --color-accent-rgb: {{ settings.color_accent | color_to_rgb | remove: 'rgb(' | remove: ')' }};
-        --color-sale: {{ settings.color_sale }};
+        --color-primary: {{ c_primary }};
+        --color-primary-rgb: {{ c_primary | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+        --color-accent: {{ c_accent }};
+        --color-accent-rgb: {{ c_accent | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+        --color-sale: {{ c_sale }};
         --color-success: #16a34a;
         --color-success-rgb: 22, 163, 74;
-        --color-text: {{ settings.color_text }};
-        --color-text-rgb: {{ settings.color_text | color_to_rgb | remove: 'rgb(' | remove: ')' }};
-        --color-bg: {{ settings.color_background }};
-        --color-surface: {{ settings.color_surface }};
-        --gradient-hero: {{ settings.gradient_hero }};
+        --color-text: {{ c_text }};
+        --color-text-rgb: {{ c_text | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+        --color-bg: {{ c_bg }};
+        --color-surface: {{ c_surface }};
+        --gradient-hero: {{ grad_hero }};
 
         --font-body-family: {{ body_font.family }}, {{ body_font.fallback_families }};
         --font-body-weight: {{ body_font.weight }};

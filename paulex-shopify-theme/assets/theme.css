@@ -152,7 +152,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .px-btn--block { width: 100%; }
 
 /* Gradient utility (hero / promo / newsletter) */
-.color-gradient { background: var(--gradient-hero); color: #fff; }
+/* Fallback à prova de falhas: se --gradient-hero vier vazio (ex.: import do
+   ZIP na Shopify), cai para a cor primária e nunca fica branco. */
+.color-gradient { background: var(--color-primary, #003DFF); background: var(--gradient-hero, var(--color-primary, #003DFF)); color: #fff; }
 
 /* ---------- Badges ------------------------------------------------------ */
 .px-badge {
@@ -272,9 +274,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .px-mobile-nav__footer { border-top: 1px solid var(--color-surface); padding-top: 1.5rem; margin-top: 1.5rem; }
 
 /* ---------- Hero -------------------------------------------------------- */
-.px-hero { position: relative; overflow: hidden; color: #fff; }
+.px-hero { position: relative; overflow: hidden; color: #fff; background: var(--color-primary, #003DFF); }
 .px-hero__bg {
-  position: absolute; inset: 0; background: var(--gradient-hero); background-size: cover; background-position: center; z-index: 0;
+  position: absolute; inset: 0; z-index: 0; background-size: cover; background-position: center;
+  background: var(--color-primary, #003DFF);
+  background: var(--gradient-hero, var(--color-primary, #003DFF));
 }
 .px-hero__bg::after {
   content: ""; position: absolute; inset: 0;
