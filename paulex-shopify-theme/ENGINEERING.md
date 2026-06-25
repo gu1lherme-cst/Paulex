@@ -36,7 +36,6 @@ assets/
   theme.css         # design system + componentes (~55 KB)
   animations.js     # parallax do hero (carregado só se "revelar ao rolar" on)
   px-logo.jpeg      # logo fallback (ver §10, item de performance)
-  hero-gradient.jpeg
 config/
   settings_schema.json  # define a UI do editor de tema
   settings_data.json    # valores atuais + preset "Paulex Advanced"

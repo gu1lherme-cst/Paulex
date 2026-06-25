@@ -284,7 +284,6 @@
 .tone-green { --tone: var(--px-green); }
 .tone-purple { --tone: var(--px-purple); }
 .tone-yellow { --tone: var(--px-yellow); }
-.tone-dark { --tone: var(--px-ink); }
 
 .hero-copy h1 {
   margin: 0;

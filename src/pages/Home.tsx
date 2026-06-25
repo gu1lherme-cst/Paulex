@@ -1,7 +1,7 @@
 import { memo, type ReactNode } from "react";
 import "./Home.css";
 
-type Tone = "blue" | "red" | "green" | "purple" | "yellow" | "dark";
+type Tone = "blue" | "red" | "green" | "purple" | "yellow";
 
 type IconName =
   | "stack"
