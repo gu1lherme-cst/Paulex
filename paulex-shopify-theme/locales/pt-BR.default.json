@@ -24,7 +24,10 @@
       "collections": "Categorias",
       "pages": "Páginas",
       "suggestions": "Sugestões",
-      "view_all": "Ver todos os resultados"
+      "view_all": "Ver todos os resultados",
+      "searching": "Buscando…",
+      "error": "Não foi possível buscar agora.",
+      "no_results_short": "Nenhum resultado."
     },
     "social": {
       "whatsapp": "Fale no WhatsApp",

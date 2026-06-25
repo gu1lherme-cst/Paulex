@@ -30,6 +30,15 @@
     };
   };
 
+  // Escapa texto antes de inserir como HTML. Mesmo vindo da loja, dados de
+  // produto/coleção passam por aqui para evitar qualquer injeção.
+  const escapeHTML = (value) => String(value == null ? '' : value).replace(/[&<>'"]/g, (ch) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+  }[ch]));
+
+  // Escapa um valor para uso seguro dentro de um atributo (ex.: href).
+  const escapeAttr = (value) => encodeURI(String(value == null ? '' : value)).replace(/"/g, '%22');
+
   const trapFocus = (container) => {
     const focusable = $$('a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])', container);
     if (!focusable.length) return () => {};
@@ -325,14 +334,23 @@
       });
       this.input = $('[data-predictive-search-input]', this);
       this.results = $('[data-predictive-search-results]', this);
+      this.activeIndex = -1;
+      this.items = [];
       if (this.input) {
         this.input.addEventListener('input', debounce(() => this.search(), 250));
+        this.input.setAttribute('role', 'combobox');
+        this.input.setAttribute('aria-expanded', 'false');
+        this.input.setAttribute('aria-autocomplete', 'list');
+        this.input.addEventListener('keydown', (e) => this.onKeydown(e));
       }
     }
 
     async search() {
       const q = this.input.value.trim();
-      if (q.length < 2) { this.results.innerHTML = ''; return; }
+      this.activeIndex = -1;
+      if (q.length < 2) { this.results.innerHTML = ''; this.input.setAttribute('aria-expanded', 'false'); return; }
+      // Estado de carregando (acessível via aria-live no container).
+      this.results.innerHTML = '<div class="px-predictive__loading" role="status">' + (Strings.searching || 'Buscando…') + '</div>';
       try {
         const url = (Routes.predictive_search_url || '/search/suggest') +
           '.json?q=' + encodeURIComponent(q) +
@@ -340,7 +358,9 @@
         const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
         const data = await res.json();
         this.render(data.resources.results, q);
-      } catch (e) { /* noop */ }
+      } catch (e) {
+        this.results.innerHTML = '<div class="px-predictive__empty">' + (Strings.searchError || 'Não foi possível buscar agora.') + '</div>';
+      }
     }
 
     render(results, q) {
@@ -350,36 +370,66 @@
       let html = '';
 
       if (!products.length && !collections.length && !pages.length) {
-        this.results.innerHTML = '<div class="px-predictive__empty">' + (Strings.noResults || 'Nenhum resultado.') + '</div>';
+        this.results.innerHTML = '<div class="px-predictive__empty">' + escapeHTML(Strings.noResults || 'Nenhum resultado.') + '</div>';
+        this.input.setAttribute('aria-expanded', 'false');
         return;
       }
 
       if (products.length) {
-        html += '<div class="px-predictive__group"><p class="px-predictive__heading">Produtos</p>';
+        html += '<div class="px-predictive__group"><p class="px-predictive__heading">' + escapeHTML(Strings.products || 'Produtos') + '</p>';
         products.forEach((p) => {
           const img = p.featured_image && p.featured_image.url ? p.featured_image.url : (p.image || '');
-          html += '<a class="px-predictive__product" href="' + p.url + '">' +
-            (img ? '<img src="' + img + '&width=120" alt="" loading="lazy">' : '') +
-            '<span><span class="px-predictive__product-title">' + p.title + '</span><br>' +
+          const imgUrl = img ? (img + (img.indexOf('?') > -1 ? '&' : '?') + 'width=120') : '';
+          html += '<a class="px-predictive__product" href="' + escapeAttr(p.url) + '" role="option">' +
+            (img ? '<img src="' + escapeAttr(imgUrl) + '" alt="" loading="lazy">' : '') +
+            '<span><span class="px-predictive__product-title">' + escapeHTML(p.title) + '</span><br>' +
             '<span class="px-predictive__product-price">' + (p.price ? formatMoney(parseFloat(p.price) * 100) : '') + '</span></span></a>';
         });
         html += '</div>';
       }
 
       if (collections.length) {
-        html += '<div class="px-predictive__group"><p class="px-predictive__heading">Categorias</p><div class="px-predictive__links">';
-        collections.forEach((c) => { html += '<a href="' + c.url + '">' + c.title + '</a>'; });
+        html += '<div class="px-predictive__group"><p class="px-predictive__heading">' + escapeHTML(Strings.collections || 'Categorias') + '</p><div class="px-predictive__links">';
+        collections.forEach((c) => { html += '<a href="' + escapeAttr(c.url) + '" role="option">' + escapeHTML(c.title) + '</a>'; });
         html += '</div></div>';
       }
 
       if (pages.length) {
-        html += '<div class="px-predictive__group"><p class="px-predictive__heading">Páginas</p><div class="px-predictive__links">';
-        pages.forEach((c) => { html += '<a href="' + c.url + '">' + c.title + '</a>'; });
+        html += '<div class="px-predictive__group"><p class="px-predictive__heading">' + escapeHTML(Strings.pages || 'Páginas') + '</p><div class="px-predictive__links">';
+        pages.forEach((c) => { html += '<a href="' + escapeAttr(c.url) + '" role="option">' + escapeHTML(c.title) + '</a>'; });
         html += '</div></div>';
       }
 
-      html += '<a class="px-predictive__all" href="/search?q=' + encodeURIComponent(q) + '">Ver todos os resultados &rarr;</a>';
+      html += '<a class="px-predictive__all" href="/search?q=' + encodeURIComponent(q) + '" role="option">' + escapeHTML(Strings.viewAll || 'Ver todos os resultados') + ' &rarr;</a>';
       this.results.innerHTML = html;
+      this.items = $$('a[role="option"]', this.results);
+      this.input.setAttribute('aria-expanded', 'true');
+    }
+
+    onKeydown(e) {
+      if (!this.items.length) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        this.setActive((this.activeIndex + 1) % this.items.length);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        this.setActive((this.activeIndex - 1 + this.items.length) % this.items.length);
+      } else if (e.key === 'Enter') {
+        if (this.activeIndex > -1 && this.items[this.activeIndex]) {
+          e.preventDefault();
+          window.location.href = this.items[this.activeIndex].href;
+        }
+      }
+    }
+
+    setActive(index) {
+      this.items.forEach((el) => el.classList.remove('is-active'));
+      this.activeIndex = index;
+      const el = this.items[index];
+      if (el) {
+        el.classList.add('is-active');
+        el.scrollIntoView({ block: 'nearest' });
+      }
     }
   }
   customElements.define('search-modal', SearchModal);

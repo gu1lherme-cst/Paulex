@@ -6,7 +6,7 @@
     <p class="px-section__subtitle">{{ article.published_at | date: '%d/%m/%Y' }} · {{ article.author }}</p>
   </header>
   {%- if article.image -%}
-    <div data-reveal>{{ article.image | image_url: width: 1400 | image_tag: widths: '600,900,1200,1400', class: 'rte', alt: article.title }}</div>
+    <div data-reveal>{{ article.image | image_url: width: 1400 | image_tag: widths: '600,900,1200,1400', sizes: '(min-width: 750px) 70vw, 100vw', loading: 'eager', fetchpriority: 'high', class: 'rte', alt: article.title }}</div>
   {%- endif -%}
   <div class="px-page__content rte" data-reveal>{{ article.content }}</div>
 

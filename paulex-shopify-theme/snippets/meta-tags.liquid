@@ -62,19 +62,39 @@
 
 {%- comment -%} Organization + WebSite (with SearchAction) on the homepage {%- endcomment -%}
 {%- if request.page_type == 'index' -%}
+  {%- liquid
+    assign org_logo = ''
+    if shop.brand.logo
+      assign org_logo = shop.brand.logo | image_url: width: 512 | prepend: 'https:'
+    elsif settings.share_image
+      assign org_logo = settings.share_image | image_url: width: 512 | prepend: 'https:'
+    endif
+    assign social = ''
+    if settings.social_instagram != blank
+      assign social = social | append: settings.social_instagram | append: ','
+    endif
+    if settings.social_facebook != blank
+      assign social = social | append: settings.social_facebook | append: ','
+    endif
+    if settings.social_youtube != blank
+      assign social = social | append: settings.social_youtube | append: ','
+    endif
+    if settings.social_tiktok != blank
+      assign social = social | append: settings.social_tiktok | append: ','
+    endif
+  -%}
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": {{ shop.name | json }},
       "url": {{ shop.url | append: '/' | json }}
-      {%- if settings.share_image %},
-      "logo": {{ settings.share_image | image_url: width: 512 | prepend: 'https:' | json }}
+      {%- if org_logo != blank %},
+      "logo": {{ org_logo | json }}
       {%- endif -%}
-      {%- assign social = '' -%}
-      {%- if settings.social_instagram != blank %}{% assign social = social | append: settings.social_instagram | append: ',' %}{% endif -%}
-      {%- if settings.social_facebook != blank %}{% assign social = social | append: settings.social_facebook | append: ',' %}{% endif -%}
-      {%- if settings.social_youtube != blank %}{% assign social = social | append: settings.social_youtube | append: ',' %}{% endif -%}
+      {%- if shop.brand.short_description != blank %},
+      "description": {{ shop.brand.short_description | json }}
+      {%- endif -%}
       {%- if social != blank %},
       "sameAs": [
         {%- assign social_list = social | split: ',' -%}

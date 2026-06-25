@@ -92,7 +92,14 @@
           unavailable: {{ 'products.product.unavailable' | t | json }},
           inStock: {{ 'products.product.in_stock' | t | json }},
           lowStock: {{ 'products.product.low_stock' | t | json }},
-          outOfStock: {{ 'products.product.out_of_stock' | t | json }}
+          outOfStock: {{ 'products.product.out_of_stock' | t | json }},
+          searching: {{ 'general.search.searching' | t | json }},
+          searchError: {{ 'general.search.error' | t | json }},
+          noResults: {{ 'general.search.no_results_short' | t | json }},
+          products: {{ 'general.search.products' | t | json }},
+          collections: {{ 'general.search.collections' | t | json }},
+          pages: {{ 'general.search.pages' | t | json }},
+          viewAll: {{ 'general.search.view_all' | t | json }}
         }
       };
     </script>

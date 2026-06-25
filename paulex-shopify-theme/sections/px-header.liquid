@@ -73,7 +73,7 @@
         </a>
       {%- endif -%}
       {%- if section.settings.show_search -%}
-        <button class="px-header__action" data-search-open aria-label="{{ 'general.search.search' | t }}">
+        <button type="button" class="px-header__action" data-search-open aria-label="{{ 'general.search.search' | t }}">
           {% render 'icon', name: 'search' %}
         </button>
       {%- endif -%}
@@ -81,7 +81,7 @@
         {% render 'icon', name: 'cart' %}
         <span class="px-header__cart-count{% if cart.item_count == 0 %} is-empty{% endif %}" data-cart-count>{{ cart.item_count }}</span>
       </a>
-      <button class="px-header__action px-header__burger" data-mobile-open aria-label="{{ 'general.accessibility.open_menu' | t }}" aria-expanded="false">
+      <button type="button" class="px-header__action px-header__burger" data-mobile-open aria-label="{{ 'general.accessibility.open_menu' | t }}" aria-expanded="false">
         {% render 'icon', name: 'menu' %}
       </button>
     </div>
@@ -93,8 +93,8 @@
   <div class="px-mobile-nav__overlay" data-mobile-close tabindex="-1"></div>
   <aside class="px-mobile-nav__panel" role="dialog" aria-modal="true" aria-label="{{ 'general.accessibility.menu' | t }}">
     <div class="px-mobile-nav__head">
-      <img src="{{ 'px-logo.jpeg' | asset_url }}" alt="{{ shop.name }}" width="64" height="48">
-      <button class="px-mobile-nav__close" data-mobile-close aria-label="{{ 'general.accessibility.close_menu' | t }}">
+      <img src="{{ 'px-logo.jpeg' | asset_url }}" alt="{{ shop.name }}" width="64" height="48" loading="lazy">
+      <button type="button" class="px-mobile-nav__close" data-mobile-close aria-label="{{ 'general.accessibility.close_menu' | t }}">
         {% render 'icon', name: 'close' %}
       </button>
     </div>

@@ -14,7 +14,7 @@
   {%- paginate collection.products by section.settings.products_per_page -%}
     <div class="px-collection__toolbar">
       {%- if section.settings.enable_filtering -%}
-        <button class="px-btn px-btn--ghost px-collection__filter-toggle" data-filters-toggle aria-expanded="false">
+        <button type="button" class="px-btn px-btn--ghost px-collection__filter-toggle" data-filters-toggle aria-expanded="false">
           {% render 'icon', name: 'menu' %} {{ 'products.facets.filter' | t }}
         </button>
       {%- endif -%}

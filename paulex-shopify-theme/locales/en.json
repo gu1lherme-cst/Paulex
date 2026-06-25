@@ -24,7 +24,10 @@
       "collections": "Collections",
       "pages": "Pages",
       "suggestions": "Suggestions",
-      "view_all": "View all results"
+      "view_all": "View all results",
+      "searching": "Searching…",
+      "error": "Couldn't search right now.",
+      "no_results_short": "No results."
     },
     "social": {
       "whatsapp": "Chat on WhatsApp",

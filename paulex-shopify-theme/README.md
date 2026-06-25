@@ -134,14 +134,38 @@ templates/   index/product/collection/cart/search/blog… (JSON OS 2.0) + custom
 - **Empty state comercial**: distingue "nenhum produto com esses filtros"
   (com botão **Limpar filtros**) de uma coleção realmente vazia.
 
+### Fase 5 — Busca segura e navegável (implementado)
+- **Sanitização**: títulos, URLs e textos dos resultados passam por
+  `escapeHTML`/`escapeAttr` antes de virar HTML (defesa contra injeção).
+- **Teclado**: ↑/↓ navegam entre resultados, **Enter** abre o selecionado,
+  **Esc** fecha; `role="combobox"`/`aria-expanded`/`role="option"`.
+- **Estados**: "Buscando…", "Nenhum resultado", erro de rede — todos via
+  `aria-live` no container de resultados. Botão "Ver todos os resultados".
+
+### Fase 6 — SEO e dados estruturados (implementado)
+- **Organization JSON-LD** usa o logo real da marca (`shop.brand.logo`, com
+  fallback para a imagem de compartilhamento), inclui `description` da marca e
+  `sameAs` só com redes preenchidas (Instagram, Facebook, YouTube, TikTok).
+- **WebSite + SearchAction** na home; **BreadcrumbList** (microdados) em
+  produto, coleção e artigo; **Product JSON-LD** com `itemCondition`, ofertas
+  por variante e moeda correta; `og:locale` no formato `pt_BR`.
+
+### Fase 7-8 — Acessibilidade e performance (implementado)
+- Modais/drawers (carrinho, busca, menu, filtros) fecham com **Esc**, prendem
+  o foco e o devolvem ao botão que abriu.
+- `type="button"` explícito em todos os botões que não enviam formulário.
+- Imagens com `widths/sizes/loading`; hero e imagem de artigo com
+  `loading: eager` + `fetchpriority: high`; demais com `lazy`. Scripts com
+  `defer`. `prefers-reduced-motion` respeitado.
+
 ## Próximas evoluções sugeridas (roadmap)
 
-Itens das fases 5–8 do briefing ainda não implementados, em ordem de impacto:
+A base do briefing (fases 1–8) está implementada. Possíveis próximos passos:
 
-- **Busca**: `escapeHTML` nos resultados e navegação por teclado (↑/↓/Enter/Esc).
-- **SEO**: revisar JSON-LD de Organization (logo + `sameAs`) e breadcrumb.
-- **Performance/A11y**: `image_tag` com `widths/sizes/loading` em todas as
-  imagens, foco preso em modais/drawers e retorno de foco ao fechar.
+- Testar o tema numa loja de desenvolvimento (Shopify CLI / `theme check`).
+- Página de produto: galeria com zoom/vídeo e recomendações por IA da Shopify.
+- Blog e páginas institucionais (Sobre, Atacado, Política de trocas).
+- Integração de avaliações (app de reviews) populando os metafields já usados.
 - **Coleção**: breadcrumb, toolbar com contagem/ordenação, filtros mobile em
   drawer com ESC e empty state comercial.
 - **SEO**: revisar JSON-LD de Organization (logo + `sameAs`) e breadcrumb.
