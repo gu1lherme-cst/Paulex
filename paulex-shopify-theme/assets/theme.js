@@ -39,6 +39,14 @@
   // Escapa um valor para uso seguro dentro de um atributo (ex.: href).
   const escapeAttr = (value) => encodeURI(String(value == null ? '' : value)).replace(/"/g, '%22');
 
+  // Só aceita caminhos relativos ou http(s); bloqueia javascript:/data:/etc.
+  // Defesa em profundidade caso a fonte da URL mude (metafield/app de terceiro).
+  const safeUrl = (value) => {
+    const s = String(value == null ? '' : value).trim();
+    if (/^\//.test(s) || /^https?:\/\//i.test(s)) return s;
+    return '#';
+  };
+
   const trapFocus = (container) => {
     const focusable = $$('a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])', container);
     if (!focusable.length) return () => {};
@@ -262,20 +270,12 @@
 
     open() { this.controller && this.controller.open(); }
 
-    bindItemControls() {
-      $$('[data-qty-up]', this).forEach((b) => b.onclick = () => this.adjust(b.dataset.key, 1));
-      $$('[data-qty-down]', this).forEach((b) => b.onclick = () => this.adjust(b.dataset.key, -1));
-      $$('[data-qty-remove]', this).forEach((b) => b.onclick = () => this.setQty(b.dataset.key, 0));
-      $$('[data-qty-input]', this).forEach((input) => {
-        input.onchange = () => this.setQty(input.dataset.key, parseInt(input.value, 10) || 0);
-      });
-    }
-
     bindExtras() {
-      // Note + coupon are re-bound via delegation since the body re-renders.
+      // Quantidade/remover dos itens são tratados pela delegação global
+      // (initGlobalCartControls) via [data-key]. Aqui só nota e cupom do drawer.
       this.addEventListener('input', (e) => {
         if (e.target.matches('[data-cart-note]')) {
-          this.saveNote(e.target.value);
+          saveCartNote(e.target.value);
         }
       });
       this.addEventListener('click', (e) => {
@@ -288,30 +288,6 @@
       });
     }
 
-    saveNote = debounce(function (value) {
-      fetch(Routes.cart_update_url + '.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ note: value })
-      });
-    }, 600);
-
-    async adjust(key, delta) {
-      const item = this.querySelector('[data-key="' + key + '"]');
-      const input = item && item.querySelector('[data-qty-input]');
-      const current = input ? parseInt(input.value, 10) : 1;
-      await this.setQty(key, current + delta);
-    }
-
-    async setQty(key, quantity) {
-      const row = this.querySelector('.px-cart-item[data-key="' + key + '"]');
-      if (row) row.classList.add('is-updating');
-      try {
-        await Cart.change(key, Math.max(0, quantity));
-      } catch (e) {
-        Toast.show(Strings.quantityError || 'Erro', 'error');
-      }
-    }
   }
   customElements.define('cart-drawer', CartDrawer);
 
@@ -380,8 +356,8 @@
         products.forEach((p) => {
           const img = p.featured_image && p.featured_image.url ? p.featured_image.url : (p.image || '');
           const imgUrl = img ? (img + (img.indexOf('?') > -1 ? '&' : '?') + 'width=120') : '';
-          html += '<a class="px-predictive__product" href="' + escapeAttr(p.url) + '" role="option">' +
-            (img ? '<img src="' + escapeAttr(imgUrl) + '" alt="" loading="lazy">' : '') +
+          html += '<a class="px-predictive__product" href="' + escapeAttr(safeUrl(p.url)) + '" role="option">' +
+            (img ? '<img src="' + escapeAttr(safeUrl(imgUrl)) + '" alt="" loading="lazy">' : '') +
             '<span><span class="px-predictive__product-title">' + escapeHTML(p.title) + '</span><br>' +
             '<span class="px-predictive__product-price">' + (p.price ? formatMoney(parseFloat(p.price) * 100) : '') + '</span></span></a>';
         });
@@ -390,13 +366,13 @@
 
       if (collections.length) {
         html += '<div class="px-predictive__group"><p class="px-predictive__heading">' + escapeHTML(Strings.collections || 'Categorias') + '</p><div class="px-predictive__links">';
-        collections.forEach((c) => { html += '<a href="' + escapeAttr(c.url) + '" role="option">' + escapeHTML(c.title) + '</a>'; });
+        collections.forEach((c) => { html += '<a href="' + escapeAttr(safeUrl(c.url)) + '" role="option">' + escapeHTML(c.title) + '</a>'; });
         html += '</div></div>';
       }
 
       if (pages.length) {
         html += '<div class="px-predictive__group"><p class="px-predictive__heading">' + escapeHTML(Strings.pages || 'Páginas') + '</p><div class="px-predictive__links">';
-        pages.forEach((c) => { html += '<a href="' + escapeAttr(c.url) + '" role="option">' + escapeHTML(c.title) + '</a>'; });
+        pages.forEach((c) => { html += '<a href="' + escapeAttr(safeUrl(c.url)) + '" role="option">' + escapeHTML(c.title) + '</a>'; });
         html += '</div></div>';
       }
 
@@ -494,6 +470,9 @@
     }
 
     onVariantChange() {
+      // Se o JSON de variantes não pôde ser lido, não mexemos no botão:
+      // mantemos o estado renderizado no servidor (evita produto não-comprável).
+      if (!this.variants.length) return;
       const selected = $$('[data-option-index]', this).map((group) => {
         const checked = $('[data-variant-option]:checked', group);
         // sync pill visual state
@@ -610,8 +589,8 @@
         this.setState('out', Strings.outOfStock || 'Sem estoque');
         return;
       }
-      const tracked = info.managed === 'shopify' && info.policy !== 'continue';
-      if (tracked && this.threshold > 0 && info.qty > 0 && info.qty <= this.threshold) {
+      // `low` é pré-calculado no servidor (não expomos a quantidade exata).
+      if (info.low) {
         this.setState('low', Strings.lowStock || 'Últimas unidades');
         return;
       }
@@ -741,14 +720,13 @@
         const data = await res.json();
         if (data.erro) throw new Error('CEP não encontrado');
         const local = [data.localidade, data.uf].filter(Boolean).join(' - ');
-        const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
         let html =
-          '<p class="px-shipping__local">' + esc(local) + '</p>' +
+          '<p class="px-shipping__local">' + escapeHTML(local) + '</p>' +
           '<p class="px-shipping__estimate">' + this.str('strEstimate', 'Estimativa informativa — entregamos para todo o Brasil.') + '</p>' +
           '<div class="px-shipping__option"><span>' + this.str('strEconomic', 'Econômico') + '</span><span>' + this.str('strEconomicEta', '5–9 dias úteis') + '</span></div>' +
           '<div class="px-shipping__option"><span>' + this.str('strExpress', 'Expresso') + '</span><span>' + this.str('strExpressEta', '2–4 dias úteis') + '</span></div>';
         if (d.pickup) {
-          html += '<div class="px-shipping__option px-shipping__option--pickup"><span>' + esc(d.pickup) + '</span><span>R$ 0,00</span></div>';
+          html += '<div class="px-shipping__option px-shipping__option--pickup"><span>' + escapeHTML(d.pickup) + '</span><span>R$ 0,00</span></div>';
         }
         html += '<p class="px-shipping__checkout">' + this.str('strCheckout', 'Valor e prazo finais são calculados no checkout.') + '</p>';
         this.result.innerHTML = html;
@@ -766,7 +744,10 @@
     const sortSelect = $('[data-sort-select]');
     if (!grid && !sortSelect) return;
 
-    const applyUrl = async (url) => {
+    // push=true em interações do usuário (empilha histórico). No popstate
+    // (voltar/avançar) usamos push=false para não quebrar o botão Voltar.
+    const applyUrl = async (url, push) => {
+      if (push === undefined) push = true;
       const results = $('.px-collection__results');
       if (results) results.classList.add('is-loading');
       try {
@@ -782,7 +763,7 @@
         const freshCount = doc.querySelector('[data-collection-count]');
         const curCount = $('[data-collection-count]');
         if (freshCount && curCount) curCount.innerHTML = freshCount.innerHTML;
-        history.pushState({}, '', url);
+        if (push) history.pushState({}, '', url);
         const toolbar = $('.px-collection__toolbar');
         if (toolbar) window.scrollTo({ top: toolbar.offsetTop - 100, behavior: 'smooth' });
         bindFacetInputs();
@@ -853,7 +834,7 @@
       });
     }
 
-    window.addEventListener('popstate', () => applyUrl(window.location.href));
+    window.addEventListener('popstate', () => applyUrl(window.location.href, false));
   }
 
   /* ---------- Related products (async section render) ------------------- */

@@ -105,7 +105,8 @@
         "express_eta": "2–4 dias úteis"
       },
       "barcode": "Cód. de barras",
-      "view_options": "Ver opções"
+      "view_options": "Ver opções",
+      "installments_from": "a partir de {{ count }}x de {{ amount }} sem juros"
     },
     "facets": {
       "filter": "Filtrar",
@@ -115,8 +116,10 @@
       "apply": "Aplicar",
       "price_from": "De",
       "price_to": "Até",
-      "results": "{{ count }} produtos",
-      "results_one": "{{ count }} produto",
+      "results": {
+        "one": "{{ count }} produto",
+        "other": "{{ count }} produtos"
+      },
       "filter_by": "Filtrar por",
       "see_results": "Ver resultados"
     }
@@ -126,8 +129,10 @@
       "title": "Categorias",
       "empty": "Nenhum produto encontrado nesta categoria.",
       "view_all": "Ver tudo",
-      "products_count": "{{ count }} produtos",
-      "products_count_one": "{{ count }} produto",
+      "products_count": {
+        "one": "{{ count }} produto",
+        "other": "{{ count }} produtos"
+      },
       "no_matches": "Nenhum produto com esses filtros",
       "no_matches_hint": "Tente remover alguns filtros para ver mais opções."
     }

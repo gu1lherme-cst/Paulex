@@ -10,7 +10,9 @@
       <button type="submit" class="px-btn px-btn--primary">{{ 'general.search.submit' | t }}</button>
     </form>
     {%- if search.performed -%}
-      <h1 class="px-search-page__title">{{ 'general.search.results_for' | t: terms: search.terms }}</h1>
+      {%- comment -%} search.terms vem do parâmetro ?q= (controlado pelo usuário): escapar antes de exibir. {%- endcomment -%}
+      {%- assign terms_safe = search.terms | escape -%}
+      <h1 class="px-search-page__title">{{ 'general.search.results_for' | t: terms: terms_safe }}</h1>
     {%- endif -%}
   </header>
 
@@ -31,7 +33,8 @@
         </div>
         {% render 'pagination', paginate: paginate %}
       {%- else -%}
-        <div class="px-empty"><p>{{ 'general.search.no_results' | t: terms: search.terms }}</p></div>
+        {%- assign terms_safe = search.terms | escape -%}
+        <div class="px-empty"><p>{{ 'general.search.no_results' | t: terms: terms_safe }}</p></div>
       {%- endif -%}
     {%- endpaginate -%}
   {%- endif -%}

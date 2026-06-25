@@ -66,6 +66,8 @@
             fetchpriority: 'high',
             widths: '500,700,900,1100',
             sizes: '(min-width: 990px) 45vw, 90vw',
+            width: 1100,
+            height: 1100 | divided_by: section.settings.hero_image.aspect_ratio | round,
             class: 'px-hero__image',
             alt: section.settings.title | default: shop.name
         }}

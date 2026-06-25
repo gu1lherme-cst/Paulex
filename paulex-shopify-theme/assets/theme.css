@@ -824,6 +824,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* ---------- Reveal animations ------------------------------------------ */
 [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1); will-change: opacity, transform; }
 [data-reveal].is-visible { opacity: 1; transform: none; }
+/* Sem JS, o observer não roda: nunca esconder conteúdo (evita tela em branco). */
+.no-js [data-reveal] { opacity: 1; transform: none; }
+/* O hero é o LCP: nunca animar para fora da tela (evita atraso/flash do LCP). */
+.px-hero [data-reveal], .px-hero[data-reveal] { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }

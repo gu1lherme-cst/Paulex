@@ -27,8 +27,16 @@
     {%- endif -%}
   {%- endif -%}
   {%- if show_installments -%}
+    {%- comment -%}
+      Em preço variável o parcelamento é sobre o menor preço: rotulamos
+      "a partir de" para não induzir o cliente a erro (CDC).
+    {%- endcomment -%}
     {%- assign installment = price | divided_by: 12 -%}
     {%- assign formatted_installment = installment | money -%}
-    <span class="px-price__installments">{{ 'products.product.installments' | t: count: 12, amount: formatted_installment }}</span>
+    {%- if price_varies -%}
+      <span class="px-price__installments">{{ 'products.product.installments_from' | t: count: 12, amount: formatted_installment }}</span>
+    {%- else -%}
+      <span class="px-price__installments">{{ 'products.product.installments' | t: count: 12, amount: formatted_installment }}</span>
+    {%- endif -%}
   {%- endif -%}
 </div>

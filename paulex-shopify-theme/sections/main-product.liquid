@@ -152,14 +152,23 @@
               data-current="{{ cur.id }}"
               {{ block.shopify_attributes }}
             >
+              {%- comment -%}
+                Não expomos a quantidade exata de estoque no HTML (inteligência
+                de negócio). O estado "últimas unidades" é calculado no servidor
+                e só um booleano `low` chega ao cliente.
+              {%- endcomment -%}
               <script type="application/json" data-stock-json>
                 {
                   {%- for v in product.variants -%}
+                    {%- liquid
+                      assign is_low = false
+                      if v.available and v.inventory_management == 'shopify' and v.inventory_policy != 'continue' and threshold > 0 and v.inventory_quantity > 0 and v.inventory_quantity <= threshold
+                        assign is_low = true
+                      endif
+                    -%}
                     "{{ v.id }}": {
                       "available": {{ v.available | json }},
-                      "managed": {{ v.inventory_management | json }},
-                      "policy": {{ v.inventory_policy | json }},
-                      "qty": {{ v.inventory_quantity | default: 0 | json }}
+                      "low": {{ is_low | json }}
                     }{%- unless forloop.last -%},{%- endunless -%}
                   {%- endfor -%}
                 }

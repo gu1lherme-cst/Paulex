@@ -105,7 +105,8 @@
         "express_eta": "2–4 business days"
       },
       "barcode": "Barcode",
-      "view_options": "View options"
+      "view_options": "View options",
+      "installments_from": "from {{ count }}x of {{ amount }}"
     },
     "facets": {
       "filter": "Filter",
@@ -115,8 +116,10 @@
       "apply": "Apply",
       "price_from": "From",
       "price_to": "To",
-      "results": "{{ count }} products",
-      "results_one": "{{ count }} product",
+      "results": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} products"
+      },
       "filter_by": "Filter by",
       "see_results": "See results"
     }
@@ -126,8 +129,10 @@
       "title": "Collections",
       "empty": "No products found in this collection.",
       "view_all": "View all",
-      "products_count": "{{ count }} products",
-      "products_count_one": "{{ count }} product",
+      "products_count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} products"
+      },
       "no_matches": "No products match these filters",
       "no_matches_hint": "Try removing some filters to see more options."
     }
