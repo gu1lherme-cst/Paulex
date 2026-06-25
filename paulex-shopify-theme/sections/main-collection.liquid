@@ -19,7 +19,7 @@
         </button>
       {%- endif -%}
 
-      <p class="px-collection__count">
+      <p class="px-collection__count" data-collection-count>
         {{ 'collections.general.products_count' | t: count: collection.products_count }}
       </p>
 
@@ -38,7 +38,12 @@
 
     <div class="px-collection__body">
       {%- if section.settings.enable_filtering and collection.filters.size > 0 -%}
-        <aside class="px-facets" data-facets aria-label="{{ 'products.facets.filter_by' | t }}">
+        <div class="px-facets-overlay" data-facets-overlay hidden></div>
+        <aside class="px-facets" data-facets aria-label="{{ 'products.facets.filter_by' | t }}" role="dialog" aria-modal="false">
+          <div class="px-facets__bar">
+            <h2 class="px-facets__bar-title">{{ 'products.facets.filter' | t }}</h2>
+            <button type="button" class="px-facets__close" data-facets-close aria-label="{{ 'general.accessibility.close' | t }}">{% render 'icon', name: 'close' %}</button>
+          </div>
           <form data-facets-form>
             <div class="px-facets__head">
               <h2>{{ 'products.facets.filter_by' | t }}</h2>
@@ -77,6 +82,9 @@
             {%- endfor -%}
             <noscript><button type="submit" class="px-btn px-btn--primary px-btn--block">{{ 'products.facets.apply' | t }}</button></noscript>
           </form>
+          <div class="px-facets__foot">
+            <button type="button" class="px-btn px-btn--primary px-btn--block" data-facets-apply>{{ 'products.facets.see_results' | t }}</button>
+          </div>
         </aside>
       {%- endif -%}
 
@@ -89,10 +97,33 @@
           </div>
           {% render 'pagination', paginate: paginate %}
         {%- else -%}
-          <div class="px-empty">
-            <p>{{ 'collections.general.empty' | t }}</p>
-            <a href="{{ routes.all_products_collection_url }}" class="px-btn px-btn--primary">{{ 'collections.general.view_all' | t }}</a>
-          </div>
+          {%- comment -%} Distingue "filtros sem resultado" de "coleção vazia". {%- endcomment -%}
+          {%- liquid
+            assign filters_active = false
+            for filter in collection.filters
+              if filter.active_values.size > 0
+                assign filters_active = true
+              endif
+              if filter.type == 'price_range' and filter.min_value.value != blank
+                assign filters_active = true
+              endif
+              if filter.type == 'price_range' and filter.max_value.value != blank
+                assign filters_active = true
+              endif
+            endfor
+          -%}
+          {%- if filters_active -%}
+            <div class="px-empty">
+              <p class="px-empty__title">{{ 'collections.general.no_matches' | t }}</p>
+              <p class="px-empty__text">{{ 'collections.general.no_matches_hint' | t }}</p>
+              <a href="{{ collection.url }}" class="px-btn px-btn--primary">{{ 'products.facets.clear_all' | t }}</a>
+            </div>
+          {%- else -%}
+            <div class="px-empty">
+              <p class="px-empty__title">{{ 'collections.general.empty' | t }}</p>
+              <a href="{{ routes.all_products_collection_url }}" class="px-btn px-btn--primary">{{ 'collections.general.view_all' | t }}</a>
+            </div>
+          {%- endif -%}
         {%- endif -%}
       </div>
     </div>

@@ -122,12 +122,22 @@ templates/   index/product/collection/cart/search/blog… (JSON OS 2.0) + custom
   informativa**, exibe retirada na loja (opcional) e avisa que **valor e prazo
   finais são calculados no checkout**. Textos traduzíveis (pt-BR e en).
 
+### Fase 4 — Coleção, filtros e cards (implementado)
+- **Cards de produto**: CTA "Ver opções" para produtos com variantes (quick add
+  só para variante única disponível); altura de título consistente (2 linhas)
+  para alinhar o grid; sem hover da 2ª imagem nem zoom em telas touch.
+- **Drawer de filtros mobile**: painel deslizante com overlay, botão fechar,
+  fecha com **ESC** e clique no overlay, foco preso no drawer e botão
+  **"Ver resultados"**; filtros e ordenação por AJAX com fallback sem JS.
+- **Contagem de produtos** atualiza junto com os resultados no AJAX; estado de
+  carregando nos resultados.
+- **Empty state comercial**: distingue "nenhum produto com esses filtros"
+  (com botão **Limpar filtros**) de uma coleção realmente vazia.
+
 ## Próximas evoluções sugeridas (roadmap)
 
-Itens das fases 4–8 do briefing ainda não implementados, em ordem de impacto:
+Itens das fases 5–8 do briefing ainda não implementados, em ordem de impacto:
 
-- **Coleção**: breadcrumb, toolbar com contagem/ordenação, filtros mobile em
-  drawer com ESC e empty state comercial.
 - **Busca**: `escapeHTML` nos resultados e navegação por teclado (↑/↓/Enter/Esc).
 - **SEO**: revisar JSON-LD de Organization (logo + `sameAs`) e breadcrumb.
 - **Performance/A11y**: `image_tag` com `widths/sizes/loading` em todas as

@@ -717,6 +717,8 @@
     if (!grid && !sortSelect) return;
 
     const applyUrl = async (url) => {
+      const results = $('.px-collection__results');
+      if (results) results.classList.add('is-loading');
       try {
         const res = await fetch(url, { headers: { 'Accept': 'text/html' } });
         const text = await res.text();
@@ -726,10 +728,16 @@
         const cur = $('.px-collection__results');
         if (freshResults && cur) cur.innerHTML = freshResults.innerHTML;
         if (freshFacets && facetsForm) facetsForm.innerHTML = freshFacets.innerHTML;
+        // Atualiza a contagem de produtos da toolbar.
+        const freshCount = doc.querySelector('[data-collection-count]');
+        const curCount = $('[data-collection-count]');
+        if (freshCount && curCount) curCount.innerHTML = freshCount.innerHTML;
         history.pushState({}, '', url);
-        window.scrollTo({ top: $('.px-collection__toolbar').offsetTop - 100, behavior: 'smooth' });
+        const toolbar = $('.px-collection__toolbar');
+        if (toolbar) window.scrollTo({ top: toolbar.offsetTop - 100, behavior: 'smooth' });
         bindFacetInputs();
       } catch (e) { window.location.href = url; }
+      finally { if (results) results.classList.remove('is-loading'); }
     };
 
     const buildUrl = () => {
@@ -752,14 +760,46 @@
     if (sortSelect) sortSelect.addEventListener('change', () => applyUrl(buildUrl()));
     if (facetsForm) bindFacetInputs();
 
-    // Mobile filter toggle
+    // Mobile filter drawer: overlay + botão fechar + ESC + foco preso.
     const toggle = $('[data-filters-toggle]');
     const facets = $('[data-facets]');
+    const overlay = $('[data-facets-overlay]');
     if (toggle && facets) {
+      let releaseFocus = null;
+      const isMobile = () => window.matchMedia('(max-width: 989px)').matches;
+      const openDrawer = () => {
+        facets.classList.add('is-open');
+        if (overlay) { overlay.hidden = false; requestAnimationFrame(() => overlay.classList.add('is-open')); }
+        toggle.setAttribute('aria-expanded', 'true');
+        facets.setAttribute('aria-modal', 'true');
+        document.body.classList.add('px-no-scroll');
+        releaseFocus = trapFocus(facets);
+        const closeBtn = $('[data-facets-close]', facets);
+        if (closeBtn) closeBtn.focus();
+      };
+      const closeDrawer = () => {
+        facets.classList.remove('is-open');
+        if (overlay) { overlay.classList.remove('is-open'); setTimeout(() => { overlay.hidden = true; }, 300); }
+        toggle.setAttribute('aria-expanded', 'false');
+        facets.setAttribute('aria-modal', 'false');
+        document.body.classList.remove('px-no-scroll');
+        if (releaseFocus) { releaseFocus(); releaseFocus = null; }
+        toggle.focus();
+      };
       toggle.addEventListener('click', () => {
-        const open = facets.classList.toggle('is-open');
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        document.body.classList.toggle('px-no-scroll', open);
+        if (facets.classList.contains('is-open')) closeDrawer(); else openDrawer();
+      });
+      const closeBtn = $('[data-facets-close]', facets);
+      if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+      const applyBtn = $('[data-facets-apply]', facets);
+      if (applyBtn) applyBtn.addEventListener('click', closeDrawer);
+      if (overlay) overlay.addEventListener('click', closeDrawer);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && facets.classList.contains('is-open')) closeDrawer();
+      });
+      // Se a tela voltar para desktop com o drawer aberto, restaura o estado.
+      window.addEventListener('resize', () => {
+        if (!isMobile() && facets.classList.contains('is-open')) closeDrawer();
       });
     }
 
