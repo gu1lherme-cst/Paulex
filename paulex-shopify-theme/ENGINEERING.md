@@ -35,7 +35,7 @@ assets/
   theme.js          # toda a lógica do cliente (custom elements + boot)
   theme.css         # design system + componentes (~55 KB)
   animations.js     # parallax do hero (carregado só se "revelar ao rolar" on)
-  px-logo.jpeg      # logo fallback (ver §10, item de performance)
+  px-logo.jpeg      # logo fallback (256x256, ~8 KB)
 config/
   settings_schema.json  # define a UI do editor de tema
   settings_data.json    # valores atuais + preset "Paulex Advanced"
@@ -189,8 +189,8 @@ coleção, related e reveals.
 | Config não importada no upload por ZIP | Fallback D1 | Resolvido |
 | JSON de variantes malformado | Guarda em `onVariantChange` | Resolvido |
 | `bindDrawer` adiciona 1 listener `keydown` global por instância | Poucas instâncias; cada um checa o próprio `is-open` | **Conhecido/baixo** — refatorar para um gerenciador ESC único se crescer |
-| `theme.css` render-blocking (~55 KB) | `{% style %}` crítico inline; `preconnect` ao CDN | **Conhecido** — minificar reduz ~30–40% |
-| `px-logo.jpeg` ~100 KB para logo pequeno | usado só como fallback; logo oficial via `section.settings.logo` usa `image_url`/`widths` | **Conhecido** — otimizar o asset ou subir logo pelo editor |
+| `theme.css` render-blocking (~55 KB) | `{% style %}` crítico inline; `preconnect` ao CDN; CDN da Shopify serve com gzip/brotli (~10 KB transferidos) | **Decisão:** manter a fonte legível em vez de minificar (manutenibilidade > ganho marginal pós-gzip) |
+| `px-logo.jpeg` superdimensionado | — | **Resolvido** — reduzido de 1024px/98 KB para 256px/~8 KB (sem mudança visual) |
 | Predictive search expõe `price` mínimo | aceitável; consistente com "a partir de" | Baixo |
 
 ---
@@ -226,8 +226,9 @@ no servidor.
 - **JS:** `defer`; custom elements só inicializam o que existe na página;
   `IntersectionObserver` para reveals e sticky bar.
 - **CSS:** bloco crítico inline (`:root`, fontes); `preconnect` ao CDN.
-- **Pendências conhecidas:** minificar `theme.css`; otimizar `px-logo.jpeg`
-  (§8).
+- **Decisões:** `px-logo.jpeg` otimizado (256px/~8 KB). `theme.css` mantido
+  legível de propósito — o CDN da Shopify entrega com gzip/brotli, então
+  minificar a fonte traria ganho marginal ao custo da manutenibilidade.
 
 ---
 
@@ -295,9 +296,10 @@ Ou com a CLI: `shopify theme dev` (preview) / `shopify theme push` /
 
 ## 13. Roadmap
 
-- Minificar `theme.css` e otimizar `px-logo.jpeg`.
 - Gerenciador único de ESC para drawers (remover listeners por instância).
 - Galeria de produto com vídeo + recomendações por IA da Shopify.
 - App de avaliações populando os metafields `reviews.rating` já suportados.
 - Páginas institucionais (Sobre, Atacado, Política de trocas) e blog.
-- CI rodando `tools/validate.py` + `shopify theme check` a cada push.
+- CI já roda `tools/validate.py` (e lint/typecheck/build do app) via
+  `.github/workflows/ci.yml`; adicionar `shopify theme check` quando houver
+  credenciais de loja.
