@@ -91,8 +91,17 @@
         "submit": "Calculate",
         "error": "Invalid ZIP code.",
         "loading": "Calculating…",
-        "free": "Free shipping"
-      }
+        "free": "Free shipping",
+        "fail": "Couldn't calculate. Please check the ZIP code.",
+        "disclaimer": "Informational estimate. Final cost and time are calculated at checkout.",
+        "estimate_note": "Informational estimate — we ship across Brazil.",
+        "checkout_note": "Final cost and delivery time are calculated at checkout.",
+        "economic": "Standard shipping",
+        "economic_eta": "5–9 business days",
+        "express": "Express shipping",
+        "express_eta": "2–4 business days"
+      },
+      "barcode": "Barcode"
     },
     "facets": {
       "filter": "Filter",

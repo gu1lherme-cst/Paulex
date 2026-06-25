@@ -91,8 +91,17 @@
         "submit": "Calcular",
         "error": "CEP inválido. Confira e tente novamente.",
         "loading": "Calculando frete…",
-        "free": "Frete grátis"
-      }
+        "free": "Frete grátis",
+        "fail": "Não foi possível calcular. Verifique o CEP.",
+        "disclaimer": "Estimativa informativa. O valor e o prazo finais são calculados no checkout.",
+        "estimate_note": "Estimativa informativa — entregamos para todo o Brasil.",
+        "checkout_note": "Valor e prazo finais são calculados no checkout.",
+        "economic": "Frete econômico",
+        "economic_eta": "5–9 dias úteis",
+        "express": "Frete expresso",
+        "express_eta": "2–4 dias úteis"
+      },
+      "barcode": "Cód. de barras"
     },
     "facets": {
       "filter": "Filtrar",

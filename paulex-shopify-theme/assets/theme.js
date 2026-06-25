@@ -390,11 +390,43 @@
       this.form = $('form[action*="/cart/add"]', this) || $('.px-product__add-form', this);
       this.variantInput = $('[data-variant-id]', this);
       this.variants = this.parseVariants();
-      this.priceBlock = $('[data-price-block]', this.closest('.px-product') || document);
+      this.productRoot = this.closest('.px-product') || document;
+      this.priceBlock = $('[data-price-block]', this.productRoot);
+      this.skuEl = $('[data-product-sku]', this.productRoot);
 
       if (this.form) this.form.addEventListener('submit', (e) => this.onSubmit(e));
       $$('[data-variant-option]', this).forEach((input) => input.addEventListener('change', () => this.onVariantChange()));
       this.initQty();
+      // Estado inicial das pills (esgotado/indisponível) no carregamento.
+      this.updatePillStates();
+    }
+
+    /* Para cada valor de cada opção, marca como esgotado quando não existe
+       variante disponível compatível com as opções já escolhidas à esquerda. */
+    updatePillStates() {
+      if (!this.variants.length) return;
+      const groups = $$('[data-option-index]', this);
+      const selected = groups.map((g) => {
+        const c = $('[data-variant-option]:checked', g);
+        return c ? c.value : null;
+      });
+      groups.forEach((group, i) => {
+        $$('.px-variant__pill', group).forEach((pill) => {
+          const input = $('[data-variant-option]', pill);
+          if (!input) return;
+          const value = input.value;
+          const exists = this.variants.some((v) =>
+            v.options[i] === value &&
+            selected.slice(0, i).every((opt, j) => opt == null || v.options[j] === opt)
+          );
+          const available = this.variants.some((v) =>
+            v.options[i] === value && v.available &&
+            selected.slice(0, i).every((opt, j) => opt == null || v.options[j] === opt)
+          );
+          pill.classList.toggle('is-soldout', exists && !available);
+          pill.classList.toggle('is-unavailable', !exists);
+        });
+      });
     }
 
     parseVariants() {
@@ -420,6 +452,8 @@
         return checked ? checked.value : null;
       });
 
+      this.updatePillStates();
+
       const match = this.variants.find((v) => selected.every((opt, i) => v.options[i] === opt));
       const btn = $('[data-add-to-cart]', this);
       const btnText = $('[data-add-text]', this);
@@ -441,13 +475,34 @@
             gallery.activate(String(match.featured_media.id));
           }
         }
+        this.updateSku(match);
         if (btn) {
           btn.disabled = !match.available;
           if (btnText) btnText.textContent = match.available ? (Strings.addToCart || 'Adicionar ao carrinho') : (Strings.soldOut || 'Esgotado');
         }
-      } else if (btn) {
-        btn.disabled = true;
+        // Avisa stock-status e barra fixa sobre a variante atual.
+        this.dispatchEvent(new CustomEvent('variant:change', {
+          bubbles: true,
+          detail: { variant: match, available: match.available }
+        }));
+      } else {
+        // Combinação inexistente: botão desabilitado e texto "Indisponível".
+        if (btn) {
+          btn.disabled = true;
+          if (btnText) btnText.textContent = Strings.unavailable || 'Indisponível';
+        }
+        this.dispatchEvent(new CustomEvent('variant:change', {
+          bubbles: true,
+          detail: { variant: null, available: false }
+        }));
       }
+    }
+
+    updateSku(variant) {
+      if (!this.skuEl) return;
+      this.skuEl.textContent = variant.sku || '';
+      const wrap = this.skuEl.closest('.px-product__sku');
+      if (wrap) wrap.classList.toggle('is-empty', !variant.sku);
     }
 
     renderPrice(variant) {
@@ -479,6 +534,88 @@
     }
   }
   customElements.define('product-form', ProductForm);
+
+  /* ---------- Stock status (atualiza ao trocar de variante) ------------- */
+  class ProductStock extends HTMLElement {
+    connectedCallback() {
+      this.threshold = parseInt(this.dataset.threshold, 10) || 0;
+      this.label = $('[data-stock-label]', this);
+      try { this.data = JSON.parse($('[data-stock-json]', this).textContent); }
+      catch (e) { this.data = {}; }
+      this.render(this.dataset.current);
+      const root = this.closest('.px-product') || document;
+      root.addEventListener('variant:change', (e) => {
+        if (e.detail && e.detail.variant) this.render(String(e.detail.variant.id));
+        else this.setState('out', Strings.unavailable || 'Indisponível');
+      });
+    }
+    setState(state, text) {
+      this.classList.remove('px-stock--in', 'px-stock--low', 'px-stock--out');
+      this.classList.add('px-stock--' + state);
+      if (this.label) this.label.textContent = text;
+    }
+    render(id) {
+      const info = this.data[id];
+      if (!info || !info.available) {
+        this.setState('out', Strings.outOfStock || 'Sem estoque');
+        return;
+      }
+      const tracked = info.managed === 'shopify' && info.policy !== 'continue';
+      if (tracked && this.threshold > 0 && info.qty > 0 && info.qty <= this.threshold) {
+        this.setState('low', Strings.lowStock || 'Últimas unidades');
+        return;
+      }
+      this.setState('in', Strings.inStock || 'Em estoque');
+    }
+  }
+  customElements.define('product-stock', ProductStock);
+
+  /* ---------- Sticky add-to-cart (mobile + desktop) --------------------- */
+  class StickyAddToCart extends HTMLElement {
+    connectedCallback() {
+      this.priceEl = $('[data-sticky-price]', this);
+      this.btn = $('[data-sticky-add]', this);
+      this.btnText = $('[data-sticky-add-text]', this);
+      const root = this.closest('.px-product') || document;
+      this.mainBtn = $('[data-add-to-cart]', root);
+
+      // Botão da barra dispara o botão principal (mantém a variante selecionada).
+      if (this.btn && this.mainBtn) {
+        this.btn.addEventListener('click', () => { if (!this.mainBtn.disabled) this.mainBtn.click(); });
+      }
+      // Mostra a barra só quando o botão principal sai por cima da viewport.
+      if (this.mainBtn && 'IntersectionObserver' in window) {
+        this.observer = new IntersectionObserver((entries) => {
+          const e = entries[0];
+          this.toggle(!e.isIntersecting && e.boundingClientRect.top < 0);
+        }, { threshold: 0 });
+        this.observer.observe(this.mainBtn);
+      }
+      root.addEventListener('variant:change', (e) => this.onVariant(e.detail));
+    }
+    toggle(show) {
+      this.classList.toggle('is-visible', show);
+      this.setAttribute('aria-hidden', show ? 'false' : 'true');
+      if (show) { this.removeAttribute('inert'); } else { this.setAttribute('inert', ''); }
+      document.body.classList.toggle('px-has-sticky-atc', show);
+    }
+    onVariant(detail) {
+      if (!detail) return;
+      if (detail.variant) {
+        if (this.priceEl) this.priceEl.textContent = formatMoney(detail.variant.price);
+        if (this.btn) this.btn.disabled = !detail.available;
+        if (this.btnText) this.btnText.textContent = detail.available ? (Strings.addToCart || 'Adicionar ao carrinho') : (Strings.soldOut || 'Esgotado');
+      } else {
+        if (this.btn) this.btn.disabled = true;
+        if (this.btnText) this.btnText.textContent = Strings.unavailable || 'Indisponível';
+      }
+    }
+    disconnectedCallback() {
+      if (this.observer) this.observer.disconnect();
+      document.body.classList.remove('px-has-sticky-atc');
+    }
+  }
+  customElements.define('sticky-add-to-cart', StickyAddToCart);
 
   /* ---------- Product gallery ------------------------------------------- */
   class ProductGallery extends HTMLElement {
@@ -536,23 +673,37 @@
         this.input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); this.calculate(); } });
       }
     }
+    str(key, fallback) {
+      return this.dataset[key] || fallback;
+    }
     async calculate() {
+      const d = this.dataset;
       const cep = (this.input.value || '').replace(/\D/g, '');
-      if (cep.length !== 8) { this.result.innerHTML = '<p style="color:var(--color-sale)">CEP inválido.</p>'; return; }
-      this.result.textContent = 'Calculando frete…';
+      if (cep.length !== 8) {
+        this.result.innerHTML = '<p class="px-shipping__error">' + this.str('strInvalid', 'CEP inválido.') + '</p>';
+        return;
+      }
+      this.result.innerHTML = '<p>' + this.str('strLoading', 'Calculando…') + '</p>';
       try {
-        // Validate the address via ViaCEP, then present estimated options.
+        // ViaCEP só valida o endereço (cidade/UF). NÃO é o frete real:
+        // os prazos são estimativas; valor e prazo finais saem no checkout.
         const res = await fetch('https://viacep.com.br/ws/' + cep + '/json/');
         const data = await res.json();
         if (data.erro) throw new Error('CEP não encontrado');
         const local = [data.localidade, data.uf].filter(Boolean).join(' - ');
-        this.result.innerHTML =
-          '<p style="margin:.4rem 0;font-weight:600">' + local + '</p>' +
-          '<div class="px-shipping__option"><span>Frete econômico</span><span>5–9 dias úteis</span></div>' +
-          '<div class="px-shipping__option"><span>Frete expresso</span><span>2–4 dias úteis</span></div>' +
-          '<p style="margin:.8rem 0 0;font-size:1.3rem;color:rgba(var(--color-text-rgb),.55)">Valores exatos calculados no checkout.</p>';
+        const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        let html =
+          '<p class="px-shipping__local">' + esc(local) + '</p>' +
+          '<p class="px-shipping__estimate">' + this.str('strEstimate', 'Estimativa informativa — entregamos para todo o Brasil.') + '</p>' +
+          '<div class="px-shipping__option"><span>' + this.str('strEconomic', 'Econômico') + '</span><span>' + this.str('strEconomicEta', '5–9 dias úteis') + '</span></div>' +
+          '<div class="px-shipping__option"><span>' + this.str('strExpress', 'Expresso') + '</span><span>' + this.str('strExpressEta', '2–4 dias úteis') + '</span></div>';
+        if (d.pickup) {
+          html += '<div class="px-shipping__option px-shipping__option--pickup"><span>' + esc(d.pickup) + '</span><span>R$ 0,00</span></div>';
+        }
+        html += '<p class="px-shipping__checkout">' + this.str('strCheckout', 'Valor e prazo finais são calculados no checkout.') + '</p>';
+        this.result.innerHTML = html;
       } catch (e) {
-        this.result.innerHTML = '<p style="color:var(--color-sale)">Não foi possível calcular. Verifique o CEP.</p>';
+        this.result.innerHTML = '<p class="px-shipping__error">' + this.str('strFail', 'Não foi possível calcular. Verifique o CEP.') + '</p>';
       }
     }
   }

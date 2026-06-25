@@ -101,16 +101,37 @@ templates/   index/product/collection/cart/search/blog… (JSON OS 2.0) + custom
 
 ---
 
+### Fase 2 — Produto premium e conversão (implementado)
+- **Novos blocos configuráveis** na página de produto (liga/desliga no editor):
+  - **Status de estoque** — "Em estoque / Últimas unidades / Sem estoque", com
+    limite de baixo estoque configurável; atualiza ao trocar de variante.
+  - **SKU / código de barras** — atualiza o SKU dinamicamente por variante.
+  - **Selos de confiança** — compra segura, retirada na loja, atendimento
+    WhatsApp, troca facilitada, parcelamento (cada um com texto editável).
+  - **Mensagem de entrega** — texto livre com ícone.
+  - **Botão "Tirar dúvida no WhatsApp"** — abre conversa já com nome e link do
+    produto; some quando não há WhatsApp configurado.
+  - **Barra fixa de compra (sticky add-to-cart)** — aparece ao rolar para além
+    do botão principal; mostra miniatura, título, preço e botão; respeita a
+    variante selecionada; mobile e desktop.
+- **Variantes premium**: pills com estado selecionado, **esgotado** (riscado) e
+  **indisponível** (combinação inexistente); botão desabilitado e texto
+  "Indisponível"/"Esgotado"; atualiza preço, parcelamento, SKU, imagem da
+  galeria e a URL (`?variant=`) sem recarregar.
+- **CEP honesto**: mostra cidade/UF, deixa claro que é **estimativa
+  informativa**, exibe retirada na loja (opcional) e avisa que **valor e prazo
+  finais são calculados no checkout**. Textos traduzíveis (pt-BR e en).
+
 ## Próximas evoluções sugeridas (roadmap)
 
-Itens das fases 2–8 do briefing ainda não implementados, em ordem de impacto:
+Itens das fases 4–8 do briefing ainda não implementados, em ordem de impacto:
 
-- **Produto premium**: blocos configuráveis (trust badges, status de estoque,
-  SKU/código de barras, mensagem de entrega, CTA de WhatsApp do produto,
-  sticky add-to-cart), pills de variante com estados indisponível/esgotado.
-- **CEP honesto**: deixar claro que é estimativa e que valor/prazo finais são
-  no checkout; mostrar retirada na loja quando aplicável.
+- **Coleção**: breadcrumb, toolbar com contagem/ordenação, filtros mobile em
+  drawer com ESC e empty state comercial.
 - **Busca**: `escapeHTML` nos resultados e navegação por teclado (↑/↓/Enter/Esc).
+- **SEO**: revisar JSON-LD de Organization (logo + `sameAs`) e breadcrumb.
+- **Performance/A11y**: `image_tag` com `widths/sizes/loading` em todas as
+  imagens, foco preso em modais/drawers e retorno de foco ao fechar.
 - **Coleção**: breadcrumb, toolbar com contagem/ordenação, filtros mobile em
   drawer com ESC e empty state comercial.
 - **SEO**: revisar JSON-LD de Organization (logo + `sameAs`) e breadcrumb.

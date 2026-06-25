@@ -102,12 +102,27 @@
             </product-form>
 
           {%- when 'shipping' -%}
-            <shipping-calculator class="px-shipping" data-shipping {{ block.shopify_attributes }}>
+            <shipping-calculator
+              class="px-shipping"
+              data-shipping
+              data-str-invalid="{{ 'products.product.shipping.error' | t }}"
+              data-str-loading="{{ 'products.product.shipping.loading' | t }}"
+              data-str-fail="{{ 'products.product.shipping.fail' | t }}"
+              data-str-estimate="{{ 'products.product.shipping.estimate_note' | t }}"
+              data-str-checkout="{{ 'products.product.shipping.checkout_note' | t }}"
+              data-str-economic="{{ 'products.product.shipping.economic' | t }}"
+              data-str-economic-eta="{{ 'products.product.shipping.economic_eta' | t }}"
+              data-str-express="{{ 'products.product.shipping.express' | t }}"
+              data-str-express-eta="{{ 'products.product.shipping.express_eta' | t }}"
+              {% if block.settings.show_pickup and block.settings.pickup_text != blank %}data-pickup="{{ block.settings.pickup_text | escape }}"{% endif %}
+              {{ block.shopify_attributes }}
+            >
               <h3 class="px-shipping__title">{% render 'icon', name: 'truck' %} {{ 'products.product.shipping.title' | t }}</h3>
               <div class="px-shipping__row">
                 <input type="text" inputmode="numeric" maxlength="9" placeholder="{{ 'products.product.shipping.placeholder' | t }}" data-cep-input aria-label="{{ 'products.product.shipping.placeholder' | t }}">
                 <button type="button" class="px-btn px-btn--ghost" data-cep-submit>{{ 'products.product.shipping.submit' | t }}</button>
               </div>
+              <p class="px-shipping__disclaimer">{{ 'products.product.shipping.disclaimer' | t }}</p>
               <div class="px-shipping__result" data-cep-result aria-live="polite"></div>
             </shipping-calculator>
 
@@ -123,6 +138,117 @@
               <a href="https://wa.me/?text={{ shop.url | append: product.url | url_encode }}" target="_blank" rel="noopener" aria-label="WhatsApp">{% render 'icon', name: 'whatsapp' %}</a>
               <a href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url | append: product.url | url_encode }}" target="_blank" rel="noopener" aria-label="Facebook">{% render 'icon', name: 'facebook' %}</a>
             </div>
+
+          {%- when 'stock_status' -%}
+            {%- liquid
+              assign cur = product.selected_or_first_available_variant
+              assign threshold = block.settings.low_stock_threshold
+            -%}
+            {%- comment -%} Mapa de estoque por variante para o JS atualizar ao trocar de variante. {%- endcomment -%}
+            <product-stock
+              class="px-stock"
+              data-stock
+              data-threshold="{{ threshold }}"
+              data-current="{{ cur.id }}"
+              {{ block.shopify_attributes }}
+            >
+              <script type="application/json" data-stock-json>
+                {
+                  {%- for v in product.variants -%}
+                    "{{ v.id }}": {
+                      "available": {{ v.available | json }},
+                      "managed": {{ v.inventory_management | json }},
+                      "policy": {{ v.inventory_policy | json }},
+                      "qty": {{ v.inventory_quantity | default: 0 | json }}
+                    }{%- unless forloop.last -%},{%- endunless -%}
+                  {%- endfor -%}
+                }
+              </script>
+              <span class="px-stock__dot" aria-hidden="true"></span>
+              <span class="px-stock__label" data-stock-label></span>
+            </product-stock>
+
+          {%- when 'sku' -%}
+            {%- assign cur = product.selected_or_first_available_variant -%}
+            <div class="px-product__codes" {{ block.shopify_attributes }}>
+              <span class="px-product__sku{% if cur.sku == blank %} is-empty{% endif %}">
+                {{ 'products.product.sku' | t }}: <span data-product-sku>{{ cur.sku }}</span>
+              </span>
+              {%- if block.settings.show_barcode and cur.barcode != blank -%}
+                <span class="px-product__barcode">
+                  {{ 'products.product.barcode' | t }}: <span data-product-barcode>{{ cur.barcode }}</span>
+                </span>
+              {%- endif -%}
+            </div>
+
+          {%- when 'trust_badges' -%}
+            <ul class="px-trust" {{ block.shopify_attributes }}>
+              {%- if block.settings.show_secure -%}
+                <li class="px-trust__item">{% render 'icon', name: 'shield' %}<span>{{ block.settings.text_secure }}</span></li>
+              {%- endif -%}
+              {%- if block.settings.show_pickup -%}
+                <li class="px-trust__item">{% render 'icon', name: 'store' %}<span>{{ block.settings.text_pickup }}</span></li>
+              {%- endif -%}
+              {%- if block.settings.show_whatsapp -%}
+                <li class="px-trust__item">{% render 'icon', name: 'headset' %}<span>{{ block.settings.text_whatsapp }}</span></li>
+              {%- endif -%}
+              {%- if block.settings.show_exchange -%}
+                <li class="px-trust__item">{% render 'icon', name: 'refresh' %}<span>{{ block.settings.text_exchange }}</span></li>
+              {%- endif -%}
+              {%- if block.settings.show_installments -%}
+                <li class="px-trust__item">{% render 'icon', name: 'card' %}<span>{{ block.settings.text_installments }}</span></li>
+              {%- endif -%}
+            </ul>
+
+          {%- when 'delivery_message' -%}
+            {%- if block.settings.text != blank -%}
+              <div class="px-delivery" {{ block.shopify_attributes }}>
+                {% render 'icon', name: 'truck' %}
+                <span>{{ block.settings.text }}</span>
+              </div>
+            {%- endif -%}
+
+          {%- when 'whatsapp_cta' -%}
+            {%- assign wa_cta = settings.social_whatsapp | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')' | remove: '.' -%}
+            {%- if wa_cta != blank -%}
+              {%- assign wa_intro = block.settings.message | default: 'Olá! Tenho interesse neste produto:' -%}
+              {%- capture wa_text -%}{{ wa_intro }} {{ product.title }} — {{ shop.url }}{{ product.url }}{%- endcapture -%}
+              <a
+                class="px-btn px-btn--whatsapp px-btn--block"
+                href="https://wa.me/{{ wa_cta }}?text={{ wa_text | url_encode }}"
+                target="_blank"
+                rel="noopener"
+                {{ block.shopify_attributes }}
+              >
+                {% render 'icon', name: 'whatsapp' %} {{ block.settings.label | default: 'Tirar dúvida no WhatsApp' }}
+              </a>
+            {%- elsif request.design_mode -%}
+              <p class="px-product__editor-hint" {{ block.shopify_attributes }}>Configure o WhatsApp em Configurações do tema → Redes sociais para exibir este botão.</p>
+            {%- endif -%}
+
+          {%- when 'sticky_add_to_cart' -%}
+            {%- assign sticky_variant = product.selected_or_first_available_variant -%}
+            <sticky-add-to-cart class="px-sticky-atc" data-sticky-atc aria-hidden="true" inert {{ block.shopify_attributes }}>
+              <div class="px-sticky-atc__inner page-width">
+                {%- if product.featured_media -%}
+                  {{ product.featured_media | image_url: width: 120 | image_tag: loading: 'lazy', widths: '60,120', sizes: '60px', class: 'px-sticky-atc__img', alt: product.title }}
+                {%- endif -%}
+                <div class="px-sticky-atc__info">
+                  <span class="px-sticky-atc__title">{{ product.title }}</span>
+                  <span class="px-sticky-atc__price" data-sticky-price>{{ sticky_variant.price | money }}</span>
+                </div>
+                <button
+                  type="button"
+                  class="px-btn px-btn--primary px-sticky-atc__btn"
+                  data-sticky-add
+                  {% unless sticky_variant.available %}disabled{% endunless %}
+                >
+                  <span data-sticky-add-text>
+                    {%- if sticky_variant.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
+                  </span>
+                </button>
+              </div>
+            </sticky-add-to-cart>
         {%- endcase -%}
       {%- endfor -%}
     </div>
@@ -157,8 +283,71 @@
     { "type": "rating", "name": "Avaliações", "limit": 1 },
     { "type": "price", "name": "Preço", "limit": 1 },
     { "type": "form", "name": "Comprar", "limit": 1 },
-    { "type": "shipping", "name": "Calcular frete (CEP)", "limit": 1 },
+    {
+      "type": "shipping",
+      "name": "Calcular frete (CEP)",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_pickup", "label": "Mostrar opção de retirada na loja", "default": true },
+        { "type": "text", "id": "pickup_text", "label": "Texto da retirada", "default": "Retirada grátis na loja" }
+      ]
+    },
     { "type": "description", "name": "Descrição", "limit": 1 },
+    {
+      "type": "stock_status",
+      "name": "Status de estoque",
+      "limit": 1,
+      "settings": [
+        { "type": "range", "id": "low_stock_threshold", "min": 0, "max": 50, "step": 1, "label": "Mostrar “últimas unidades” quando o estoque for igual ou menor que", "default": 6 }
+      ]
+    },
+    {
+      "type": "sku",
+      "name": "SKU / Código de barras",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_barcode", "label": "Exibir código de barras", "default": false }
+      ]
+    },
+    {
+      "type": "trust_badges",
+      "name": "Selos de confiança",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_secure", "label": "Compra segura", "default": true },
+        { "type": "text", "id": "text_secure", "label": "Texto — compra segura", "default": "Compra 100% segura" },
+        { "type": "checkbox", "id": "show_pickup", "label": "Retirada na loja", "default": true },
+        { "type": "text", "id": "text_pickup", "label": "Texto — retirada", "default": "Retire na loja" },
+        { "type": "checkbox", "id": "show_whatsapp", "label": "Atendimento via WhatsApp", "default": true },
+        { "type": "text", "id": "text_whatsapp", "label": "Texto — atendimento", "default": "Atendimento humano via WhatsApp" },
+        { "type": "checkbox", "id": "show_exchange", "label": "Troca facilitada", "default": true },
+        { "type": "text", "id": "text_exchange", "label": "Texto — troca", "default": "Troca facilitada" },
+        { "type": "checkbox", "id": "show_installments", "label": "Parcelamento", "default": true },
+        { "type": "text", "id": "text_installments", "label": "Texto — parcelamento", "default": "Parcele em até 12x" }
+      ]
+    },
+    {
+      "type": "delivery_message",
+      "name": "Mensagem de entrega",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "text", "label": "Mensagem", "default": "Enviamos para todo o Brasil. Retirada disponível na loja." }
+      ]
+    },
+    {
+      "type": "whatsapp_cta",
+      "name": "Botão de dúvida (WhatsApp)",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Texto do botão", "default": "Tirar dúvida no WhatsApp" },
+        { "type": "text", "id": "message", "label": "Mensagem inicial", "default": "Olá! Tenho interesse neste produto:" }
+      ]
+    },
+    {
+      "type": "sticky_add_to_cart",
+      "name": "Barra fixa de compra",
+      "limit": 1
+    },
     {
       "type": "collapsible",
       "name": "Aba expansível",
@@ -177,11 +366,17 @@
         { "type": "title" },
         { "type": "rating" },
         { "type": "price" },
+        { "type": "stock_status" },
         { "type": "form" },
+        { "type": "trust_badges" },
+        { "type": "delivery_message" },
+        { "type": "whatsapp_cta" },
         { "type": "shipping" },
+        { "type": "sku" },
         { "type": "description" },
         { "type": "collapsible" },
-        { "type": "share" }
+        { "type": "share" },
+        { "type": "sticky_add_to_cart" }
       ]
     }
   ]
