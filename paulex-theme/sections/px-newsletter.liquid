@@ -1,0 +1,48 @@
+{%- comment -%}
+  Newsletter signup powered by Shopify customer form (newsletter tag).
+{%- endcomment -%}
+<section class="px-section px-newsletter-section" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    <div class="px-newsletter color-gradient" data-reveal>
+      <div class="px-newsletter__copy">
+        {%- if section.settings.title != blank -%}<h2 class="px-newsletter__title">{{ section.settings.title }}</h2>{%- endif -%}
+        {%- if section.settings.text != blank -%}<p class="px-newsletter__text">{{ section.settings.text }}</p>{%- endif -%}
+      </div>
+      <div class="px-newsletter__form-wrap">
+        {%- form 'customer', class: 'px-newsletter__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <label class="visually-hidden" for="NewsletterEmail">{{ 'general.newsletter.label' | t }}</label>
+          <div class="px-newsletter__row">
+            <input
+              type="email"
+              id="NewsletterEmail"
+              name="contact[email]"
+              placeholder="{{ 'general.newsletter.placeholder' | t }}"
+              required
+              autocomplete="email"
+            >
+            <button type="submit" class="px-btn px-btn--light">{{ 'general.newsletter.submit' | t }}</button>
+          </div>
+          {%- if form.posted_successfully? -%}
+            <p class="px-newsletter__success">{{ 'general.newsletter.success' | t }}</p>
+          {%- elsif form.errors -%}
+            <p class="px-newsletter__error">{{ 'general.newsletter.error' | t }}</p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.newsletter.name",
+  "tag": "section",
+  "class": "px-section-wrapper",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Receba ofertas exclusivas" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Cadastre-se e ganhe novidades e descontos em primeira mão." }
+  ],
+  "presets": [ { "name": "t:sections.newsletter.name" } ]
+}
+{% endschema %}

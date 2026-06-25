@@ -1,0 +1,59 @@
+{%- comment -%}
+  Brand logos strip.
+{%- endcomment -%}
+<section class="px-section px-brands-section" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    {%- if section.settings.title != blank -%}
+      <div class="px-section__head px-section__head--center" data-reveal>
+        <h2 class="px-section__title px-section__title--sm">{{ section.settings.title }}</h2>
+      </div>
+    {%- endif -%}
+    <div class="px-brands">
+      {%- for block in section.blocks -%}
+        <div class="px-brand" data-reveal {{ block.shopify_attributes }}>
+          {%- if block.settings.logo != blank -%}
+            {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{%- endif -%}
+            {{ block.settings.logo | image_url: width: 220 | image_tag: loading: 'lazy', class: 'px-brand__logo', alt: block.settings.name | default: 'Marca' }}
+            {%- if block.settings.link != blank -%}</a>{%- endif -%}
+          {%- else -%}
+            <span class="px-brand__name">{{ block.settings.name | default: 'Marca' }}</span>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.brands.name",
+  "tag": "section",
+  "class": "px-section-wrapper",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Marcas que confiam na Paulex" }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Marca",
+      "settings": [
+        { "type": "image_picker", "id": "logo", "label": "Logo" },
+        { "type": "text", "id": "name", "label": "Nome" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.brands.name",
+      "blocks": [
+        { "type": "brand", "settings": { "name": "BIC" } },
+        { "type": "brand", "settings": { "name": "Faber-Castell" } },
+        { "type": "brand", "settings": { "name": "Tilibra" } },
+        { "type": "brand", "settings": { "name": "Multilaser" } },
+        { "type": "brand", "settings": { "name": "Tramontina" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,71 @@
+{%- comment -%}
+  Cart contents, shared between the drawer and the cart page.
+  Accepts: context {String} 'drawer' | 'page'
+  This markup is re-rendered server-side and swapped in by theme.js after AJAX updates.
+{%- endcomment -%}
+{%- liquid
+  assign threshold_amount = 19900
+  assign threshold = shop.metafields.custom.free_shipping_threshold | default: threshold_amount
+-%}
+<div class="px-cart{% if cart.item_count == 0 %} px-cart--empty{% endif %}" data-cart-root>
+  {%- if cart.item_count > 0 -%}
+    {%- comment -%} Free shipping progress {%- endcomment -%}
+    {%- assign remaining = threshold | minus: cart.total_price -%}
+    <div class="px-cart__shipping-bar" data-free-shipping data-threshold="{{ threshold }}">
+      {%- if remaining > 0 -%}
+        <p class="px-cart__shipping-text">{{ 'cart.free_shipping_progress' | t: amount: remaining | money }}</p>
+      {%- else -%}
+        <p class="px-cart__shipping-text px-cart__shipping-text--reached">{{ 'cart.free_shipping_reached' | t }}</p>
+      {%- endif -%}
+      <div class="px-progress">
+        {%- assign pct = cart.total_price | times: 100 | divided_by: threshold -%}
+        <div class="px-progress__fill" style="width: {% if pct > 100 %}100{% else %}{{ pct }}{% endif %}%"></div>
+      </div>
+    </div>
+
+    <ul class="px-cart__items" data-cart-items>
+      {%- for item in cart.items -%}
+        {% render 'cart-item', item: item %}
+      {%- endfor -%}
+    </ul>
+
+    <div class="px-cart__footer">
+      {%- if settings.cart_enable_note -%}
+        <details class="px-cart__note">
+          <summary>{{ 'cart.note' | t }}</summary>
+          <textarea name="note" form="cart-form" placeholder="{{ 'cart.note_placeholder' | t }}" data-cart-note>{{ cart.note }}</textarea>
+        </details>
+      {%- endif -%}
+
+      {%- if settings.cart_enable_coupon -%}
+        <div class="px-cart__coupon">
+          <label class="visually-hidden" for="CartCoupon">{{ 'cart.coupon' | t }}</label>
+          <div class="px-cart__coupon-row">
+            <input type="text" id="CartCoupon" placeholder="{{ 'cart.coupon_placeholder' | t }}" data-coupon-input>
+            <button type="button" class="px-btn px-btn--ghost" data-coupon-apply>{{ 'cart.coupon_apply' | t }}</button>
+          </div>
+          <small class="px-cart__coupon-note">{{ 'cart.coupon_note' | t }}</small>
+        </div>
+      {%- endif -%}
+
+      <div class="px-cart__subtotal">
+        <span>{{ 'cart.subtotal' | t }}</span>
+        <span data-cart-subtotal>{{ cart.total_price | money }}</span>
+      </div>
+      <p class="px-cart__taxes">{{ 'cart.taxes_and_shipping' | t }}</p>
+
+      <form action="{{ routes.cart_url }}" method="post" id="cart-form">
+        <button type="submit" name="checkout" class="px-btn px-btn--primary px-btn--block px-cart__checkout">
+          {{ 'cart.checkout' | t }}
+        </button>
+      </form>
+      <a href="{{ routes.all_products_collection_url }}" class="px-cart__continue" data-drawer-close>{{ 'cart.continue_shopping' | t }}</a>
+    </div>
+  {%- else -%}
+    <div class="px-cart__empty">
+      {% render 'icon', name: 'cart', class: 'px-cart__empty-icon' %}
+      <p>{{ 'cart.empty' | t }}</p>
+      <a href="{{ routes.all_products_collection_url }}" class="px-btn px-btn--primary" data-drawer-close>{{ 'cart.continue_shopping' | t }}</a>
+    </div>
+  {%- endif -%}
+</div>

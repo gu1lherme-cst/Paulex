@@ -1,0 +1,87 @@
+{%- comment -%}
+  Product media gallery with thumbnails, zoom and video support.
+  Accepts: product (required)
+{%- endcomment -%}
+<product-gallery class="px-gallery" data-product-gallery>
+  <div class="px-gallery__stage">
+    <div class="px-gallery__viewport" data-gallery-viewport>
+      {%- for media in product.media -%}
+        <div
+          class="px-gallery__slide{% if forloop.first %} is-active{% endif %}"
+          data-gallery-slide
+          data-media-id="{{ media.id }}"
+          id="GalleryMedia-{{ media.id }}"
+        >
+          {%- case media.media_type -%}
+            {%- when 'image' -%}
+              {%- liquid
+                assign img_loading = 'lazy'
+                if forloop.first
+                  assign img_loading = 'eager'
+                endif
+                assign zoom_src = media | image_url: width: 2048
+              -%}
+              <button type="button" class="px-gallery__zoom-btn" data-zoom-trigger aria-label="{{ 'products.product.zoom' | t }}">
+                {% render 'icon', name: 'zoom' %}
+              </button>
+              {{
+                media
+                | image_url: width: 1400
+                | image_tag:
+                  loading: img_loading,
+                  widths: '400,600,800,1000,1200,1400',
+                  sizes: '(min-width: 990px) 50vw, 100vw',
+                  class: 'px-gallery__image',
+                  alt: media.alt | default: product.title,
+                  data-zoom-src: zoom_src
+              }}
+            {%- when 'video', 'external_video' -%}
+              <div class="px-gallery__video">
+                {%- if media.media_type == 'video' -%}
+                  {{ media | media_tag: image_size: '1400x', controls: true, preload: 'metadata' }}
+                {%- else -%}
+                  {{ media | external_video_tag }}
+                {%- endif -%}
+              </div>
+            {%- when 'model' -%}
+              <div class="px-gallery__model">{{ media | media_tag }}</div>
+            {%- else -%}
+              {{ media | media_tag }}
+          {%- endcase -%}
+        </div>
+      {%- else -%}
+        <div class="px-gallery__slide is-active">
+          {{ 'product-1' | placeholder_svg_tag: 'px-gallery__image px-gallery__placeholder' }}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- if product.media.size > 1 -%}
+    <div class="px-gallery__thumbs" role="tablist" aria-label="{{ 'products.product.media_gallery' | t }}">
+      {%- for media in product.media -%}
+        <button
+          type="button"
+          class="px-gallery__thumb{% if forloop.first %} is-active{% endif %}"
+          role="tab"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          data-gallery-thumb
+          data-target="{{ media.id }}"
+        >
+          {{ media.preview_image | image_url: width: 160 | image_tag: loading: 'lazy', widths: '80,120,160', alt: media.alt | default: product.title }}
+          {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+            <span class="px-gallery__thumb-badge">{% render 'icon', name: 'play' %}</span>
+          {%- endif -%}
+        </button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Lightbox zoom layer {%- endcomment -%}
+  <div class="px-gallery__lightbox" data-zoom-lightbox aria-hidden="true">
+    <button type="button" class="px-gallery__lightbox-close" data-zoom-close aria-label="{{ 'general.accessibility.close' | t }}">
+      {% render 'icon', name: 'close' %}
+    </button>
+    <img src="" alt="" class="px-gallery__lightbox-img" data-zoom-image>
+  </div>
+</product-gallery>

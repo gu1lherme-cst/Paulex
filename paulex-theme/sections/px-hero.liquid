@@ -1,0 +1,120 @@
+{%- comment -%}
+  Paulex hero: full-width blue gradient banner, copy + trust chips on the left,
+  premium product composition on the right.
+{%- endcomment -%}
+<section class="px-hero color-gradient" data-section-id="{{ section.id }}">
+  <div class="px-hero__bg" {% if section.settings.bg_image != blank %}style="background-image:url({{ section.settings.bg_image | image_url: width: 2400 }});"{% endif %}></div>
+  <div class="px-hero__inner page-width">
+    <div class="px-hero__copy" data-reveal>
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="px-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h1 class="px-hero__title">{{ section.settings.title }}</h1>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="px-hero__text">{{ section.settings.text }}</p>
+      {%- endif -%}
+
+      <div class="px-hero__buttons">
+        {%- if section.settings.primary_label != blank -%}
+          <a class="px-btn px-btn--light" href="{{ section.settings.primary_link | default: routes.all_products_collection_url }}">
+            {{ section.settings.primary_label }}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.secondary_label != blank -%}
+          {%- liquid
+            assign secondary_url = section.settings.secondary_link
+            if section.settings.secondary_is_whatsapp and settings.social_whatsapp != blank
+              assign secondary_url = settings.social_whatsapp | prepend: 'https://wa.me/'
+            endif
+          -%}
+          <a class="px-btn px-btn--glass" href="{{ secondary_url }}"{% if section.settings.secondary_is_whatsapp %} target="_blank" rel="noopener"{% endif %}>
+            {%- if section.settings.secondary_is_whatsapp -%}{% render 'icon', name: 'whatsapp' %}{%- endif -%}
+            {{ section.settings.secondary_label }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="px-hero__chips">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'chip' -%}
+              <li class="px-hero__chip" {{ block.shopify_attributes }}>
+                {% render 'icon', name: 'check' %} {{ block.settings.text }}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <div class="px-hero__stage" data-reveal>
+      {%- if section.settings.hero_image != blank -%}
+        {{
+          section.settings.hero_image
+          | image_url: width: 1100
+          | image_tag:
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '500,700,900,1100',
+            sizes: '(min-width: 990px) 45vw, 90vw',
+            class: 'px-hero__image',
+            alt: section.settings.title | default: shop.name
+        }}
+      {%- else -%}
+        {%- comment -%} Premium product composition placeholder (no Apple products) {%- endcomment -%}
+        <div class="px-hero__scene" aria-hidden="true">
+          <span class="px-hero__tile px-hero__tile--1">Caderno</span>
+          <span class="px-hero__tile px-hero__tile--2">Canetas</span>
+          <span class="px-hero__tile px-hero__tile--3">Marca-texto</span>
+          <span class="px-hero__tile px-hero__tile--4">Mouse</span>
+          <span class="px-hero__tile px-hero__tile--5">Teclado</span>
+          <span class="px-hero__tile px-hero__tile--6">Fone</span>
+          <span class="px-hero__tile px-hero__tile--7">Organizador</span>
+          <span class="px-hero__tile px-hero__tile--8">Garrafa</span>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.hero.name",
+  "tag": "section",
+  "class": "px-section px-section--hero",
+  "settings": [
+    { "type": "image_picker", "id": "bg_image", "label": "Fundo (substitui o gradiente)" },
+    { "type": "image_picker", "id": "hero_image", "label": "t:sections.hero.image" },
+    { "type": "text", "id": "eyebrow", "label": "t:sections.hero.eyebrow", "default": "PAULEX ARMARINHO • DESDE 1984" },
+    { "type": "text", "id": "title", "label": "t:sections.hero.title", "default": "Há mais de 40 anos facilitando o dia a dia dos brasileiros." },
+    { "type": "textarea", "id": "text", "label": "t:sections.hero.text", "default": "Mais de 10 mil produtos para casa, escritório, escola e empresas." },
+    { "type": "text", "id": "primary_label", "label": "t:sections.hero.primary_label", "default": "Comprar agora" },
+    { "type": "url", "id": "primary_link", "label": "t:sections.hero.primary_link" },
+    { "type": "text", "id": "secondary_label", "label": "t:sections.hero.secondary_label", "default": "Falar no WhatsApp" },
+    { "type": "url", "id": "secondary_link", "label": "t:sections.hero.secondary_link" },
+    { "type": "checkbox", "id": "secondary_is_whatsapp", "label": "Botão secundário abre WhatsApp", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "chip",
+      "name": "Selo de confiança",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texto", "default": "Frete grátis" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.hero.name",
+      "blocks": [
+        { "type": "chip", "settings": { "text": "Desde 1984" } },
+        { "type": "chip", "settings": { "text": "Atacado e varejo" } },
+        { "type": "chip", "settings": { "text": "Frete grátis" } },
+        { "type": "chip", "settings": { "text": "Atendimento via WhatsApp" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,113 @@
+{%- comment -%}
+  Collection page: header, filters (facets), sorting and paginated product grid.
+{%- endcomment -%}
+{% render 'breadcrumbs' %}
+
+<section class="px-collection page-width" data-section-id="{{ section.id }}">
+  <header class="px-collection__header" data-reveal>
+    <h1 class="px-collection__title">{{ collection.title }}</h1>
+    {%- if collection.description != blank and section.settings.show_description -%}
+      <div class="px-collection__description rte">{{ collection.description }}</div>
+    {%- endif -%}
+  </header>
+
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    <div class="px-collection__toolbar">
+      {%- if section.settings.enable_filtering -%}
+        <button class="px-btn px-btn--ghost px-collection__filter-toggle" data-filters-toggle aria-expanded="false">
+          {% render 'icon', name: 'menu' %} {{ 'products.facets.filter' | t }}
+        </button>
+      {%- endif -%}
+
+      <p class="px-collection__count">
+        {{ 'collections.general.products_count' | t: count: collection.products_count }}
+      </p>
+
+      {%- if section.settings.enable_sorting -%}
+        <form class="px-collection__sort" data-sort-form>
+          <label for="SortBy" class="visually-hidden">{{ 'products.facets.sort_by' | t }}</label>
+          <select id="SortBy" name="sort_by" data-sort-select>
+            {%- for option in collection.sort_options -%}
+              <option value="{{ option.value }}" {% if option.value == collection.sort_by or option.value == collection.default_sort_by %}selected{% endif %}>{{ option.name }}</option>
+            {%- endfor -%}
+          </select>
+          {% render 'icon', name: 'chevron-down', class: 'px-collection__sort-caret' %}
+        </form>
+      {%- endif -%}
+    </div>
+
+    <div class="px-collection__body">
+      {%- if section.settings.enable_filtering and collection.filters.size > 0 -%}
+        <aside class="px-facets" data-facets aria-label="{{ 'products.facets.filter_by' | t }}">
+          <form data-facets-form>
+            <div class="px-facets__head">
+              <h2>{{ 'products.facets.filter_by' | t }}</h2>
+              <a href="{{ collection.url }}" class="px-facets__clear" data-facets-clear>{{ 'products.facets.clear_all' | t }}</a>
+            </div>
+            {%- for filter in collection.filters -%}
+              <details class="px-facet" open>
+                <summary>{{ filter.label }} {% render 'icon', name: 'chevron-down' %}</summary>
+                <div class="px-facet__content">
+                  {%- case filter.type -%}
+                    {%- when 'list', 'boolean' -%}
+                      <ul class="px-facet__list">
+                        {%- for value in filter.values -%}
+                          <li>
+                            <label class="px-facet__option{% if value.count == 0 and value.active == false %} is-disabled{% endif %}">
+                              <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %} data-facet-input>
+                              <span class="px-facet__checkbox">{% render 'icon', name: 'check' %}</span>
+                              <span class="px-facet__name">{{ value.label }}</span>
+                              <span class="px-facet__count">{{ value.count }}</span>
+                            </label>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- when 'price_range' -%}
+                      <div class="px-facet__price">
+                        <label>{{ 'products.facets.price_from' | t }}
+                          <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" placeholder="0" data-facet-input>
+                        </label>
+                        <label>{{ 'products.facets.price_to' | t }}
+                          <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" placeholder="{{ filter.range_max | money_without_currency }}" data-facet-input>
+                        </label>
+                      </div>
+                  {%- endcase -%}
+                </div>
+              </details>
+            {%- endfor -%}
+            <noscript><button type="submit" class="px-btn px-btn--primary px-btn--block">{{ 'products.facets.apply' | t }}</button></noscript>
+          </form>
+        </aside>
+      {%- endif -%}
+
+      <div class="px-collection__results">
+        {%- if collection.products.size > 0 -%}
+          <div class="px-product-grid" data-product-grid>
+            {%- for product in collection.products -%}
+              {% render 'px-product-card', product: product %}
+            {%- endfor -%}
+          </div>
+          {% render 'pagination', paginate: paginate %}
+        {%- else -%}
+          <div class="px-empty">
+            <p>{{ 'collections.general.empty' | t }}</p>
+            <a href="{{ routes.all_products_collection_url }}" class="px-btn px-btn--primary">{{ 'collections.general.view_all' | t }}</a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endpaginate -%}
+</section>
+
+{% schema %}
+{
+  "name": "Página de coleção",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "show_description", "label": "Exibir descrição", "default": true },
+    { "type": "checkbox", "id": "enable_filtering", "label": "Habilitar filtros", "default": true },
+    { "type": "checkbox", "id": "enable_sorting", "label": "Habilitar ordenação", "default": true },
+    { "type": "range", "id": "products_per_page", "min": 8, "max": 48, "step": 4, "label": "Produtos por página", "default": 24 }
+  ]
+}
+{% endschema %}

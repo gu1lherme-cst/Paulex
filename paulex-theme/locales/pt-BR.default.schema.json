@@ -1,0 +1,91 @@
+{
+  "settings": {
+    "brand": {
+      "name": "Marca & Cores",
+      "colors": "Paleta Paulex",
+      "color_primary": "Azul principal",
+      "color_accent": "Azul claro",
+      "color_sale": "Vermelho (ofertas)",
+      "color_text": "Texto",
+      "color_background": "Fundo",
+      "color_surface": "Cinza de superfície",
+      "gradient_hero": "Gradiente do Hero"
+    },
+    "typography": {
+      "name": "Tipografia",
+      "font_heading": "Fonte dos títulos",
+      "font_body": "Fonte do corpo",
+      "font_scale": "Escala da fonte"
+    },
+    "layout": {
+      "name": "Layout",
+      "page_width": "Largura da página",
+      "corner_radius": "Arredondamento dos cantos",
+      "section_spacing": "Espaçamento entre seções"
+    },
+    "product_card": {
+      "name": "Cartão de produto",
+      "show_vendor": "Exibir marca",
+      "show_rating": "Exibir avaliações",
+      "quick_add": "Adição rápida",
+      "image_ratio": "Proporção da imagem"
+    },
+    "cart": {
+      "name": "Carrinho",
+      "type": "Tipo de carrinho",
+      "type_drawer": "Drawer lateral",
+      "type_page": "Página",
+      "enable_note": "Habilitar observações",
+      "enable_coupon": "Habilitar campo de cupom"
+    },
+    "social": {
+      "name": "Redes sociais",
+      "whatsapp": "WhatsApp",
+      "whatsapp_info": "Use o formato internacional, ex.: 5511999999999"
+    },
+    "seo": {
+      "name": "SEO & Compartilhamento",
+      "share_image": "Imagem de compartilhamento",
+      "share_image_info": "Usada em redes sociais (Open Graph / Twitter).",
+      "twitter_handle": "Usuário do Twitter/X",
+      "enable_breadcrumbs": "Exibir breadcrumbs"
+    },
+    "animations": {
+      "name": "Animações",
+      "reveal": "Revelar ao rolar",
+      "hover_lift": "Elevar ao passar o mouse"
+    }
+  },
+  "sections": {
+    "header": {
+      "name": "Cabeçalho",
+      "logo": "Logo",
+      "logo_width": "Largura do logo",
+      "menu": "Menu principal",
+      "sticky": "Cabeçalho fixo",
+      "show_account": "Exibir conta",
+      "show_search": "Exibir busca",
+      "announcement": "Texto da chamada (opcional)"
+    },
+    "hero": {
+      "name": "Hero / Banner",
+      "eyebrow": "Texto superior",
+      "title": "Título",
+      "text": "Descrição",
+      "primary_label": "Botão principal",
+      "primary_link": "Link do botão principal",
+      "secondary_label": "Botão secundário",
+      "secondary_link": "Link do botão secundário",
+      "image": "Imagem dos produtos",
+      "chips": "Selos de confiança"
+    },
+    "categories": { "name": "Categorias" },
+    "featured": { "name": "Produtos em destaque" },
+    "benefits": { "name": "Benefícios" },
+    "promo": { "name": "Banner promocional" },
+    "reviews": { "name": "Avaliações" },
+    "brands": { "name": "Marcas" },
+    "newsletter": { "name": "Newsletter" },
+    "footer": { "name": "Rodapé" }
+  }
+}

@@ -1,0 +1,27 @@
+{%- comment -%}
+  Shared address form fields. Accepts: form (required)
+{%- endcomment -%}
+{{ form.errors | default_errors }}
+<div class="px-account__row">
+  <div><label>Nome</label>{{ form.first_name }}</div>
+  <div><label>Sobrenome</label>{{ form.last_name }}</div>
+</div>
+<label>Empresa</label>{{ form.company }}
+<label>Endereço</label>{{ form.address1 }}
+<label>Complemento</label>{{ form.address2 }}
+<div class="px-account__row">
+  <div><label>Cidade</label>{{ form.city }}</div>
+  <div><label>CEP</label>{{ form.zip }}</div>
+</div>
+<div class="px-account__row">
+  <div>
+    <label>País</label>
+    {{ form.country | replace: '<select', '<select id="AddressCountryNew" data-default="Brazil"' }}
+  </div>
+  <div>
+    <label>Estado</label>
+    <div id="AddressProvinceContainerNew">{{ form.province | replace: '<select', '<select id="AddressProvinceNew"' }}</div>
+  </div>
+</div>
+<label>Telefone</label>{{ form.phone }}
+<label class="px-checkbox">{{ form.set_as_default_checkbox }} Definir como endereço padrão</label>

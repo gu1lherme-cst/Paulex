@@ -1,0 +1,29 @@
+{%- comment -%} Blog listing {%- endcomment -%}
+{% render 'breadcrumbs' %}
+<section class="px-section page-width" data-section-id="{{ section.id }}">
+  <header class="px-section__head" data-reveal>
+    <h1 class="px-section__title">{{ blog.title }}</h1>
+  </header>
+  {%- paginate blog.articles by 12 -%}
+    <div class="px-categories">
+      {%- for article in blog.articles -%}
+        <a class="px-category-card px-card--lift" href="{{ article.url }}" data-reveal>
+          <div class="px-category-card__media">
+            {%- if article.image -%}
+              {{ article.image | image_url: width: 600 | image_tag: loading: 'lazy', class: 'px-category-card__image', alt: article.title }}
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'px-category-card__image' }}
+            {%- endif -%}
+          </div>
+          <div class="px-category-card__overlay">
+            <span class="px-category-card__title">{{ article.title }}</span>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+    {% render 'pagination', paginate: paginate %}
+  {%- endpaginate -%}
+</section>
+{% schema %}
+{ "name": "Blog", "tag": "section", "settings": [] }
+{% endschema %}

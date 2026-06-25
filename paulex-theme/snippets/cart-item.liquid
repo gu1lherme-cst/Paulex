@@ -1,0 +1,58 @@
+{%- comment -%}
+  Single cart line item with AJAX quantity controls.
+  Accepts: item (required)
+{%- endcomment -%}
+<li class="px-cart-item" data-cart-item data-key="{{ item.key }}" data-line="{{ forloop.index }}">
+  <a href="{{ item.url }}" class="px-cart-item__media">
+    {%- if item.image -%}
+      {{ item.image | image_url: width: 160 | image_tag: loading: 'lazy', widths: '80,120,160', alt: item.title }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'px-cart-item__placeholder' }}
+    {%- endif -%}
+  </a>
+  <div class="px-cart-item__info">
+    <a href="{{ item.url }}" class="px-cart-item__title">{{ item.product.title }}</a>
+    {%- unless item.product.has_only_default_variant -%}
+      <p class="px-cart-item__variant">{{ item.variant.title }}</p>
+    {%- endunless -%}
+    {%- if item.selling_plan_allocation -%}
+      <p class="px-cart-item__variant">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+    {%- endif -%}
+    {%- if item.line_level_discount_allocations.size > 0 -%}
+      {%- for allocation in item.line_level_discount_allocations -%}
+        <p class="px-cart-item__discount">{% render 'icon', name: 'check' %} {{ allocation.discount_application.title }}</p>
+      {%- endfor -%}
+    {%- endif -%}
+
+    <div class="px-cart-item__controls">
+      <div class="px-qty" data-qty>
+        <button type="button" class="px-qty__btn" data-qty-down data-key="{{ item.key }}" aria-label="{{ 'products.product.decrease' | t }}">
+          {% render 'icon', name: 'minus' %}
+        </button>
+        <input
+          class="px-qty__input"
+          type="number"
+          min="0"
+          value="{{ item.quantity }}"
+          aria-label="{{ 'cart.quantity' | t }}"
+          data-qty-input
+          data-key="{{ item.key }}"
+        >
+        <button type="button" class="px-qty__btn" data-qty-up data-key="{{ item.key }}" aria-label="{{ 'products.product.increase' | t }}">
+          {% render 'icon', name: 'plus' %}
+        </button>
+      </div>
+      <button type="button" class="px-cart-item__remove" data-qty-remove data-key="{{ item.key }}" aria-label="{{ 'cart.remove' | t }}">
+        {% render 'icon', name: 'trash' %}
+      </button>
+    </div>
+  </div>
+  <div class="px-cart-item__price">
+    {%- if item.original_line_price != item.final_line_price -%}
+      <s>{{ item.original_line_price | money }}</s>
+      <span>{{ item.final_line_price | money }}</span>
+    {%- else -%}
+      <span>{{ item.final_line_price | money }}</span>
+    {%- endif -%}
+  </div>
+</li>

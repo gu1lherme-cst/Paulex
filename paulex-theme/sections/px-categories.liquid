@@ -1,0 +1,85 @@
+{%- comment -%}
+  Category grid of modern cards. Each block links to a collection.
+{%- endcomment -%}
+<section class="px-section" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    {%- if section.settings.title != blank -%}
+      <div class="px-section__head" data-reveal>
+        <h2 class="px-section__title">{{ section.settings.title }}</h2>
+        {%- if section.settings.subtitle != blank -%}
+          <p class="px-section__subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="px-categories">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign collection = collections[block.settings.collection]
+          assign card_image = block.settings.image
+          if card_image == blank and collection != blank
+            assign card_image = collection.featured_image
+          endif
+          assign card_title = block.settings.title
+          if card_title == blank and collection != blank
+            assign card_title = collection.title
+          endif
+          assign card_url = block.settings.link
+          if card_url == blank and collection != blank
+            assign card_url = collection.url
+          endif
+        -%}
+        <a class="px-category-card{% if settings.animations_hover_lift %} px-card--lift{% endif %}" href="{{ card_url | default: '#' }}" data-reveal {{ block.shopify_attributes }}>
+          <div class="px-category-card__media">
+            {%- if card_image != blank -%}
+              {{ card_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300,450,600', sizes: '(min-width:990px) 30vw, 45vw', class: 'px-category-card__image', alt: card_title }}
+            {%- else -%}
+              {{ 'collection-1' | placeholder_svg_tag: 'px-category-card__image px-category-card__placeholder' }}
+            {%- endif -%}
+          </div>
+          <div class="px-category-card__overlay">
+            <span class="px-category-card__title">{{ card_title | default: 'Categoria' }}</span>
+            <span class="px-category-card__cta">{% render 'icon', name: 'arrow-right' %}</span>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.categories.name",
+  "tag": "section",
+  "class": "px-section-wrapper",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Categorias" },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "Tudo organizado para você encontrar mais rápido." }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Categoria",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Coleção" },
+        { "type": "image_picker", "id": "image", "label": "Imagem (opcional)" },
+        { "type": "text", "id": "title", "label": "Título (opcional)" },
+        { "type": "url", "id": "link", "label": "Link (opcional)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.categories.name",
+      "blocks": [
+        { "type": "category", "settings": { "title": "Papelaria" } },
+        { "type": "category", "settings": { "title": "Utilidades" } },
+        { "type": "category", "settings": { "title": "Descartáveis" } },
+        { "type": "category", "settings": { "title": "Brinquedos" } },
+        { "type": "category", "settings": { "title": "Informática" } },
+        { "type": "category", "settings": { "title": "TV e acessórios" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,33 @@
+{%- comment -%}
+  Related products ("Você também pode gostar") via Shopify recommendations API.
+  Loaded asynchronously by theme.js using the section rendering endpoint.
+{%- endcomment -%}
+<section
+  class="px-section page-width px-related"
+  data-section-id="{{ section.id }}"
+  data-related-products
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}"
+>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <div class="px-section__head" data-reveal>
+      <h2 class="px-section__title px-section__title--sm">{{ section.settings.title }}</h2>
+    </div>
+    <div class="px-product-grid">
+      {%- for product in recommendations.products limit: section.settings.products_to_show -%}
+        {% render 'px-product-card', product: product %}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Produtos relacionados",
+  "tag": "section",
+  "class": "px-section-wrapper",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Você também pode gostar" },
+    { "type": "range", "id": "products_to_show", "min": 2, "max": 10, "step": 1, "label": "Produtos a exibir", "default": 4 }
+  ]
+}
+{% endschema %}

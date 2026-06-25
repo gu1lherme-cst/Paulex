@@ -1,0 +1,46 @@
+{%- comment -%}
+  Search results page.
+{%- endcomment -%}
+<section class="px-search-page page-width" data-section-id="{{ section.id }}">
+  <header class="px-search-page__header">
+    <form action="{{ routes.search_url }}" method="get" role="search" class="px-search-page__form">
+      <input type="hidden" name="type" value="product">
+      {% render 'icon', name: 'search' %}
+      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.search' | t }}">
+      <button type="submit" class="px-btn px-btn--primary">{{ 'general.search.submit' | t }}</button>
+    </form>
+    {%- if search.performed -%}
+      <h1 class="px-search-page__title">{{ 'general.search.results_for' | t: terms: search.terms }}</h1>
+    {%- endif -%}
+  </header>
+
+  {%- if search.performed -%}
+    {%- paginate search.results by 24 -%}
+      {%- if search.results.size > 0 -%}
+        <div class="px-product-grid">
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}
+              {% render 'px-product-card', product: item %}
+            {%- else -%}
+              <a class="px-search-result" href="{{ item.url }}">
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.content | strip_html | truncatewords: 20 }}</p>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        {% render 'pagination', paginate: paginate %}
+      {%- else -%}
+        <div class="px-empty"><p>{{ 'general.search.no_results' | t: terms: search.terms }}</p></div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Página de busca",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

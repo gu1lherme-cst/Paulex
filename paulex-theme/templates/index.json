@@ -1,0 +1,89 @@
+{
+  "sections": {
+    "hero": {
+      "type": "px-hero",
+      "blocks": {
+        "c1": { "type": "chip", "settings": { "text": "Desde 1984" } },
+        "c2": { "type": "chip", "settings": { "text": "Atacado e varejo" } },
+        "c3": { "type": "chip", "settings": { "text": "Frete grátis" } },
+        "c4": { "type": "chip", "settings": { "text": "Atendimento via WhatsApp" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4"],
+      "settings": {
+        "eyebrow": "PAULEX ARMARINHO • DESDE 1984",
+        "title": "Há mais de 40 anos facilitando o dia a dia dos brasileiros.",
+        "text": "Mais de 10 mil produtos para casa, escritório, escola e empresas.",
+        "primary_label": "Comprar agora",
+        "secondary_label": "Falar no WhatsApp",
+        "secondary_is_whatsapp": true
+      }
+    },
+    "categories": {
+      "type": "px-categories",
+      "blocks": {
+        "b1": { "type": "category", "settings": { "title": "Papelaria" } },
+        "b2": { "type": "category", "settings": { "title": "Utilidades" } },
+        "b3": { "type": "category", "settings": { "title": "Descartáveis" } },
+        "b4": { "type": "category", "settings": { "title": "Brinquedos" } },
+        "b5": { "type": "category", "settings": { "title": "Informática" } },
+        "b6": { "type": "category", "settings": { "title": "TV e acessórios" } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6"],
+      "settings": {
+        "title": "Categorias",
+        "subtitle": "Tudo organizado para você encontrar mais rápido."
+      }
+    },
+    "benefits": {
+      "type": "px-benefits",
+      "blocks": {
+        "k1": { "type": "benefit", "settings": { "icon": "truck", "title": "Frete grátis", "text": "Acima de R$ 199 para todo o Brasil" } },
+        "k2": { "type": "benefit", "settings": { "icon": "card", "title": "Até 12x", "text": "Parcele sem juros no cartão" } },
+        "k3": { "type": "benefit", "settings": { "icon": "shield", "title": "Compra segura", "text": "Ambiente 100% protegido" } },
+        "k4": { "type": "benefit", "settings": { "icon": "headset", "title": "Atendimento humano", "text": "Suporte rápido via WhatsApp" } }
+      },
+      "block_order": ["k1", "k2", "k3", "k4"],
+      "settings": {}
+    },
+    "best_sellers": {
+      "type": "px-featured-products",
+      "settings": { "title": "Mais vendidos", "subtitle": "Os favoritos dos nossos clientes.", "products_to_show": 8 }
+    },
+    "promo": {
+      "type": "px-promo-banner",
+      "settings": {
+        "eyebrow": "Oferta da semana",
+        "title": "Até 40% OFF em itens selecionados",
+        "text": "Aproveite preços de atacado também no varejo.",
+        "button_label": "Ver ofertas"
+      }
+    },
+    "new_arrivals": {
+      "type": "px-featured-products",
+      "settings": { "title": "Novidades", "subtitle": "Acabaram de chegar.", "products_to_show": 8 }
+    },
+    "brands": {
+      "type": "px-brands",
+      "blocks": {
+        "m1": { "type": "brand", "settings": { "name": "BIC" } },
+        "m2": { "type": "brand", "settings": { "name": "Faber-Castell" } },
+        "m3": { "type": "brand", "settings": { "name": "Tilibra" } },
+        "m4": { "type": "brand", "settings": { "name": "Multilaser" } },
+        "m5": { "type": "brand", "settings": { "name": "Tramontina" } }
+      },
+      "block_order": ["m1", "m2", "m3", "m4", "m5"],
+      "settings": { "title": "Marcas que confiam na Paulex" }
+    },
+    "reviews": {
+      "type": "px-reviews",
+      "blocks": {
+        "r1": { "type": "review", "settings": { "author": "Maria S.", "role": "Cliente verificada", "quote": "Atendimento excelente e entrega super rápida. Virei cliente fiel!" } },
+        "r2": { "type": "review", "settings": { "author": "João P.", "role": "Cliente verificado", "quote": "Variedade enorme e preços de atacado. Recomendo demais." } },
+        "r3": { "type": "review", "settings": { "author": "Ana L.", "role": "Compra empresarial", "quote": "Comprei material escolar para a empresa toda. Tudo perfeito." } }
+      },
+      "block_order": ["r1", "r2", "r3"],
+      "settings": { "title": "Quem compra, recomenda", "subtitle": "Milhares de clientes satisfeitos desde 1984." }
+    }
+  },
+  "order": ["hero", "categories", "benefits", "best_sellers", "promo", "new_arrivals", "brands", "reviews"]
+}

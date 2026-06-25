@@ -1,0 +1,24 @@
+{%- comment -%}
+  Slide-in cart drawer. Updated via AJAX by cart-drawer custom element in theme.js.
+  Includes free-shipping progress bar, optional note and coupon hint.
+{%- endcomment -%}
+<cart-drawer
+  id="CartDrawer"
+  class="px-drawer"
+  data-cart-drawer
+  aria-hidden="true"
+>
+  <div class="px-drawer__overlay" data-drawer-close tabindex="-1"></div>
+  <aside class="px-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'cart.title' | t }}">
+    <header class="px-drawer__header">
+      <h2 class="px-drawer__title">{{ 'cart.title' | t }} <span class="px-drawer__count" data-cart-count>{{ cart.item_count }}</span></h2>
+      <button class="px-drawer__close" data-drawer-close aria-label="{{ 'general.accessibility.close' | t }}">
+        {% render 'icon', name: 'close' %}
+      </button>
+    </header>
+
+    <div class="px-drawer__body" data-cart-body>
+      {% render 'cart-contents', context: 'drawer' %}
+    </div>
+  </aside>
+</cart-drawer>

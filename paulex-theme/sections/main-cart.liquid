@@ -1,0 +1,17 @@
+{%- comment -%}
+  Full cart page (used when cart type = page, or as a fallback).
+{%- endcomment -%}
+<section class="px-cart-page page-width" data-section-id="{{ section.id }}">
+  <h1 class="px-cart-page__title">{{ 'cart.title' | t }}</h1>
+  <div class="px-cart-page__inner" data-cart-body>
+    {% render 'cart-contents', context: 'page' %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Página de carrinho",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,37 @@
+{%- comment -%}
+  Promotional banner with gradient/image background and CTA.
+{%- endcomment -%}
+<section class="px-section px-section--flush" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    <div class="px-promo{% if section.settings.bg_image != blank %} px-promo--has-image{% else %} color-gradient{% endif %}" data-reveal>
+      {%- if section.settings.bg_image != blank -%}
+        {{ section.settings.bg_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000', class: 'px-promo__bg', alt: section.settings.title }}
+      {%- endif -%}
+      <div class="px-promo__content">
+        {%- if section.settings.eyebrow != blank -%}<p class="px-promo__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        {%- if section.settings.title != blank -%}<h2 class="px-promo__title">{{ section.settings.title }}</h2>{%- endif -%}
+        {%- if section.settings.text != blank -%}<p class="px-promo__text">{{ section.settings.text }}</p>{%- endif -%}
+        {%- if section.settings.button_label != blank -%}
+          <a class="px-btn px-btn--light" href="{{ section.settings.button_link | default: '#' }}">{{ section.settings.button_label }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.promo.name",
+  "tag": "section",
+  "class": "px-section-wrapper",
+  "settings": [
+    { "type": "image_picker", "id": "bg_image", "label": "Imagem de fundo" },
+    { "type": "text", "id": "eyebrow", "label": "Texto superior", "default": "Oferta da semana" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Até 40% OFF em itens selecionados" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Aproveite preços de atacado também no varejo." },
+    { "type": "text", "id": "button_label", "label": "Botão", "default": "Ver ofertas" },
+    { "type": "url", "id": "button_link", "label": "Link do botão" }
+  ],
+  "presets": [ { "name": "t:sections.promo.name" } ]
+}
+{% endschema %}

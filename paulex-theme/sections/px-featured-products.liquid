@@ -1,0 +1,75 @@
+{%- comment -%}
+  Featured collection carousel/grid. Reused for "Mais vendidos", "Novidades",
+  "Ofertas", "Lançamentos" — just point each instance at a different collection.
+{%- endcomment -%}
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  assign limit = section.settings.products_to_show
+-%}
+<section class="px-section" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    <div class="px-section__head px-section__head--row" data-reveal>
+      <div>
+        {%- if section.settings.title != blank -%}
+          <h2 class="px-section__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <p class="px-section__subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.show_view_all and collection != blank -%}
+        <a href="{{ collection.url }}" class="px-section__link">
+          {{ 'collections.general.view_all' | t }} {% render 'icon', name: 'arrow-right' %}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if collection != blank and collection.products.size > 0 -%}
+      <div class="px-product-grid{% if section.settings.layout == 'carousel' %} px-product-grid--carousel{% endif %}" data-product-grid>
+        {%- for product in collection.products limit: limit -%}
+          {% render 'px-product-card', product: product %}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="px-product-grid">
+        {%- for i in (1..4) -%}
+          <div class="px-card px-card--placeholder" data-reveal>
+            <div class="px-card__media px-card__media--square">{{ 'product-1' | placeholder_svg_tag: 'px-card__image' }}</div>
+            <div class="px-card__body">
+              <h3 class="px-card__title">Produto exemplo {{ i }}</h3>
+              <div class="px-price"><span class="px-price__current">R$ 0,00</span></div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.featured.name",
+  "tag": "section",
+  "class": "px-section-wrapper",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Mais vendidos" },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo" },
+    { "type": "collection", "id": "collection", "label": "Coleção" },
+    { "type": "range", "id": "products_to_show", "min": 2, "max": 12, "step": 1, "label": "Produtos a exibir", "default": 8 },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "grid", "label": "Grade" },
+        { "value": "carousel", "label": "Carrossel" }
+      ],
+      "default": "grid"
+    },
+    { "type": "checkbox", "id": "show_view_all", "label": "Exibir “Ver tudo”", "default": true }
+  ],
+  "presets": [
+    { "name": "t:sections.featured.name" }
+  ]
+}
+{% endschema %}
