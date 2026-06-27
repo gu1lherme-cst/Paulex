@@ -195,5 +195,25 @@
       "total": "Total",
       "none": "You haven't placed any orders yet."
     }
+  },
+  "b2b": {
+    "order_pad": {
+      "product": "Product",
+      "unit_price": "Unit price",
+      "quantity": "Qty",
+      "subtotal": "Subtotal",
+      "min_qty": "Min. {{ count }} units",
+      "items": "Items",
+      "estimated_total": "Estimated total",
+      "estimate_note": "Estimate at list price; wholesale discounts and final total at checkout.",
+      "quote": "Request a quote",
+      "add_all": "Add all to cart"
+    },
+    "wholesale": {
+      "title": "Wholesale price",
+      "badge": "Wholesale",
+      "from_qty": "from {{ count }} units",
+      "unit_price": "{{ price }}/unit"
+    }
   }
 }

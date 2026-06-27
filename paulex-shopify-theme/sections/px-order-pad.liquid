@@ -1,0 +1,126 @@
+{%- comment -%}
+  Pedido rápido (order pad) B2B: lista os produtos de uma coleção com campo de
+  quantidade e adiciona vários ao carrinho de uma vez. Opcionalmente gera um
+  orçamento pelo WhatsApp com os itens selecionados.
+
+  Quantidade mínima/múltiplos por produto vêm de metafields:
+    custom.qty_increment  -> passo do contador (ex.: 12 para "de 12 em 12")
+    custom.min_quantity   -> pedido mínimo (apenas informativo no card)
+
+  O total é uma ESTIMATIVA com o preço de tabela; descontos de atacado e o
+  valor final são aplicados no checkout.
+{%- endcomment -%}
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  assign limit = section.settings.products_to_show
+  assign wa = settings.social_whatsapp | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')' | remove: '.'
+  assign has_products = false
+  if collection != blank and collection.products.size > 0
+    assign has_products = true
+  endif
+-%}
+{%- if has_products -%}
+  <section class="px-section px-orderpad" id="pedido-rapido" data-section-id="{{ section.id }}">
+    <div class="page-width">
+      <div class="px-section__head" data-reveal>
+        {%- if section.settings.title != blank -%}<h2 class="px-section__title">{{ section.settings.title }}</h2>{%- endif -%}
+        {%- if section.settings.subtitle != blank -%}<p class="px-section__subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
+      </div>
+
+      <order-pad
+        class="px-orderpad__box"
+        data-reveal
+        {% if section.settings.show_quote and wa != blank %}data-wa="{{ wa }}" data-quote-intro="{{ section.settings.quote_intro | escape }}"{% endif %}
+      >
+        <div class="px-orderpad__head" aria-hidden="true">
+          <span>{{ 'b2b.order_pad.product' | t }}</span>
+          <span>{{ 'b2b.order_pad.unit_price' | t }}</span>
+          <span>{{ 'b2b.order_pad.quantity' | t }}</span>
+          <span>{{ 'b2b.order_pad.subtotal' | t }}</span>
+        </div>
+
+        {%- for product in collection.products limit: limit -%}
+          {%- liquid
+            assign v = product.selected_or_first_available_variant
+            assign increment = product.metafields.custom.qty_increment | default: 1
+            assign min_qty = product.metafields.custom.min_quantity
+          -%}
+          <div class="px-orderpad__row" data-pad-row data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-title="{{ product.title | escape }}">
+            <div class="px-orderpad__product">
+              <a href="{{ product.url }}" class="px-orderpad__media">
+                {%- if product.featured_media -%}
+                  {{ product.featured_media | image_url: width: 120 | image_tag: loading: 'lazy', widths: '60,120', sizes: '60px', alt: product.title, class: 'px-orderpad__img' }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'px-orderpad__img' }}
+                {%- endif -%}
+              </a>
+              <div class="px-orderpad__info">
+                <a href="{{ product.url }}" class="px-orderpad__title">{{ product.title }}</a>
+                {%- if v.sku != blank -%}<span class="px-orderpad__sku">{{ 'products.product.sku' | t }}: {{ v.sku }}</span>{%- endif -%}
+                {%- if min_qty != blank -%}<span class="px-orderpad__min">{{ 'b2b.order_pad.min_qty' | t: count: min_qty }}</span>{%- endif -%}
+              </div>
+            </div>
+
+            <div class="px-orderpad__price" data-label="{{ 'b2b.order_pad.unit_price' | t }}">
+              {%- if v.available -%}{{ v.price | money }}{%- else -%}<span class="px-orderpad__soldout">{{ 'products.product.sold_out' | t }}</span>{%- endif -%}
+            </div>
+
+            <div class="px-orderpad__qty" data-label="{{ 'b2b.order_pad.quantity' | t }}">
+              {%- if v.available -%}
+                <div class="px-qty" data-qty>
+                  <button type="button" class="px-qty__btn" data-pad-step="-1" aria-label="{{ 'products.product.decrease' | t }}">{% render 'icon', name: 'minus' %}</button>
+                  <input class="px-qty__input" type="number" inputmode="numeric" min="0" step="{{ increment }}" value="0" data-pad-qty aria-label="{{ product.title | escape }} — {{ 'b2b.order_pad.quantity' | t }}">
+                  <button type="button" class="px-qty__btn" data-pad-step="1" aria-label="{{ 'products.product.increase' | t }}">{% render 'icon', name: 'plus' %}</button>
+                </div>
+              {%- endif -%}
+            </div>
+
+            <div class="px-orderpad__line" data-label="{{ 'b2b.order_pad.subtotal' | t }}"><span data-pad-line>—</span></div>
+          </div>
+        {%- endfor -%}
+
+        <div class="px-orderpad__foot">
+          <p class="px-orderpad__summary">
+            {{ 'b2b.order_pad.items' | t }}: <strong data-pad-count>0</strong> ·
+            {{ 'b2b.order_pad.estimated_total' | t }}: <strong data-pad-total>{{ 0 | money }}</strong>
+            <span class="px-orderpad__note">{{ 'b2b.order_pad.estimate_note' | t }}</span>
+          </p>
+          <div class="px-orderpad__actions">
+            {%- if section.settings.show_quote and wa != blank -%}
+              <button type="button" class="px-btn px-btn--whatsapp" data-pad-quote disabled>{% render 'icon', name: 'whatsapp' %} {{ 'b2b.order_pad.quote' | t }}</button>
+            {%- endif -%}
+            <button type="button" class="px-btn px-btn--primary" data-pad-add disabled>{{ 'b2b.order_pad.add_all' | t }}</button>
+          </div>
+        </div>
+      </order-pad>
+    </div>
+  </section>
+{%- elsif request.design_mode -%}
+  <section class="px-section" data-section-id="{{ section.id }}">
+    <div class="page-width">
+      <div class="px-section__editor-note">
+        <strong>{{ section.settings.title | default: 'Pedido rápido' }}</strong>
+        <p>Selecione uma coleção nas configurações desta seção para montar o pedido rápido de atacado. A seção fica oculta na loja publicada enquanto não houver produtos.</p>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Pedido rápido (B2B)",
+  "tag": "section",
+  "class": "px-section-wrapper",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Pedido rápido" },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "Monte seu pedido de atacado e adicione tudo ao carrinho de uma vez." },
+    { "type": "collection", "id": "collection", "label": "Coleção de atacado" },
+    { "type": "range", "id": "products_to_show", "min": 4, "max": 50, "step": 2, "label": "Produtos a exibir", "default": 24 },
+    { "type": "checkbox", "id": "show_quote", "label": "Exibir botão de orçamento no WhatsApp", "default": true },
+    { "type": "text", "id": "quote_intro", "label": "Mensagem inicial do orçamento", "default": "Olá! Gostaria de um orçamento de atacado:" }
+  ],
+  "presets": [
+    { "name": "Pedido rápido (B2B)" }
+  ]
+}
+{% endschema %}

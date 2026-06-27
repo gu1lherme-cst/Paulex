@@ -195,5 +195,25 @@
       "total": "Total",
       "none": "Você ainda não fez nenhum pedido."
     }
+  },
+  "b2b": {
+    "order_pad": {
+      "product": "Produto",
+      "unit_price": "Preço un.",
+      "quantity": "Qtd.",
+      "subtotal": "Subtotal",
+      "min_qty": "Mín. {{ count }} un.",
+      "items": "Itens",
+      "estimated_total": "Total estimado",
+      "estimate_note": "Estimativa com preço de tabela; descontos de atacado e valor final no checkout.",
+      "quote": "Pedir orçamento",
+      "add_all": "Adicionar tudo ao carrinho"
+    },
+    "wholesale": {
+      "title": "Preço de atacado",
+      "badge": "Atacado",
+      "from_qty": "a partir de {{ count }} un.",
+      "unit_price": "{{ price }}/un"
+    }
   }
 }

@@ -66,6 +66,9 @@
           {%- unless product.available -%}
             <span class="px-badge px-badge--soldout">{{ 'products.product.sold_out' | t }}</span>
           {%- endunless -%}
+          {%- if product.metafields.custom.atacado_min != blank -%}
+            <span class="px-badge px-badge--wholesale">{{ 'b2b.wholesale.badge' | t }}</span>
+          {%- endif -%}
         </div>
       </div>
     </a>

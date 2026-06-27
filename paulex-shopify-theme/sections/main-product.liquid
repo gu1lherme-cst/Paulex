@@ -73,10 +73,15 @@
               {%- form 'product', product, id: 'ProductForm', class: 'px-product__add-form', novalidate: 'novalidate' -%}
                 <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
 
+                {%- comment -%} Pedido mínimo / múltiplos de atacado via metafield. {%- endcomment -%}
+                {%- liquid
+                  assign min_qty = product.metafields.custom.min_quantity | default: 1
+                  assign qty_step = product.metafields.custom.qty_increment | default: 1
+                -%}
                 <div class="px-product__purchase">
                   <div class="px-qty px-qty--lg" data-qty>
                     <button type="button" class="px-qty__btn" data-qty-down aria-label="{{ 'products.product.decrease' | t }}">{% render 'icon', name: 'minus' %}</button>
-                    <input class="px-qty__input" type="number" name="quantity" min="1" value="1" aria-label="{{ 'products.product.quantity' | t }}" data-qty-input>
+                    <input class="px-qty__input" type="number" name="quantity" min="{{ min_qty }}" step="{{ qty_step }}" value="{{ min_qty }}" aria-label="{{ 'products.product.quantity' | t }}" data-qty-input>
                     <button type="button" class="px-qty__btn" data-qty-up aria-label="{{ 'products.product.increase' | t }}">{% render 'icon', name: 'plus' %}</button>
                   </div>
 
@@ -189,6 +194,29 @@
                 </span>
               {%- endif -%}
             </div>
+
+          {%- when 'atacado' -%}
+            {%- liquid
+              assign a_min = product.metafields.custom.atacado_min
+              assign a_price = product.metafields.custom.atacado_preco
+            -%}
+            {%- if a_min != blank or a_price != blank -%}
+              <div class="px-atacado" {{ block.shopify_attributes }}>
+                {% render 'icon', name: 'card' %}
+                <div class="px-atacado__body">
+                  <strong>{{ 'b2b.wholesale.title' | t }}</strong>
+                  <p>
+                    {%- if a_min != blank -%}{{ 'b2b.wholesale.from_qty' | t: count: a_min }}{%- endif -%}
+                    {%- if a_price != blank -%}{% if a_min != blank %} · {% endif %}{{ 'b2b.wholesale.unit_price' | t: price: a_price }}{%- endif -%}
+                  </p>
+                  {%- if block.settings.link != blank -%}
+                    <a href="{{ block.settings.link }}" class="px-atacado__link">{{ block.settings.link_label | default: 'Ver atacado' }} {% render 'icon', name: 'arrow-right' %}</a>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- elsif request.design_mode -%}
+              <p class="px-product__editor-hint" {{ block.shopify_attributes }}>Defina os metafields <code>custom.atacado_min</code> e <code>custom.atacado_preco</code> no produto para exibir o preço de atacado.</p>
+            {%- endif -%}
 
           {%- when 'trust_badges' -%}
             <ul class="px-trust" {{ block.shopify_attributes }}>
@@ -344,6 +372,16 @@
       ]
     },
     {
+      "type": "atacado",
+      "name": "Preço de atacado (B2B)",
+      "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "Lê os metafields do produto: custom.atacado_min e custom.atacado_preco." },
+        { "type": "url", "id": "link", "label": "Link “Ver atacado” (opcional)" },
+        { "type": "text", "id": "link_label", "label": "Texto do link", "default": "Comprar no atacado" }
+      ]
+    },
+    {
       "type": "whatsapp_cta",
       "name": "Botão de dúvida (WhatsApp)",
       "limit": 1,
@@ -377,6 +415,7 @@
         { "type": "price" },
         { "type": "stock_status" },
         { "type": "form" },
+        { "type": "atacado" },
         { "type": "trust_badges" },
         { "type": "delivery_message" },
         { "type": "whatsapp_cta" },

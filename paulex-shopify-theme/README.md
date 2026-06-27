@@ -57,6 +57,30 @@ Depois de subir, abra o **editor de tema** e configure:
 
 ---
 
+## B2B / Atacado
+
+O tema tem uma camada de atacado pronta. Para ativar:
+
+1. **Crie uma coleção de atacado** (ex.: "Atacado") com os produtos.
+2. **Crie uma página "Atacado"** (Loja virtual → Páginas → Adicionar) e, no
+   editor de tema, atribua o template **`page.atacado`**. Ele já traz a seção
+   institucional **Atacado / Empresas** + o **Pedido rápido**.
+   - Na seção "Pedido rápido", aponte a **coleção de atacado**.
+3. **Preço de atacado por produto (opcional)** — defina os metafields do produto:
+   - `custom.atacado_min` (número) → quantidade mínima de atacado (ex.: 12);
+   - `custom.atacado_preco` (dinheiro/texto) → preço por unidade no atacado.
+   Com isso, a página do produto mostra o bloco **Preço de atacado** e os cards
+   ganham o selo **Atacado**.
+4. **Pedido mínimo / múltiplos (opcional)** — metafields do produto:
+   - `custom.min_quantity` (número) → quantidade mínima de compra;
+   - `custom.qty_increment` (número) → passo do contador (ex.: 12 em 12).
+
+O **Pedido rápido** adiciona vários itens ao carrinho de uma vez e, se houver
+WhatsApp configurado, gera um **orçamento** com os itens. O total exibido é uma
+estimativa pelo preço de tabela; descontos e valor final são no checkout.
+
+---
+
 ## Estrutura
 
 ```

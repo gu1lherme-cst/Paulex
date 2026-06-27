@@ -1,0 +1,34 @@
+{
+  "sections": {
+    "business": {
+      "type": "px-business",
+      "blocks": {
+        "b1": { "type": "benefit", "settings": { "icon": "card", "title": "Preço de atacado", "text": "Descontos por volume a partir de 12 unidades." } },
+        "b2": { "type": "benefit", "settings": { "icon": "truck", "title": "Entrega para todo o Brasil", "text": "Logística para pedidos grandes." } },
+        "b3": { "type": "benefit", "settings": { "icon": "shield", "title": "Nota fiscal", "text": "Compra segura com NF para sua empresa." } },
+        "b4": { "type": "benefit", "settings": { "icon": "headset", "title": "Atendimento dedicado", "text": "Um vendedor para te ajudar no pedido." } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4"],
+      "settings": {
+        "eyebrow": "PARA EMPRESAS",
+        "title": "Compre no atacado com a tradição da Paulex",
+        "text": "Preços especiais por volume, nota fiscal e atendimento dedicado para escritórios, escolas e revendedores.",
+        "primary_label": "Ver pedido rápido",
+        "primary_link": "#pedido-rapido",
+        "show_whatsapp": true,
+        "whatsapp_label": "Falar com vendedor"
+      }
+    },
+    "order_pad": {
+      "type": "px-order-pad",
+      "settings": {
+        "title": "Pedido rápido",
+        "subtitle": "Monte seu pedido de atacado e adicione tudo ao carrinho de uma vez.",
+        "products_to_show": 24,
+        "show_quote": true,
+        "quote_intro": "Olá! Gostaria de um orçamento de atacado:"
+      }
+    }
+  },
+  "order": ["business", "order_pad"]
+}

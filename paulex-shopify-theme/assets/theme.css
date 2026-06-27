@@ -901,6 +901,60 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .px-sticky-atc { transition: none; }
 }
 
+/* ---------- B2B / Atacado ----------------------------------------------- */
+.px-badge--wholesale { background: var(--color-primary); color: #fff; }
+
+/* Bloco de preço de atacado no produto */
+.px-atacado { display: flex; gap: 1.2rem; margin: 1.6rem 0; padding: 1.4rem 1.6rem; border-radius: var(--radius); background: rgba(var(--color-primary-rgb), .06); border: 1px solid rgba(var(--color-primary-rgb), .18); }
+.px-atacado .px-icon { width: 2.4rem; height: 2.4rem; color: var(--color-primary); flex: none; }
+.px-atacado__body strong { display: block; color: var(--color-primary); font-size: 1.5rem; }
+.px-atacado__body p { margin: .2rem 0 0; font-size: 1.4rem; }
+.px-atacado__link { display: inline-flex; align-items: center; gap: .4rem; margin-top: .6rem; font-weight: 600; color: var(--color-primary); font-size: 1.4rem; }
+.px-atacado__link .px-icon { width: 1.6rem; height: 1.6rem; }
+
+/* Seção institucional B2B */
+.px-business__intro { max-width: 70ch; }
+.px-business__eyebrow { font-size: 1.3rem; font-weight: 700; letter-spacing: .12em; color: var(--color-primary); margin: 0 0 1rem; }
+.px-business__title { font-size: clamp(2.6rem, 4vw, 4rem); margin: 0 0 1.2rem; }
+.px-business__text { color: rgba(var(--color-text-rgb), .7); font-size: 1.6rem; margin: 0 0 2rem; }
+.px-business__cta { display: flex; flex-wrap: wrap; gap: 1rem; }
+.px-business__benefits { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr)); gap: 1.6rem; }
+.px-business__benefit { display: flex; gap: 1.2rem; padding: 1.8rem; border-radius: var(--radius); background: var(--color-surface); }
+.px-business__benefit .px-icon { width: 2.6rem; height: 2.6rem; color: var(--color-primary); flex: none; }
+.px-business__benefit strong { display: block; font-size: 1.55rem; }
+.px-business__benefit p { margin: .3rem 0 0; font-size: 1.4rem; color: rgba(var(--color-text-rgb), .65); }
+
+/* Pedido rápido (order pad) */
+.px-orderpad__box { display: block; border: 1px solid rgba(var(--color-text-rgb), .1); border-radius: var(--radius); overflow: hidden; }
+.px-orderpad__head, .px-orderpad__row {
+  display: grid; grid-template-columns: 1fr 12rem 14rem 12rem; align-items: center; gap: 1.2rem;
+  padding: 1.2rem 1.6rem;
+}
+.px-orderpad__head { background: var(--color-surface); font-size: 1.25rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: rgba(var(--color-text-rgb), .55); }
+.px-orderpad__row { border-top: 1px solid rgba(var(--color-text-rgb), .08); }
+.px-orderpad__product { display: flex; gap: 1.2rem; align-items: center; min-width: 0; }
+.px-orderpad__media { flex: none; }
+.px-orderpad__img { width: 5.4rem; height: 5.4rem; border-radius: var(--radius-sm); object-fit: cover; background: var(--color-surface); }
+.px-orderpad__info { display: flex; flex-direction: column; min-width: 0; }
+.px-orderpad__title { font-weight: 600; font-size: 1.45rem; }
+.px-orderpad__sku, .px-orderpad__min { font-size: 1.25rem; color: rgba(var(--color-text-rgb), .55); }
+.px-orderpad__min { color: var(--color-primary); font-weight: 600; }
+.px-orderpad__price { font-weight: 600; }
+.px-orderpad__soldout { color: var(--color-sale); font-size: 1.3rem; }
+.px-orderpad__line { font-weight: 700; }
+.px-orderpad__foot { display: flex; flex-wrap: wrap; gap: 1.6rem; align-items: center; justify-content: space-between; padding: 1.6rem; background: var(--color-surface); border-top: 1px solid rgba(var(--color-text-rgb), .1); }
+.px-orderpad__summary { margin: 0; font-size: 1.45rem; }
+.px-orderpad__note { display: block; font-size: 1.25rem; color: rgba(var(--color-text-rgb), .55); margin-top: .3rem; }
+.px-orderpad__actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+@media (max-width: 749px) {
+  .px-orderpad__head { display: none; }
+  .px-orderpad__row { grid-template-columns: 1fr; gap: .8rem; }
+  .px-orderpad__price, .px-orderpad__line { display: flex; justify-content: space-between; font-size: 1.4rem; }
+  .px-orderpad__price::before, .px-orderpad__line::before { content: attr(data-label); color: rgba(var(--color-text-rgb), .55); font-weight: 500; }
+  .px-orderpad__actions { width: 100%; }
+  .px-orderpad__actions .px-btn { flex: 1; }
+}
+
 /* ---------- Utility ----------------------------------------------------- */
 .px-checkbox { display: flex; align-items: center; gap: .8rem; }
 body.px-no-scroll { overflow: hidden; }

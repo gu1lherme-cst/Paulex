@@ -98,6 +98,21 @@
       return res.json();
     },
 
+    // Adiciona vários itens de uma vez (usado pelo pedido rápido B2B).
+    async addItems(items) {
+      const res = await fetch(Routes.cart_add_url + '.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ items })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.description || Strings.addToCartError);
+      }
+      await this.refresh();
+      return res.json();
+    },
+
     async change(key, quantity) {
       const res = await fetch(Routes.cart_change_url + '.js', {
         method: 'POST',
@@ -464,8 +479,12 @@
     initQty() {
       $$('[data-qty]', this).forEach((wrap) => {
         const input = $('[data-qty-input]', wrap);
-        $('[data-qty-up]', wrap).addEventListener('click', () => { input.value = (parseInt(input.value, 10) || 1) + 1; });
-        $('[data-qty-down]', wrap).addEventListener('click', () => { input.value = Math.max(1, (parseInt(input.value, 10) || 1) - 1); });
+        if (!input) return;
+        // Respeita step/min (pedido mínimo e múltiplos de atacado via metafield).
+        const step = parseInt(input.step, 10) || 1;
+        const min = parseInt(input.min, 10) || 1;
+        $('[data-qty-up]', wrap).addEventListener('click', () => { input.value = (parseInt(input.value, 10) || 0) + step; });
+        $('[data-qty-down]', wrap).addEventListener('click', () => { input.value = Math.max(min, (parseInt(input.value, 10) || min) - step); });
       });
     }
 
@@ -736,6 +755,89 @@
     }
   }
   customElements.define('shipping-calculator', ShippingCalculator);
+
+  /* ---------- Order pad (pedido rápido B2B) ----------------------------- */
+  class OrderPad extends HTMLElement {
+    connectedCallback() {
+      this.rows = $$('[data-pad-row]', this);
+      this.totalEl = $('[data-pad-total]', this);
+      this.countEl = $('[data-pad-count]', this);
+      this.addBtn = $('[data-pad-add]', this);
+      this.quoteBtn = $('[data-pad-quote]', this);
+
+      this.rows.forEach((row) => {
+        const input = $('[data-pad-qty]', row);
+        if (input) input.addEventListener('input', () => this.recalc());
+        $$('[data-pad-step]', row).forEach((btn) => btn.addEventListener('click', () => {
+          if (!input) return;
+          const step = parseInt(input.step, 10) || 1;
+          const delta = (parseInt(btn.dataset.padStep, 10) || 0) * step;
+          input.value = Math.max(0, (parseInt(input.value, 10) || 0) + delta);
+          this.recalc();
+        }));
+      });
+      if (this.addBtn) this.addBtn.addEventListener('click', () => this.addAll());
+      if (this.quoteBtn) this.quoteBtn.addEventListener('click', () => this.quote());
+      this.recalc();
+    }
+
+    collect() {
+      return this.rows.map((row) => {
+        const input = $('[data-pad-qty]', row);
+        return {
+          id: row.dataset.variantId,
+          price: parseInt(row.dataset.price, 10) || 0,
+          title: row.dataset.title || '',
+          qty: parseInt(input && input.value, 10) || 0
+        };
+      }).filter((r) => r.qty > 0 && r.id);
+    }
+
+    recalc() {
+      let total = 0, count = 0;
+      this.rows.forEach((row) => {
+        const input = $('[data-pad-qty]', row);
+        const qty = parseInt(input && input.value, 10) || 0;
+        const price = parseInt(row.dataset.price, 10) || 0;
+        const lineEl = $('[data-pad-line]', row);
+        if (lineEl) lineEl.textContent = qty > 0 ? formatMoney(price * qty) : '—';
+        total += price * qty;
+        count += qty;
+      });
+      if (this.totalEl) this.totalEl.textContent = formatMoney(total);
+      if (this.countEl) this.countEl.textContent = count;
+      const has = count > 0;
+      if (this.addBtn) this.addBtn.disabled = !has;
+      if (this.quoteBtn) this.quoteBtn.disabled = !has;
+    }
+
+    async addAll() {
+      const items = this.collect().map((r) => ({ id: r.id, quantity: r.qty }));
+      if (!items.length) return;
+      this.addBtn.disabled = true;
+      this.addBtn.classList.add('is-loading');
+      try {
+        await Cart.addItems(items);
+        Toast.show(Strings.addedToCart || 'Adicionado ao carrinho', 'success');
+        const drawer = $('#CartDrawer');
+        if (Settings.cartType === 'drawer' && drawer && drawer.open) drawer.open();
+      } catch (e) {
+        Toast.show(e.message || Strings.addToCartError, 'error');
+      } finally {
+        this.addBtn.classList.remove('is-loading');
+        this.recalc();
+      }
+    }
+
+    quote() {
+      const wa = this.dataset.wa;
+      if (!wa) return;
+      const lines = this.collect().map((r) => '• ' + r.qty + 'x ' + r.title).join('\n');
+      const intro = this.dataset.quoteIntro || 'Olá! Gostaria de um orçamento de atacado:';
+      window.open('https://wa.me/' + wa + '?text=' + encodeURIComponent(intro + '\n' + lines), '_blank', 'noopener');
+    }
+  }
+  customElements.define('order-pad', OrderPad);
 
   /* ---------- Collection: facets + sort (AJAX) -------------------------- */
   function initCollection() {

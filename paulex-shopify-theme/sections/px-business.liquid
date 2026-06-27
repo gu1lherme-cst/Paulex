@@ -1,0 +1,94 @@
+{%- comment -%}
+  Bloco institucional B2B: chamada para empresas comprarem no atacado, com
+  benefícios e CTAs (loja + WhatsApp). Use na página "Atacado".
+{%- endcomment -%}
+{%- liquid
+  assign wa = settings.social_whatsapp | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')' | remove: '.'
+-%}
+<section class="px-section px-business" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    <div class="px-business__intro" data-reveal>
+      {%- if section.settings.eyebrow != blank -%}<p class="px-business__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.title != blank -%}<h1 class="px-business__title">{{ section.settings.title }}</h1>{%- endif -%}
+      {%- if section.settings.text != blank -%}<p class="px-business__text">{{ section.settings.text }}</p>{%- endif -%}
+      <div class="px-business__cta">
+        {%- if section.settings.primary_label != blank and section.settings.primary_link != blank -%}
+          <a class="px-btn px-btn--primary" href="{{ section.settings.primary_link }}">{{ section.settings.primary_label }}</a>
+        {%- endif -%}
+        {%- if section.settings.show_whatsapp and wa != blank -%}
+          {%- assign wa_msg = section.settings.whatsapp_message | default: 'Olá! Quero comprar no atacado para minha empresa.' -%}
+          <a class="px-btn px-btn--whatsapp" href="https://wa.me/{{ wa }}?text={{ wa_msg | url_encode }}" target="_blank" rel="noopener">{% render 'icon', name: 'whatsapp' %} {{ section.settings.whatsapp_label | default: 'Falar com vendedor' }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="px-business__benefits">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'benefit' -%}
+            <li class="px-business__benefit" data-reveal {{ block.shopify_attributes }}>
+              {% render 'icon', name: block.settings.icon %}
+              <div>
+                <strong>{{ block.settings.title }}</strong>
+                {%- if block.settings.text != blank -%}<p>{{ block.settings.text }}</p>{%- endif -%}
+              </div>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Atacado / Empresas",
+  "tag": "section",
+  "class": "px-section-wrapper",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto superior", "default": "PARA EMPRESAS" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Compre no atacado com a tradição da Paulex" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Preços especiais por volume, nota fiscal e atendimento dedicado para escritórios, escolas e revendedores." },
+    { "type": "text", "id": "primary_label", "label": "Botão principal", "default": "Ver pedido rápido" },
+    { "type": "url", "id": "primary_link", "label": "Link do botão principal" },
+    { "type": "checkbox", "id": "show_whatsapp", "label": "Exibir botão de WhatsApp", "default": true },
+    { "type": "text", "id": "whatsapp_label", "label": "Texto do WhatsApp", "default": "Falar com vendedor" },
+    { "type": "text", "id": "whatsapp_message", "label": "Mensagem do WhatsApp", "default": "Olá! Quero comprar no atacado para minha empresa." }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefício",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Ícone",
+          "default": "card",
+          "options": [
+            { "value": "card", "label": "Cartão" },
+            { "value": "truck", "label": "Caminhão" },
+            { "value": "shield", "label": "Escudo" },
+            { "value": "headset", "label": "Atendimento" },
+            { "value": "store", "label": "Loja" },
+            { "value": "check", "label": "Check" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Título", "default": "Preço de atacado" },
+        { "type": "text", "id": "text", "label": "Texto", "default": "Descontos por volume a partir de 12 unidades." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atacado / Empresas",
+      "blocks": [
+        { "type": "benefit", "settings": { "icon": "card", "title": "Preço de atacado", "text": "Descontos por volume a partir de 12 unidades." } },
+        { "type": "benefit", "settings": { "icon": "truck", "title": "Entrega para todo o Brasil", "text": "Logística para pedidos grandes." } },
+        { "type": "benefit", "settings": { "icon": "shield", "title": "Nota fiscal", "text": "Compra segura com NF para sua empresa." } },
+        { "type": "benefit", "settings": { "icon": "headset", "title": "Atendimento dedicado", "text": "Um vendedor para te ajudar no pedido." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
