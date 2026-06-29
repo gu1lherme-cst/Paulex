@@ -1,866 +1,878 @@
-import { memo, type ReactNode } from "react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import "./Home.css";
 
-type Tone = "blue" | "red" | "green" | "purple" | "yellow" | "dark";
+/* ----------------------------------------------------------------------------
+ * Paulex Armarinho — homepage
+ * Reconstrução funcional (React) do protótipo de design. Todas as imagens são
+ * placeholders em CSS/SVG, prontos para troca pelos arquivos reais.
+ * ------------------------------------------------------------------------- */
+
+type Tone = "blue" | "red" | "soft" | "violet" | "teal" | "amber";
+
+/* ----------------------------- Ícones ------------------------------------ */
 
 type IconName =
-  | "stack"
-  | "gift"
-  | "users"
-  | "card"
-  | "briefcase"
-  | "file"
-  | "tasks"
-  | "calendar"
-  | "spark"
-  | "community"
-  | "notes"
-  | "timer"
-  | "target"
-  | "brain"
-  | "book"
-  | "chart"
-  | "certificate"
+  | "pin"
+  | "medal"
   | "shield"
-  | "rocket"
-  | "play"
-  | "check"
-  | "chevron"
+  | "headset"
+  | "store"
+  | "menu"
+  | "user"
+  | "heart"
+  | "cart"
+  | "arrow"
+  | "chevronL"
+  | "chevronR"
   | "search"
-  | "bell"
-  | "home"
-  | "send"
-  | "map";
+  | "plus"
+  | "stack"
+  | "tag"
+  | "truck"
+  | "box"
+  | "check"
+  | "mail"
+  | "up"
+  | "whatsapp"
+  | "instagram"
+  | "facebook"
+  | "pencil"
+  | "cup"
+  | "users"
+  | "monitor"
+  | "lipstick"
+  | "trash"
+  | "list"
+  | "calendar"
+  | "boxes";
 
 const iconPaths: Record<IconName, ReactNode> = {
-  stack: (
+  pin: (
     <>
-      <path d="M12 3 3.6 7.4 12 11.8l8.4-4.4L12 3Z" />
-      <path d="m3.6 12.1 8.4 4.4 8.4-4.4" />
-      <path d="m3.6 16.6 8.4 4.4 8.4-4.4" />
+      <path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z" />
+      <circle cx="12" cy="10" r="2.3" />
     </>
   ),
-  gift: (
+  medal: (
     <>
-      <path d="M20 12v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8" />
-      <path d="M2.8 8h18.4v4H2.8z" />
-      <path d="M12 8v13" />
-      <path d="M12 8H8.5a2.5 2.5 0 1 1 2.3-3.5L12 8Z" />
-      <path d="M12 8h3.5a2.5 2.5 0 1 0-2.3-3.5L12 8Z" />
-    </>
-  ),
-  users: (
-    <>
-      <path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
-      <circle cx="9.5" cy="7" r="4" />
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-    </>
-  ),
-  card: (
-    <>
-      <rect x="3" y="5" width="18" height="14" rx="2" />
-      <path d="M3 10h18" />
-      <path d="M7 15h3" />
-    </>
-  ),
-  briefcase: (
-    <>
-      <path d="M10 6V5a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v1" />
-      <rect x="3" y="6" width="18" height="15" rx="2" />
-      <path d="M3 12h18" />
-      <path d="M12 12v2" />
-    </>
-  ),
-  file: (
-    <>
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
-      <path d="M14 2v6h6" />
-      <path d="M8 13h8" />
-      <path d="M8 17h6" />
-    </>
-  ),
-  tasks: (
-    <>
-      <rect x="4" y="4" width="16" height="16" rx="2" />
-      <path d="m8 12 2.5 2.5L16 9" />
-    </>
-  ),
-  calendar: (
-    <>
-      <rect x="3" y="4.5" width="18" height="16" rx="2" />
-      <path d="M8 2v5" />
-      <path d="M16 2v5" />
-      <path d="M3 10h18" />
-      <path d="M8 14h.01" />
-      <path d="M12 14h.01" />
-      <path d="M16 14h.01" />
-      <path d="M8 18h.01" />
-      <path d="M12 18h.01" />
-    </>
-  ),
-  spark: (
-    <>
-      <path d="M12 2.5 14.2 8l5.8 2-5.8 2-2.2 5.5L9.8 12 4 10l5.8-2L12 2.5Z" />
-      <path d="m19 15 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z" />
-    </>
-  ),
-  community: (
-    <>
-      <circle cx="8" cy="8" r="3" />
-      <circle cx="16" cy="8" r="3" />
-      <path d="M3.5 19a4.5 4.5 0 0 1 9 0" />
-      <path d="M11.5 19a4.5 4.5 0 0 1 9 0" />
-    </>
-  ),
-  notes: (
-    <>
-      <path d="M5 3h10l4 4v14H5V3Z" />
-      <path d="M15 3v5h5" />
-      <path d="M8 13h8" />
-      <path d="M8 17h6" />
-    </>
-  ),
-  timer: (
-    <>
-      <circle cx="12" cy="13" r="8" />
-      <path d="M12 13 16 9" />
-      <path d="M9 2h6" />
-      <path d="M12 2v3" />
-    </>
-  ),
-  target: (
-    <>
-      <circle cx="12" cy="12" r="9" />
-      <circle cx="12" cy="12" r="5" />
-      <circle cx="12" cy="12" r="1.5" />
-    </>
-  ),
-  brain: (
-    <>
-      <path d="M8.5 8.3a3.2 3.2 0 0 1 6.2-1.1A3 3 0 0 1 19 10a3 3 0 0 1-.9 2.1A3.4 3.4 0 0 1 15 19h-1.2" />
-      <path d="M9.6 19H9a4 4 0 0 1-2.9-6.8A3 3 0 0 1 8.5 8.3" />
-      <path d="M12 6.5V21" />
-      <path d="M8 12h4" />
-      <path d="M12 15h4" />
-    </>
-  ),
-  book: (
-    <>
-      <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H7a3 3 0 0 0-3 3V5.5Z" />
-      <path d="M4 5.5V22" />
-      <path d="M8 7h8" />
-    </>
-  ),
-  chart: (
-    <>
-      <path d="M4 19V5" />
-      <path d="M4 19h16" />
-      <path d="m7 15 3-4 3 2 5-7" />
-    </>
-  ),
-  certificate: (
-    <>
-      <path d="M6 3h12v10a6 6 0 0 1-12 0V3Z" />
-      <path d="M9 21v-4" />
-      <path d="M15 21v-4" />
-      <path d="m9 8 2 2 4-4" />
+      <circle cx="12" cy="9" r="5" />
+      <path d="M9 13l-1.4 7L12 17.6 16.4 20 15 13" />
     </>
   ),
   shield: (
     <>
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
-      <path d="m9 12 2 2 4-4" />
+      <path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z" />
+      <path d="M9.3 12l1.8 1.8 3.6-3.8" />
     </>
   ),
-  rocket: (
+  headset: (
     <>
-      <path d="M14 4c2.9 1 5 3.7 6 6.8-2.4.4-4.5 1.5-6 3.2-1.7 1.5-2.8 3.6-3.2 6C7.7 19 5 16.9 4 14c2.1-.7 3.7-1.8 5-3s2.3-2.9 3-5Z" />
-      <path d="M14 4 9 9" />
-      <path d="M5 19c-1 1-2 1.5-3 1 0-1 .5-2 1.5-3" />
+      <path d="M4 13a8 8 0 0 1 16 0" />
+      <path d="M4 13v3a2 2 0 0 0 2 2h1v-5H6a2 2 0 0 0-2 2z" />
+      <path d="M20 13v3a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2z" />
     </>
   ),
-  play: <path d="m8 5 11 7-11 7V5Z" />,
-  check: <path d="m5 12 4 4L19 6" />,
-  chevron: <path d="m6 9 6 6 6-6" />,
+  store: (
+    <>
+      <path d="M3 21h18" />
+      <path d="M5 21V8l7-4 7 4v13" />
+      <path d="M9 21v-6h6v6" />
+    </>
+  ),
+  menu: (
+    <>
+      <path d="M4 7h16" />
+      <path d="M4 12h16" />
+      <path d="M4 17h16" />
+    </>
+  ),
+  user: (
+    <>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" />
+    </>
+  ),
+  heart: <path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z" />,
+  cart: (
+    <>
+      <path d="M6 7h12l-1 11a2 2 0 0 1-2 1.8H9A2 2 0 0 1 7 18z" />
+      <path d="M9 7a3 3 0 0 1 6 0" />
+    </>
+  ),
+  arrow: (
+    <>
+      <path d="M5 12h14" />
+      <path d="M13 6l6 6-6 6" />
+    </>
+  ),
+  chevronL: <path d="M15 6l-6 6 6 6" />,
+  chevronR: <path d="M9 6l6 6-6 6" />,
   search: (
     <>
       <circle cx="11" cy="11" r="7" />
-      <path d="m16 16 4 4" />
+      <path d="M21 21l-4.3-4.3" />
     </>
   ),
-  bell: (
+  plus: (
     <>
-      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 6-3 8h18c0-2-3-1-3-8" />
-      <path d="M10 20a2 2 0 0 0 4 0" />
+      <path d="M12 5v14" />
+      <path d="M5 12h14" />
     </>
   ),
-  home: (
+  stack: (
     <>
-      <path d="m3 11 9-8 9 8" />
-      <path d="M5 10v11h14V10" />
-      <path d="M10 21v-6h4v6" />
+      <path d="M12 3l8 4v10l-8 4-8-4V7z" />
+      <path d="M4 7l8 4 8-4" />
+      <path d="M12 11v10" />
     </>
   ),
-  send: (
+  tag: (
     <>
-      <path d="m22 2-7 20-4-9-9-4 20-7Z" />
-      <path d="M22 2 11 13" />
+      <rect x="3" y="6" width="18" height="13" rx="2" />
+      <path d="M3 10h18" />
+      <path d="M16 14h2" />
     </>
   ),
-  map: (
+  truck: (
     <>
-      <path d="M9 18 3 21V6l6-3 6 3 6-3v15l-6 3-6-3Z" />
-      <path d="M9 3v15" />
-      <path d="M15 6v15" />
+      <path d="M3 13l2-6h9v10H3z" />
+      <path d="M14 9h3l3 4v3h-6z" />
+      <circle cx="7" cy="18" r="1.7" />
+      <circle cx="17" cy="18" r="1.7" />
     </>
-  )
+  ),
+  box: (
+    <>
+      <path d="M3 6l9-3 9 3-9 3z" />
+      <path d="M3 6v7l9 3 9-3V6" />
+    </>
+  ),
+  check: (
+    <>
+      <path d="M9 11l3 3 8-8" />
+      <path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" />
+    </>
+  ),
+  mail: (
+    <>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M3 7l9 6 9-6" />
+    </>
+  ),
+  up: (
+    <>
+      <path d="M12 19V5" />
+      <path d="M5 12l7-7 7 7" />
+    </>
+  ),
+  whatsapp: <path d="M12 2a10 10 0 0 0-8.7 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2z" />,
+  instagram: (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </>
+  ),
+  facebook: (
+    <path d="M14 8.5V7a1.5 1.5 0 0 1 1.5-1.5H17V3h-2.5A4 4 0 0 0 10.5 7v1.5H8V11h2.5v8H14v-8h2l.5-2.5z" />
+  ),
+  pencil: (
+    <>
+      <path d="M4 4h11l5 5v11H4z" />
+      <path d="M8 9h6" />
+      <path d="M8 13h8" />
+    </>
+  ),
+  cup: (
+    <>
+      <path d="M6 3h12l-1 5H7z" />
+      <path d="M7 8v11a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8" />
+    </>
+  ),
+  users: (
+    <>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" />
+    </>
+  ),
+  monitor: (
+    <>
+      <rect x="3" y="4" width="18" height="12" rx="2" />
+      <path d="M8 20h8" />
+    </>
+  ),
+  lipstick: (
+    <>
+      <path d="M9 3h6v4H9z" />
+      <path d="M8 7h8l1 13H7z" />
+    </>
+  ),
+  trash: (
+    <>
+      <path d="M6 3h12l-1.5 18h-9z" />
+      <path d="M8 9h8" />
+    </>
+  ),
+  list: (
+    <>
+      <path d="M4 7h16" />
+      <path d="M4 12h16" />
+      <path d="M4 17h10" />
+    </>
+  ),
+  calendar: (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <path d="M3 9h18" />
+      <path d="M8 4v5" />
+    </>
+  ),
+  boxes: (
+    <>
+      <path d="M3 9h18" />
+      <path d="M5 9V6a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />
+      <path d="M4 9l1 10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1l1-10" />
+    </>
+  ),
 };
 
-const baseUrl = import.meta.env.BASE_URL || "/";
-
-const navItems: Array<{ label: string; href: string; icon: IconName; dropdown?: boolean }> = [
-  { label: "Produto", href: "#produto", icon: "stack", dropdown: true },
-  { label: "Recursos", href: "#recursos", icon: "gift", dropdown: true },
-  { label: "Comunidade", href: "#comunidade", icon: "users" },
-  { label: "Planos", href: "#planos", icon: "card" },
-  { label: "Carreira", href: "#carreira", icon: "briefcase" }
-];
-
-const heroTools: Array<{ label: string; icon: IconName; tone: Tone }> = [
-  { label: "Notas", icon: "notes", tone: "blue" },
-  { label: "Tarefas", icon: "tasks", tone: "red" },
-  { label: "IA", icon: "spark", tone: "purple" },
-  { label: "Comunidade", icon: "community", tone: "green" },
-  { label: "Calendário", icon: "calendar", tone: "yellow" },
-  { label: "Carreira", icon: "briefcase", tone: "blue" }
-];
-
-const sidebarItems: Array<{ label: string; icon: IconName }> = [
-  { label: "Início", icon: "home" },
-  { label: "Agenda", icon: "calendar" },
-  { label: "Tarefas", icon: "tasks" },
-  { label: "Notas", icon: "notes" },
-  { label: "Pomodoro", icon: "timer" },
-  { label: "Metas", icon: "target" },
-  { label: "IA Assistente", icon: "spark" },
-  { label: "Simulados", icon: "chart" },
-  { label: "Comunidade", icon: "community" },
-  { label: "Carreira", icon: "briefcase" }
-];
-
-const stats = [
-  { value: "3", label: "Tarefas hoje" },
-  { value: "2h 30m", label: "Tempo de foco" },
-  { value: "1", label: "Aula / Prova" },
-  { value: "85%", label: "Meta diária", accent: true }
-];
-
-const schedule = [
-  { subject: "Matemática", time: "14:00 - 15:30", label: "Aula", tone: "blue" as Tone },
-  { subject: "História", time: "16:00 - 17:30", label: "Entrega", tone: "red" as Tone },
-  { subject: "Física", time: "19:00 - 20:30", label: "Foco", tone: "green" as Tone }
-];
-
-const aiActions = ["Resumir PDF", "Criar cronograma", "Gerar questões", "Explicar conceito"];
-
-const partners = ["Universidade Alpha", "Instituto Beta", "Escola Next", "Campus Digital", "EduLab", "Future Academy"];
-
-const productSteps: Array<{ title: string; description: string; icon: IconName; tone: Tone }> = [
-  {
-    title: "Reúna",
-    description: "Aulas, PDFs, tarefas, provas e dúvidas entram no mesmo ambiente.",
-    icon: "file",
-    tone: "blue"
-  },
-  {
-    title: "Planeje",
-    description: "Prazos viram agenda, prioridades, Pomodoro e metas executáveis.",
-    icon: "calendar",
-    tone: "purple"
-  },
-  {
-    title: "Aprenda",
-    description: "A IA cria resumos, revisões, questões, flashcards e explicações.",
-    icon: "brain",
-    tone: "red"
-  },
-  {
-    title: "Evolua",
-    description: "Seu progresso vira histórico, portfólio e oportunidades de carreira.",
-    icon: "rocket",
-    tone: "green"
-  }
-];
-
-const features: Array<{ title: string; description: string; icon: IconName; tone: Tone }> = [
-  {
-    title: "Notas que viram revisão",
-    description: "Guarde aulas, resumos e ideias em um espaço organizado para revisar quando precisar.",
-    icon: "notes",
-    tone: "blue"
-  },
-  {
-    title: "Calendário acadêmico",
-    description: "Veja provas, trabalhos, revisões e aulas em uma rotina simples de acompanhar.",
-    icon: "calendar",
-    tone: "purple"
-  },
-  {
-    title: "Tarefas inteligentes",
-    description: "Priorize o que importa e transforme prazos em ações claras para hoje.",
-    icon: "tasks",
-    tone: "green"
-  },
-  {
-    title: "Metas e hábitos",
-    description: "Acompanhe consistência, evolução por matéria e objetivos de longo prazo.",
-    icon: "target",
-    tone: "yellow"
-  },
-  {
-    title: "Pomodoro integrado",
-    description: "Conecte ciclos de foco às matérias, tarefas e revisões certas.",
-    icon: "timer",
-    tone: "red"
-  },
-  {
-    title: "IA contextual",
-    description: "Resumos, planos, exercícios e explicações baseados na sua rotina real.",
-    icon: "spark",
-    tone: "purple"
-  },
-  {
-    title: "Simulados e desempenho",
-    description: "Pratique com questões, identifique pontos fracos e acompanhe evolução.",
-    icon: "chart",
-    tone: "blue"
-  },
-  {
-    title: "Comunidade ativa",
-    description: "Entre em grupos, tire dúvidas e aprenda com estudantes do mesmo caminho.",
-    icon: "community",
-    tone: "green"
-  }
-];
-
-const communities = [
-  {
-    name: "ENEM",
-    members: "23.118",
-    description: "Redação, simulados e plano de revisão.",
-    event: "Correção de redação às 19h",
-    online: "+527 online",
-    tone: "yellow" as Tone
-  },
-  {
-    name: "Programação",
-    members: "18.430",
-    description: "Projetos, desafios e revisão de código.",
-    event: "Desafio React aberto",
-    online: "+418 online",
-    tone: "blue" as Tone
-  },
-  {
-    name: "Concursos",
-    members: "15.209",
-    description: "Editais, cronogramas e questões comentadas.",
-    event: "Simulado semanal liberado",
-    online: "+312 online",
-    tone: "purple" as Tone
-  }
-];
-
-const plans = [
-  {
-    name: "Free",
-    price: "R$ 0",
-    period: "/mês",
-    description: "Para começar a organizar a rotina sem custo.",
-    features: ["Notas e tarefas", "Calendário de estudos", "Pomodoro", "Comunidades públicas"],
-    cta: "Começar grátis"
-  },
-  {
-    name: "Pro",
-    price: "R$ 19,90",
-    period: "/mês",
-    description: "Para acelerar foco, desempenho e evolução com IA.",
-    features: ["Tudo do Free", "IA de estudos", "Simulados e desempenho", "Metas avançadas"],
-    cta: "Assinar Pro",
-    featured: true
-  },
-  {
-    name: "Campus",
-    price: "Sob consulta",
-    period: "",
-    description: "Para escolas, faculdades, cursos e instituições.",
-    features: ["Tudo do Pro", "Painel para turmas", "Relatórios de evolução", "Suporte dedicado"],
-    cta: "Falar com vendas"
-  }
-];
-
-function Icon({ name, className = "" }: { name: IconName; className?: string }) {
+const Icon = memo(function Icon({
+  name,
+  size = 18,
+  className,
+}: {
+  name: IconName;
+  size?: number;
+  className?: string;
+}) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+      focusable="false"
+    >
       {iconPaths[name]}
     </svg>
   );
-}
+});
 
-function LogoMark({ compact = false }: { compact?: boolean }) {
+/* ----------------------------- Placeholder ------------------------------- */
+
+function Placeholder({
+  label,
+  icon,
+  tone = "soft",
+  className,
+}: {
+  label: string;
+  icon: IconName;
+  tone?: Tone;
+  className?: string;
+}) {
   return (
-    <a className={compact ? "logo-mark compact" : "logo-mark"} href="#produto" aria-label="Ir para o início">
-      <img src={`${baseUrl}img/logo.png`} alt="Px" width="64" height="64" decoding="async" />
-      <span className="logo-fallback" aria-hidden="true"><strong>P</strong><em>x</em></span>
-    </a>
+    <div
+      className={`px-ph px-ph--${tone}${className ? ` ${className}` : ""}`}
+      role="img"
+      aria-label={label}
+    >
+      <span className="px-ph__icon">
+        <Icon name={icon} size={34} />
+      </span>
+      <span className="px-ph__label">{label}</span>
+    </div>
   );
 }
 
-const Header = memo(function Header() {
-  return (
-    <header className="header-shell" aria-label="Cabeçalho principal">
-      <div className="header-bar">
-        <LogoMark compact />
+/* ------------------------------- Estrelas -------------------------------- */
 
-        <nav className="desktop-nav" aria-label="Navegação principal">
-          {navItems.map((item) => (
-            <a key={item.label} className="nav-link" href={item.href}>
-              <Icon name={item.icon} />
-              <span>{item.label}</span>
-              {item.dropdown ? <Icon name="chevron" className="nav-chevron" /> : null}
+function Stars({ n, reviews }: { n: number; reviews: string }) {
+  return (
+    <div className="px-stars">
+      <span className="px-stars__row" aria-hidden="true">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <svg key={i} width="12" height="12" viewBox="0 0 24 24" fill={i < n ? "#F5A623" : "#E2E4E8"}>
+            <path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z" />
+          </svg>
+        ))}
+      </span>
+      <span className="px-stars__count">
+        <span className="px-sr-only">{n} de 5 estrelas, </span>({reviews})
+      </span>
+    </div>
+  );
+}
+
+/* -------------------------------- Dados ---------------------------------- */
+
+const universos: { name: string; desc: string; icon: IconName; tone: Tone }[] = [
+  { name: "Papelaria", desc: "Cadernos, canetas e material escolar", icon: "pencil", tone: "blue" },
+  { name: "Utilidades", desc: "Organização, limpeza e muito mais", icon: "cup", tone: "teal" },
+  { name: "Brinquedos", desc: "Diversão para todas as idades", icon: "users", tone: "amber" },
+  { name: "Informática", desc: "Tecnologia que simplifica o seu dia", icon: "monitor", tone: "violet" },
+  { name: "Cosméticos", desc: "Cuidados diários com as melhores marcas", icon: "lipstick", tone: "red" },
+  { name: "Descartáveis", desc: "Soluções práticas para o dia a dia", icon: "trash", tone: "soft" },
+];
+
+const benefits: { title: string; desc: string; icon: IconName }[] = [
+  { title: "Variedade completa", desc: "Para casa, escola e trabalho", icon: "stack" },
+  { title: "Preços justos", desc: "Condições que cabem no bolso", icon: "tag" },
+  { title: "Compra segura", desc: "Proteção dos seus dados", icon: "shield" },
+  { title: "Entrega rápida", desc: "Para todo o Rio de Janeiro", icon: "truck" },
+  { title: "Atendimento humano", desc: "Equipe especializada", icon: "headset" },
+];
+
+type Product = {
+  id: string;
+  name: string;
+  price: string;
+  installment: string;
+  n: number;
+  reviews: string;
+  badge?: string;
+  badgeTone?: "blue" | "red";
+  icon: IconName;
+  tone: Tone;
+};
+
+const bestsellers: Product[] = [
+  { id: "px-b1", name: "Caderno inteligente capa dura A5", price: "R$ 49,90", installment: "em 3x sem juros", n: 5, reviews: "1.245", badge: "Novo", badgeTone: "blue", icon: "pencil", tone: "blue" },
+  { id: "px-b2", name: "Mouse sem fio silencioso USB-C", price: "R$ 89,90", installment: "em 6x sem juros", n: 4, reviews: "982", badge: "Oferta", badgeTone: "red", icon: "monitor", tone: "violet" },
+  { id: "px-b3", name: "Organizador modular de mesa", price: "R$ 64,90", installment: "em 4x sem juros", n: 5, reviews: "1.103", icon: "cup", tone: "teal" },
+  { id: "px-b4", name: "Kit cuidados diários essencial", price: "R$ 79,90", installment: "em 4x sem juros", n: 4, reviews: "875", icon: "lipstick", tone: "red" },
+  { id: "px-b5", name: "Fone de ouvido Bluetooth", price: "R$ 129,90", installment: "em 6x sem juros", n: 5, reviews: "1.782", badge: "Novo", badgeTone: "blue", icon: "monitor", tone: "violet" },
+  { id: "px-b6", name: "Impressora multifuncional Wi-Fi", price: "R$ 899,10", installment: "em 10x sem juros", n: 4, reviews: "967", badge: "Oferta", badgeTone: "red", icon: "monitor", tone: "soft" },
+];
+
+const campaigns: { tag: string; title: string; off: string; cta: string; tone: Tone }[] = [
+  { tag: "Volta às aulas", title: "Tudo para um novo começo", off: "30%", cta: "Aproveitar ofertas", tone: "blue" },
+  { tag: "Home office", title: "Mais produtividade no seu dia", off: "25%", cta: "Ver produtos", tone: "teal" },
+  { tag: "Tecnologia", title: "Conecte-se com o futuro", off: "35%", cta: "Ver ofertas", tone: "violet" },
+];
+
+const atacadoBenefits: { title: string; desc: string; icon: IconName }[] = [
+  { title: "Preços por volume", desc: "Condições exclusivas para grandes compras", icon: "box" },
+  { title: "Atendimento especializado", desc: "Equipe dedicada ao seu negócio", icon: "users" },
+  { title: "Orçamentos rápidos", desc: "Resposta em até 24h para o seu negócio", icon: "check" },
+  { title: "Entrega programada", desc: "Mais agilidade e flexibilidade", icon: "calendar" },
+  { title: "Grande variedade", desc: "Tudo em um só fornecedor", icon: "list" },
+  { title: "40 anos de tradição", desc: "Confiança que gera parcerias", icon: "medal" },
+];
+
+const brands = [
+  "Faber-Castell", "BIC", "Tilibra", "CIS", "HP", "EPSON", "Logitech",
+  "Tramontina", "3M", "Acrilex", "Pilot", "Maped", "Stabilo",
+];
+
+const categories = [
+  "Todas as categorias", "Papelaria", "Utilidades", "Brinquedos",
+  "Informática", "Cosméticos", "Descartáveis",
+];
+
+/* ------------------------------ Logo (SVG) ------------------------------- */
+
+function Logo({ variant = "light" }: { variant?: "light" | "muted" }) {
+  return (
+    <span className={`px-logo px-logo--${variant}`} aria-label="Paulex">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="20" height="20" rx="6" fill="currentColor" opacity="0.16" />
+        <path d="M7 17V7h4.2a3.2 3.2 0 0 1 0 6.4H9.4" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      <span className="px-logo__word">Paulex</span>
+    </span>
+  );
+}
+
+/* --------------------------------- Page ---------------------------------- */
+
+export default function Home() {
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const univRef = useRef<HTMLDivElement>(null);
+  const bestRef = useRef<HTMLDivElement>(null);
+
+  const [cart, setCart] = useState(0);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState(categories[0]);
+  const [email, setEmail] = useState("");
+  const [newsletterMsg, setNewsletterMsg] = useState<string | null>(null);
+
+  /* Reveal on scroll */
+  useEffect(() => {
+    const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    if (!("IntersectionObserver" in window)) {
+      els.forEach((el) => el.classList.add("px-in"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("px-in");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -6% 0px" }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  /* Sombra no header sticky ao rolar */
+  useEffect(() => {
+    const onScroll = () => {
+      const h = stickyRef.current;
+      if (!h) return;
+      h.style.boxShadow = window.scrollY > 6 ? "0 4px 20px rgba(16,24,40,.12)" : "none";
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const scrollRow = useCallback((el: HTMLDivElement | null, dir: number) => {
+    if (!el) return;
+    el.scrollBy({ left: dir * Math.min(el.clientWidth * 0.85, 700), behavior: "smooth" });
+  }, []);
+
+  const scrollTop = useCallback(() => window.scrollTo({ top: 0, behavior: "smooth" }), []);
+
+  const onSearch = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault();
+      const q = search.trim();
+      const target = document.getElementById("universos");
+      if (target) target.scrollIntoView({ behavior: "smooth" });
+      if (q) console.info(`Buscar "${q}" em ${category}`);
+    },
+    [search, category]
+  );
+
+  const onNewsletter = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault();
+      const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+      if (!ok) {
+        setNewsletterMsg("Digite um e-mail válido para continuar.");
+        return;
+      }
+      setNewsletterMsg("Pronto! Você vai receber nossas novidades. 🎉");
+      setEmail("");
+    },
+    [email]
+  );
+
+  const addToCart = useCallback(() => setCart((c) => c + 1), []);
+
+  return (
+    <div className="px-root">
+      {/* 1 · TOP BAR */}
+      <div className="px-topbar">
+        <div className="px-topbar__in">
+          <div className="px-topbar__left">
+            <span><Icon name="pin" size={14} />Enviamos para todo o Rio de Janeiro</span>
+            <span><Icon name="medal" size={14} />Mais de 40 anos de tradição</span>
+            <span><Icon name="shield" size={14} />Compra 100% segura</span>
+            <span><Icon name="headset" size={14} />Atendimento humano</span>
+          </div>
+          <div className="px-topbar__right">
+            <a href="#lojas" className="px-navlink"><Icon name="store" size={14} />Nossas lojas</a>
+            <a href="#ajuda" className="px-navlink">Ajuda</a>
+          </div>
+        </div>
+      </div>
+
+      {/* STICKY: HEADER + MENU */}
+      <div className="px-sticky" ref={stickyRef}>
+        {/* 2 · HEADER */}
+        <div className="px-header">
+          <div className="px-header__in">
+            <a href="#topo" className="px-header__logo" aria-label="Paulex — página inicial">
+              <Logo />
             </a>
-          ))}
+
+            <form className="px-search" role="search" onSubmit={onSearch}>
+              <label htmlFor="px-q" className="px-sr-only">O que você procura</label>
+              <span className="px-search__icon"><Icon name="search" size={19} /></span>
+              <input
+                id="px-q"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="O que você precisa hoje?"
+              />
+              <label htmlFor="px-cat" className="px-sr-only">Categoria</label>
+              <select id="px-cat" value={category} onChange={(e) => setCategory(e.target.value)}>
+                {categories.map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
+              <button type="submit">
+                Buscar <Icon name="search" size={16} />
+              </button>
+            </form>
+
+            <div className="px-acctbar">
+              <a href="#entrar" className="px-acct">
+                <Icon name="user" size={22} />
+                <span className="px-acct__txt">
+                  <span className="px-acct__title">Entrar</span>
+                  <span className="px-acct__sub">Minha conta</span>
+                </span>
+              </a>
+              <a href="#favoritos" className="px-acct">
+                <Icon name="heart" size={22} />
+                <span className="px-acct__txt">
+                  <span className="px-acct__title">Favoritos</span>
+                  <span className="px-acct__sub">Lista de desejos</span>
+                </span>
+              </a>
+              <a href="#carrinho" className="px-acct">
+                <span className="px-acct__cart">
+                  <Icon name="cart" size={23} />
+                  <span className="px-acct__badge" aria-hidden="true">{cart}</span>
+                </span>
+                <span className="px-acct__txt">
+                  <span className="px-acct__title">Carrinho</span>
+                  <span className="px-acct__sub">{cart} {cart === 1 ? "item" : "itens"}</span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* 3 · MENU DE CATEGORIAS */}
+        <nav className="px-menu" aria-label="Categorias">
+          <div className="px-menu__in">
+            <span className="px-menu__all"><Icon name="menu" size={18} />Todas as categorias</span>
+            <a href="#universos" className="px-navlink">Papelaria</a>
+            <a href="#universos" className="px-navlink">Utilidades</a>
+            <a href="#universos" className="px-navlink">Brinquedos</a>
+            <a href="#universos" className="px-navlink">Informática e acessórios</a>
+            <a href="#universos" className="px-navlink">Cosméticos</a>
+            <a href="#universos" className="px-navlink">Descartáveis</a>
+            <a href="#atacado" className="px-navlink px-menu__atac">Atacado</a>
+            <a href="#ofertas" className="px-navlink px-menu__off">Ofertas</a>
+          </div>
         </nav>
-
-        <div className="header-actions">
-          <a className="login-link" href="#acesso">Entrar</a>
-          <a className="button button-primary header-cta" href="#acesso">Começar grátis</a>
-        </div>
       </div>
-    </header>
-  );
-});
 
-function HeroTools() {
-  return (
-    <div className="hero-tools" aria-label="Recursos principais">
-      {heroTools.map((tool) => (
-        <div className={`tool-orb tone-${tool.tone}`} key={tool.label}>
-          <Icon name={tool.icon} />
-          <span>{tool.label}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function SocialProof() {
-  return (
-    <div className="social-proof" aria-label="Prova social">
-      <div className="avatar-row" aria-hidden="true">
-        {['G', 'A', 'L', 'M', 'R'].map((item, index) => (
-          <span className={`avatar avatar-${index}`} key={item}>{item}</span>
-        ))}
-      </div>
-      <div className="proof-copy">
-        <div className="rating"><span>★★★★★</span><strong>Beta aberto</strong></div>
-        <p>Criado para estudantes que querem estudar melhor, se organizar e construir o futuro.</p>
-      </div>
-    </div>
-  );
-}
-
-const ProductMockup = memo(function ProductMockup() {
-  return (
-    <section className="product-mockup" id="demo" aria-label="Demonstração do produto">
-      <aside className="mockup-sidebar" aria-label="Menu do aplicativo">
-        <LogoMark compact />
-        <div className="sidebar-menu">
-          {sidebarItems.map((item, index) => (
-            <span className={index === 0 ? "sidebar-item active" : "sidebar-item"} key={item.label}>
-              <Icon name={item.icon} />
-              {item.label}
-            </span>
-          ))}
-        </div>
-      </aside>
-
-      <div className="mockup-main">
-        <div className="mockup-topbar">
-          <div>
-            <h2>Olá, estudante! 👋</h2>
-            <p>Foque no que importa e deixe o resto com a Px.</p>
-          </div>
-          <div className="topbar-icons" aria-hidden="true">
-            <Icon name="search" />
-            <Icon name="bell" />
-            <span className="user-photo">J</span>
-          </div>
-        </div>
-
-        <div className="dashboard-section">
-          <h3>Resumo de hoje</h3>
-          <div className="stat-grid">
-            {stats.map((stat) => (
-              <div className="stat-card" key={stat.label}>
-                <strong className={stat.accent ? "success" : ""}>{stat.value}</strong>
-                <span>{stat.label}</span>
+      <main id="topo">
+        {/* 4 · HERO */}
+        <section className="px-section">
+          <div className="px-hero">
+            <div className="px-hero__copy">
+              <p className="px-hero__eyebrow" data-reveal>Desde 1984, com você</p>
+              <h1 className="px-hero__title" data-reveal>
+                Tudo para escola, casa e <span className="px-hero__mark">trabalho</span>
+              </h1>
+              <p className="px-hero__lead" data-reveal>
+                Papelaria, utilidades, descartáveis, brinquedos, cosméticos e acessórios em um só lugar.
+              </p>
+              <div className="px-hero__cta" data-reveal>
+                <a href="#ofertas" className="px-btn px-btn--primary">
+                  Ver ofertas <Icon name="arrow" size={17} />
+                </a>
+                <a href="#whatsapp" className="px-btn px-btn--ghost">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366" aria-hidden="true">
+                    <path d="M12 2a10 10 0 0 0-8.7 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2z" />
+                  </svg>
+                  Falar no WhatsApp
+                </a>
               </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="dashboard-grid">
-          <article className="panel-card schedule-card">
-            <div className="panel-title-row">
-              <h3>Plano de hoje</h3>
-              <a href="#recursos">Ver agenda completa</a>
             </div>
-            <div className="schedule-list">
-              {schedule.map((item) => (
-                <div className={`schedule-item tone-${item.tone}`} key={item.subject}>
-                  <span className="schedule-line" />
-                  <div>
-                    <strong>{item.subject}</strong>
-                    <p>{item.time}</p>
-                  </div>
-                  <span className="tag">{item.label}</span>
+            <div className="px-hero__visual" data-reveal>
+              <Placeholder label="Produtos Paulex" icon="stack" tone="blue" className="px-hero__ph" />
+            </div>
+          </div>
+        </section>
+
+        {/* 5 · BENEFÍCIOS RÁPIDOS */}
+        <section className="px-benefits-wrap">
+          <div className="px-benefits">
+            {benefits.map((b) => (
+              <div className="px-benefit" key={b.title}>
+                <span className="px-benefit__icon"><Icon name={b.icon} size={28} /></span>
+                <div>
+                  <div className="px-benefit__title">{b.title}</div>
+                  <div className="px-benefit__desc">{b.desc}</div>
                 </div>
-              ))}
-            </div>
-          </article>
-
-          <article className="panel-card pomodoro-card">
-            <h3>Pomodoro</h3>
-            <div className="timer-ring" aria-label="Pomodoro 25 minutos">
-              <span>25:00</span>
-              <small>Foco</small>
-            </div>
-            <button className="mini-button" type="button">Iniciar</button>
-          </article>
-
-          <article className="panel-card career-card-mini">
-            <h3>Carreira</h3>
-            <p>Seu perfil está 72% completo</p>
-            <div className="progress-track"><span style={{ width: "72%" }} /></div>
-            <p>Complete para receber melhores oportunidades.</p>
-            <a href="#carreira">Ver meu perfil</a>
-          </article>
-        </div>
-
-        <article className="ai-assistant-card">
-          <div className="ai-title"><Icon name="spark" /><strong>IA Assistente</strong></div>
-          <p>Como posso ajudar nos seus estudos hoje?</p>
-          <div className="ai-actions">
-            {aiActions.map((action) => <button type="button" key={action}>{action}</button>)}
-            <button className="send-button" type="button" aria-label="Enviar"><Icon name="send" /></button>
-          </div>
-        </article>
-      </div>
-    </section>
-  );
-});
-
-const Hero = memo(function Hero() {
-  return (
-    <section className="hero-section" id="produto">
-      <div className="hero-bg" aria-hidden="true" />
-      <div className="container hero-grid">
-        <div className="hero-copy">
-          <div className="hero-badge"><Icon name="spark" />O sistema operacional do estudante</div>
-          <HeroTools />
-
-          <h1>
-            <span>Onde estudantes</span>
-            <span>aprendem, se</span>
-            <span>organizam e</span>
-            <span className="highlight-line"><i /> evoluem.</span>
-          </h1>
-
-          <p className="hero-subtitle">
-            Notas, tarefas, calendário, metas, Pomodoro, comunidade e IA para estudantes que querem aprender melhor e construir o futuro.
-          </p>
-
-          <div className="hero-actions">
-            <a className="button button-primary" href="#acesso">Começar gratuitamente <span aria-hidden="true">→</span></a>
-            <a className="button button-secondary" href="#demo">Ver demonstração <Icon name="play" /></a>
-          </div>
-
-          <SocialProof />
-        </div>
-
-        <ProductMockup />
-      </div>
-
-      <TrustStrip />
-    </section>
-  );
-});
-
-function TrustStrip() {
-  return (
-    <div className="container trust-strip">
-      <p>Utilizado por estudantes e instituições que acreditam no futuro da educação</p>
-      <div className="partner-row" aria-label="Instituições parceiras fictícias">
-        {partners.map((partner, index) => (
-          <span key={partner}><Icon name={index % 2 === 0 ? "shield" : "stack"} />{partner}</span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function SectionHeader({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
-  return (
-    <div className="section-header">
-      <span>{eyebrow}</span>
-      <h2>{title}</h2>
-      <p>{description}</p>
-    </div>
-  );
-}
-
-function ProductSystem() {
-  return (
-    <section className="section product-system" id="sistema">
-      <div className="container">
-        <SectionHeader
-          eyebrow="Como funciona"
-          title="Um fluxo, não dez aplicativos soltos."
-          description="A Px transforma a bagunça acadêmica em uma rotina de execução: reúna, planeje, aprenda e evolua."
-        />
-        <div className="steps-grid">
-          {productSteps.map((step, index) => (
-            <article className="step-card" key={step.title}>
-              <div className={`icon-box tone-${step.tone}`}><Icon name={step.icon} /></div>
-              <span className="step-number">{String(index + 1).padStart(2, "0")}</span>
-              <h3>{step.title}</h3>
-              <p>{step.description}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Features() {
-  return (
-    <section className="section features-section" id="recursos">
-      <div className="container">
-        <SectionHeader
-          eyebrow="Recursos"
-          title="Tudo que você precisa para estudar melhor."
-          description="Ferramentas conectadas para transformar intenção em rotina, rotina em progresso e progresso em oportunidade."
-        />
-        <div className="features-grid">
-          {features.map((feature) => (
-            <article className="feature-card" key={feature.title}>
-              <div className={`icon-box tone-${feature.tone}`}><Icon name={feature.icon} /></div>
-              <h3>{feature.title}</h3>
-              <p>{feature.description}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Community() {
-  return (
-    <section className="section community-section" id="comunidade">
-      <div className="container split-section">
-        <div>
-          <span className="eyebrow">Comunidade</span>
-          <h2>Aprender junto é mais poderoso.</h2>
-          <p>
-            Encontre estudantes com os mesmos objetivos, participe de grupos ativos, tire dúvidas e evolua com quem está na mesma jornada.
-          </p>
-          <a className="text-link" href="#acesso">Conhecer comunidade →</a>
-        </div>
-        <div className="community-grid">
-          {communities.map((community) => (
-            <article className={`community-card tone-${community.tone}`} key={community.name}>
-              <div className="community-top">
-                <div className={`icon-box tone-${community.tone}`}><Icon name="community" /></div>
-                <span>Ativo</span>
-              </div>
-              <h3>{community.name}</h3>
-              <strong>{community.members} membros</strong>
-              <p>{community.description}</p>
-              <small>{community.online}</small>
-              <em>{community.event}</em>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function AISection() {
-  return (
-    <section className="section ai-section" id="ia">
-      <div className="container ai-card-large">
-        <div>
-          <span className="eyebrow">Inteligência artificial</span>
-          <h2>Uma IA que entende sua rotina de estudos.</h2>
-          <p>
-            A Px conecta suas tarefas, provas, metas e anotações para criar planos personalizados, resumos inteligentes, revisões automáticas e exercícios baseados no que você precisa aprender agora.
-          </p>
-          <a className="button button-primary" href="#acesso">Experimentar IA</a>
-        </div>
-        <div className="ai-example-stack">
-          {[
-            ["Prova de Física em 7 dias", "Plano criado com 6 blocos de estudo e 2 revisões."],
-            ["PDF de Biologia enviado", "Resumo, flashcards e 12 questões gerados."],
-            ["Meta atrasada", "Agenda reorganizada para recuperar consistência."]
-          ].map(([title, text]) => (
-            <article className="ai-example" key={title}>
-              <Icon name="spark" />
-              <div><strong>{title}</strong><p>{text}</p></div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CareerSection() {
-  return (
-    <section className="section career-section" id="carreira">
-      <div className="container career-layout">
-        <div className="career-copy">
-          <span className="eyebrow">Carreira</span>
-          <h2>Do estudo à carreira.</h2>
-          <p className="career-thesis">Seu estudo vira histórico. Seu histórico vira portfólio. Seu portfólio vira oportunidade.</p>
-          <p>
-            A camada de carreira transforma evolução acadêmica em sinais úteis para estágios, bolsas, mentorias, vagas e trilhas profissionais.
-          </p>
-          <div className="hero-actions compact-actions">
-            <a className="button button-primary" href="#acesso">Criar perfil</a>
-            <a className="button button-secondary" href="#recursos">Ver trilhas</a>
-          </div>
-        </div>
-        <article className="career-profile-card">
-          <div className="profile-top">
-            <span className="profile-avatar">A</span>
-            <div>
-              <h3>Ana Clara</h3>
-              <p>Estudante de Engenharia</p>
-            </div>
-            <strong>72%</strong>
-          </div>
-          <div className="skill-list">
-            {[
-              ["Raciocínio lógico", "88%"],
-              ["Gestão de tempo", "76%"],
-              ["Comunicação escrita", "69%"]
-            ].map(([name, value]) => (
-              <div className="skill-item" key={name}>
-                <span>{name}</span><strong>{value}</strong>
-                <div className="progress-track"><span style={{ width: value }} /></div>
               </div>
             ))}
           </div>
-          <div className="opportunity-card">
-            <span>Oportunidade recomendada</span>
-            <strong>Estágio em tecnologia educacional</strong>
-            <small>Compatibilidade: 91%</small>
-          </div>
-        </article>
-      </div>
-    </section>
-  );
-}
+        </section>
 
-function Pricing() {
-  return (
-    <section className="section pricing-section" id="planos">
-      <div className="container">
-        <SectionHeader
-          eyebrow="Planos"
-          title="Comece simples. Evolua conforme sua rotina cresce."
-          description="Plano gratuito para validar o hábito e planos pagos para quem quer acelerar aprendizado, IA e desempenho."
-        />
-        <div className="pricing-grid">
-          {plans.map((plan) => (
-            <article className={plan.featured ? "plan-card featured" : "plan-card"} key={plan.name}>
-              {plan.featured ? <span className="popular-badge">Mais popular</span> : null}
-              <h3>{plan.name}</h3>
-              <p>{plan.description}</p>
-              <div className="price-line"><strong>{plan.price}</strong><span>{plan.period}</span></div>
+        {/* 6 · NOSSOS UNIVERSOS */}
+        <section id="universos" className="px-section px-section--pad">
+          <div className="px-rowhead">
+            <h2 className="px-h2" data-reveal>Nossos universos</h2>
+            <div className="px-rowhead__nav">
+              <a href="#universos" className="px-seeall" data-reveal>Ver todos os universos →</a>
+              <div className="px-arrows">
+                <button className="px-arrowbtn" aria-label="Universos anteriores" onClick={() => scrollRow(univRef.current, -1)}>
+                  <Icon name="chevronL" />
+                </button>
+                <button className="px-arrowbtn" aria-label="Próximos universos" onClick={() => scrollRow(univRef.current, 1)}>
+                  <Icon name="chevronR" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="px-scroll" ref={univRef}>
+            {universos.map((u) => (
+              <a href="#universos" className="px-card px-univ" data-reveal key={u.name}>
+                <div className="px-univ__img">
+                  <Placeholder label={u.name} icon={u.icon} tone={u.tone} />
+                </div>
+                <div className="px-univ__row">
+                  <h3 className="px-univ__name">{u.name}</h3>
+                  <span className="px-univ__arrow"><Icon name="arrow" size={17} /></span>
+                </div>
+                <p className="px-univ__desc">{u.desc}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        {/* 7 · MAIS VENDIDOS */}
+        <section className="px-section px-section--pad">
+          <div className="px-rowhead">
+            <h2 className="px-h2" data-reveal>Os mais vendidos</h2>
+            <div className="px-rowhead__nav">
+              <a href="#ofertas" className="px-seeall" data-reveal>Ver todos os mais vendidos →</a>
+              <div className="px-arrows">
+                <button className="px-arrowbtn" aria-label="Produtos anteriores" onClick={() => scrollRow(bestRef.current, -1)}>
+                  <Icon name="chevronL" />
+                </button>
+                <button className="px-arrowbtn" aria-label="Próximos produtos" onClick={() => scrollRow(bestRef.current, 1)}>
+                  <Icon name="chevronR" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="px-scroll" ref={bestRef}>
+            {bestsellers.map((p) => (
+              <article className="px-card px-prod" data-reveal key={p.id}>
+                <a href="#produto" className="px-prod__media">
+                  {p.badge && (
+                    <span className={`px-prod__badge px-prod__badge--${p.badgeTone}`}>{p.badge}</span>
+                  )}
+                  <Placeholder label={p.name} icon={p.icon} tone={p.tone} />
+                </a>
+                <h3 className="px-prod__name">
+                  <a href="#produto">{p.name}</a>
+                </h3>
+                <Stars n={p.n} reviews={p.reviews} />
+                <div className="px-prod__buy">
+                  <div className="px-prod__price">
+                    <span className="px-prod__amount">{p.price}</span>
+                    <span className="px-prod__install">{p.installment}</span>
+                  </div>
+                  <button className="px-prod__add" onClick={addToCart} aria-label={`Adicionar ${p.name} ao carrinho`}>
+                    <Icon name="plus" size={16} /> Adicionar
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* 8 · OFERTAS DA SEMANA */}
+        <section id="ofertas" className="px-section px-section--pad">
+          <div className="px-promo" data-reveal>
+            <div className="px-promo__glow" aria-hidden="true" />
+            <div className="px-promo__copy">
+              <span className="px-promo__tag">Ofertas da semana</span>
+              <h2 className="px-promo__title">Até 40% de desconto</h2>
+              <p className="px-promo__lead">Em papelaria, informática e utilidades.</p>
+              <a href="#ofertas" className="px-btn px-btn--red px-promo__btn">
+                Ver ofertas <Icon name="arrow" size={17} />
+              </a>
+            </div>
+            <div className="px-promo__media">
+              <Placeholder label="Composição de produtos: caderno, canetas, porta-canetas e planta" icon="pencil" tone="blue" />
+            </div>
+          </div>
+        </section>
+
+        {/* 9 · CAMPANHAS */}
+        <section className="px-section px-section--pad">
+          <div className="px-camps">
+            {campaigns.map((c) => (
+              <a href="#ofertas" className="px-camp" data-reveal key={c.tag}>
+                <Placeholder label={c.tag} icon="tag" tone={c.tone} className="px-camp__bg" />
+                <div className="px-camp__veil" aria-hidden="true" />
+                <div className="px-camp__body">
+                  <div>
+                    <p className="px-camp__tag">{c.tag}</p>
+                    <h3 className="px-camp__title">{c.title}</h3>
+                    <p className="px-camp__off"><span>até </span>{c.off}<span> OFF</span></p>
+                  </div>
+                  <span className="px-camp__cta">{c.cta} <Icon name="arrow" size={15} /></span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        {/* 10 · ATACADO */}
+        <section id="atacado" className="px-section px-section--pad">
+          <div className="px-atac-card" data-reveal>
+            <div className="px-atac">
+              <div className="px-atac__copy">
+                <span className="px-atac__chip"><Icon name="boxes" size={14} />Paulex Atacado</span>
+                <h2 className="px-atac__title">Comprando para sua empresa?</h2>
+                <p className="px-atac__lead">
+                  Condições especiais para empresas, escolas, escritórios, condomínios, igrejas e revendedores.
+                </p>
+                <div className="px-atac__cta">
+                  <a href="#orcamento" className="px-btn px-btn--primary px-btn--sm">Solicitar orçamento</a>
+                  <a href="#atacado" className="px-btn px-btn--ghost px-btn--sm">Conhecer o atacado</a>
+                </div>
+              </div>
+              <div className="px-atac__benefits">
+                {atacadoBenefits.map((b) => (
+                  <div className="px-atac__ben" key={b.title}>
+                    <span className="px-atac__benicon"><Icon name={b.icon} size={19} /></span>
+                    <div>
+                      <h4>{b.title}</h4>
+                      <p>{b.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="px-atac__media">
+                <Placeholder label="Atendimento a empresas" icon="users" tone="blue" className="px-atac__ph" />
+                <div className="px-atac__veil" aria-hidden="true" />
+                <p className="px-atac__caption">Enviamos para todo o Rio de Janeiro com excelência e agilidade.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 11 · MARCAS */}
+        <section className="px-section px-section--pad">
+          <div className="px-rowhead px-rowhead--brands">
+            <h2 className="px-h2 px-h2--sm" data-reveal>As melhores marcas você encontra aqui</h2>
+            <a href="#marcas" className="px-seeall" data-reveal>Ver todas as marcas →</a>
+          </div>
+          <div className="px-brands" data-reveal>
+            {brands.map((b) => (
+              <span className="px-brand" key={b}>{b}</span>
+            ))}
+          </div>
+        </section>
+
+        {/* 12 · NEWSLETTER */}
+        <section className="px-section px-section--pad">
+          <div className="px-news" data-reveal>
+            <div className="px-news__intro">
+              <span className="px-news__icon"><Icon name="mail" size={26} /></span>
+              <div>
+                <h3 className="px-news__title">Receba novidades e ofertas da Paulex</h3>
+                <p className="px-news__desc">Promoções, novidades e oportunidades para comprar melhor.</p>
+              </div>
+            </div>
+            <form className="px-news__form" onSubmit={onNewsletter} noValidate>
+              <label htmlFor="px-email" className="px-sr-only">Seu e-mail</label>
+              <input
+                id="px-email"
+                type="email"
+                value={email}
+                onChange={(e) => { setEmail(e.target.value); setNewsletterMsg(null); }}
+                placeholder="Seu melhor e-mail"
+                autoComplete="email"
+              />
+              <button type="submit">Cadastrar</button>
+              {newsletterMsg && (
+                <p className="px-news__msg" role="status">{newsletterMsg}</p>
+              )}
+            </form>
+          </div>
+        </section>
+      </main>
+
+      {/* 13 · RODAPÉ */}
+      <footer className="px-footer">
+        <button className="px-totop" onClick={scrollTop}>
+          <Icon name="up" size={16} /> Voltar ao topo
+        </button>
+
+        <div className="px-footer__in">
+          <div className="px-footer__cols">
+            <div>
+              <h4>Conheça a Paulex</h4>
               <ul>
-                {plan.features.map((item) => <li key={item}><Icon name="check" />{item}</li>)}
+                <li><a href="#historia" className="px-foot-link">Nossa história</a></li>
+                <li><a href="#carreiras" className="px-foot-link">Trabalhe conosco</a></li>
+                <li><a href="#lojas" className="px-foot-link">Lojas físicas</a></li>
+                <li><a href="#atacado" className="px-foot-link">Atacado</a></li>
+                <li><a href="#trocas" className="px-foot-link">Política de trocas</a></li>
               </ul>
-              <a className={plan.featured ? "button button-primary" : "button button-secondary"} href="#acesso">{plan.cta}</a>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function FinalCTA() {
-  return (
-    <section className="section final-cta-section" id="acesso">
-      <div className="container final-cta">
-        <div className="cta-orb"><Icon name="rocket" /></div>
-        <div>
-          <span>Próximo passo</span>
-          <h2>Pronto para transformar sua rotina de estudos?</h2>
-          <p>Entre na lista beta e ajude a construir o novo sistema operacional do estudante.</p>
-        </div>
-        <form className="waitlist-form" aria-label="Lista beta">
-          <input type="email" placeholder="Seu melhor e-mail" aria-label="Seu melhor e-mail" />
-          <button type="submit">Entrar na lista</button>
-        </form>
-      </div>
-    </section>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="footer">
-      <div className="container footer-grid">
-        <div>
-          <LogoMark compact />
-          <p>O ecossistema completo para estudantes aprenderem, se organizarem e evoluírem.</p>
-        </div>
-        {[
-          ["Produto", "Visão geral", "Demonstração", "Planos"],
-          ["Recursos", "Notas", "IA", "Comunidade"],
-          ["Empresa", "Sobre", "Carreira", "Contato"]
-        ].map(([title, ...links]) => (
-          <div key={title}>
-            <h3>{title}</h3>
-            {links.map((link) => <a href="#produto" key={link}>{link}</a>)}
+            </div>
+            <div>
+              <h4>Categorias</h4>
+              <ul>
+                <li><a href="#universos" className="px-foot-link">Papelaria</a></li>
+                <li><a href="#universos" className="px-foot-link">Utilidades</a></li>
+                <li><a href="#universos" className="px-foot-link">Brinquedos</a></li>
+                <li><a href="#universos" className="px-foot-link">Informática</a></li>
+                <li><a href="#universos" className="px-foot-link">Cosméticos</a></li>
+                <li><a href="#universos" className="px-foot-link">Descartáveis</a></li>
+                <li><a href="#atacado" className="px-foot-link">Atacado</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4>Atendimento</h4>
+              <ul>
+                <li><a href="#ajuda" className="px-foot-link">Fale conosco</a></li>
+                <li><a href="#whatsapp" className="px-foot-link">WhatsApp</a></li>
+                <li><a href="#entrega" className="px-foot-link">Entrega e retirada</a></li>
+                <li><a href="#trocas" className="px-foot-link">Trocas e devoluções</a></li>
+                <li><a href="#faq" className="px-foot-link">Perguntas frequentes</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4>Legal</h4>
+              <ul>
+                <li><a href="#privacidade" className="px-foot-link">Política de privacidade</a></li>
+                <li><a href="#termos" className="px-foot-link">Termos de uso</a></li>
+                <li><a href="#cookies" className="px-foot-link">Cookies</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4>Redes sociais</h4>
+              <ul>
+                <li><a href="#instagram" className="px-foot-link px-foot-link--ic"><Icon name="instagram" size={15} />Instagram</a></li>
+                <li><a href="#whatsapp" className="px-foot-link px-foot-link--ic"><Icon name="whatsapp" size={15} />WhatsApp</a></li>
+                <li><a href="#facebook" className="px-foot-link px-foot-link--ic"><Icon name="facebook" size={15} />Facebook</a></li>
+              </ul>
+            </div>
           </div>
-        ))}
-      </div>
-    </footer>
+
+          <div className="px-footer__base">
+            <Logo variant="muted" />
+            <span className="px-footer__legal">© 2026 Paulex Armarinho LTDA. · CNPJ 59.340.421/0001-04</span>
+            <a href="#privacidade" className="px-foot-link">Privacidade</a>
+            <a href="#termos" className="px-foot-link">Termos</a>
+            <a href="#cookies" className="px-foot-link">Cookies</a>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
-
-export const Home = memo(function Home() {
-  return (
-    <main className="px-page">
-      <Header />
-      <Hero />
-      <ProductSystem />
-      <Features />
-      <Community />
-      <AISection />
-      <CareerSection />
-      <Pricing />
-      <FinalCTA />
-      <Footer />
-    </main>
-  );
-});
-
-export default Home;
