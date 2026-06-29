@@ -2,6 +2,7 @@ import {
   memo,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type FormEvent,
@@ -337,10 +338,19 @@ const benefits: { title: string; desc: string; icon: IconName }[] = [
   { title: "Atendimento humano", desc: "Equipe especializada", icon: "headset" },
 ];
 
+type Category =
+  | "Papelaria"
+  | "Utilidades"
+  | "Brinquedos"
+  | "Informática"
+  | "Cosméticos"
+  | "Descartáveis";
+
 type Product = {
   id: string;
   name: string;
   price: string;
+  priceNum: number;
   installment: string;
   n: number;
   reviews: string;
@@ -348,15 +358,45 @@ type Product = {
   badgeTone?: "blue" | "red";
   icon: IconName;
   tone: Tone;
+  category: Category;
 };
 
 const bestsellers: Product[] = [
-  { id: "px-b1", name: "Caderno inteligente capa dura A5", price: "R$ 49,90", installment: "em 3x sem juros", n: 5, reviews: "1.245", badge: "Novo", badgeTone: "blue", icon: "pencil", tone: "blue" },
-  { id: "px-b2", name: "Mouse sem fio silencioso USB-C", price: "R$ 89,90", installment: "em 6x sem juros", n: 4, reviews: "982", badge: "Oferta", badgeTone: "red", icon: "monitor", tone: "violet" },
-  { id: "px-b3", name: "Organizador modular de mesa", price: "R$ 64,90", installment: "em 4x sem juros", n: 5, reviews: "1.103", icon: "cup", tone: "teal" },
-  { id: "px-b4", name: "Kit cuidados diários essencial", price: "R$ 79,90", installment: "em 4x sem juros", n: 4, reviews: "875", icon: "lipstick", tone: "red" },
-  { id: "px-b5", name: "Fone de ouvido Bluetooth", price: "R$ 129,90", installment: "em 6x sem juros", n: 5, reviews: "1.782", badge: "Novo", badgeTone: "blue", icon: "monitor", tone: "violet" },
-  { id: "px-b6", name: "Impressora multifuncional Wi-Fi", price: "R$ 899,10", installment: "em 10x sem juros", n: 4, reviews: "967", badge: "Oferta", badgeTone: "red", icon: "monitor", tone: "soft" },
+  { id: "px-b1", name: "Caderno inteligente capa dura A5", price: "R$ 49,90", priceNum: 49.9, installment: "em 3x sem juros", n: 5, reviews: "1.245", badge: "Novo", badgeTone: "blue", icon: "pencil", tone: "blue", category: "Papelaria" },
+  { id: "px-b2", name: "Mouse sem fio silencioso USB-C", price: "R$ 89,90", priceNum: 89.9, installment: "em 6x sem juros", n: 4, reviews: "982", badge: "Oferta", badgeTone: "red", icon: "monitor", tone: "violet", category: "Informática" },
+  { id: "px-b3", name: "Organizador modular de mesa", price: "R$ 64,90", priceNum: 64.9, installment: "em 4x sem juros", n: 5, reviews: "1.103", icon: "cup", tone: "teal", category: "Utilidades" },
+  { id: "px-b4", name: "Kit cuidados diários essencial", price: "R$ 79,90", priceNum: 79.9, installment: "em 4x sem juros", n: 4, reviews: "875", icon: "lipstick", tone: "red", category: "Cosméticos" },
+  { id: "px-b5", name: "Fone de ouvido Bluetooth", price: "R$ 129,90", priceNum: 129.9, installment: "em 6x sem juros", n: 5, reviews: "1.782", badge: "Novo", badgeTone: "blue", icon: "monitor", tone: "violet", category: "Informática" },
+  { id: "px-b6", name: "Impressora multifuncional Wi-Fi", price: "R$ 899,10", priceNum: 899.1, installment: "em 10x sem juros", n: 4, reviews: "967", badge: "Oferta", badgeTone: "red", icon: "monitor", tone: "soft", category: "Informática" },
+  { id: "px-b7", name: "Jogo de blocos de montar 120 peças", price: "R$ 59,90", priceNum: 59.9, installment: "em 3x sem juros", n: 5, reviews: "734", icon: "users", tone: "amber", category: "Brinquedos" },
+  { id: "px-b8", name: "Pelúcia urso macio 30cm", price: "R$ 44,90", priceNum: 44.9, installment: "em 2x sem juros", n: 4, reviews: "612", badge: "Novo", badgeTone: "blue", icon: "users", tone: "amber", category: "Brinquedos" },
+  { id: "px-b9", name: "Copos descartáveis 200ml (100un)", price: "R$ 19,90", priceNum: 19.9, installment: "em 1x sem juros", n: 4, reviews: "498", icon: "trash", tone: "soft", category: "Descartáveis" },
+  { id: "px-b10", name: "Pratos descartáveis 18cm (50un)", price: "R$ 24,90", priceNum: 24.9, installment: "em 2x sem juros", n: 5, reviews: "356", icon: "trash", tone: "soft", category: "Descartáveis" },
+  { id: "px-b11", name: "Canetas gel coloridas (12 cores)", price: "R$ 34,90", priceNum: 34.9, installment: "em 2x sem juros", n: 5, reviews: "1.021", badge: "Oferta", badgeTone: "red", icon: "pencil", tone: "blue", category: "Papelaria" },
+  { id: "px-b12", name: "Pano multiuso de limpeza (5un)", price: "R$ 14,90", priceNum: 14.9, installment: "em 1x sem juros", n: 4, reviews: "289", icon: "cup", tone: "teal", category: "Utilidades" },
+  { id: "px-b13", name: "Hidratante facial diário 50g", price: "R$ 39,90", priceNum: 39.9, installment: "em 2x sem juros", n: 5, reviews: "844", icon: "lipstick", tone: "red", category: "Cosméticos" },
+];
+
+/* Número de WhatsApp da loja (formato internacional, só dígitos).
+   TODO: substituir pelo número real da Paulex. */
+const WHATSAPP_NUMBER = "5521970000000";
+
+const formatBRL = (v: number) =>
+  v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+/* Link de contato direto no WhatsApp (botões de atendimento) */
+const WHATSAPP_CONTACT = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+  "Olá! Vim pelo site da Paulex e gostaria de atendimento."
+)}`;
+
+/* Mapeia rótulos do menu para a categoria filtrável correspondente. */
+const menuCategories: { label: string; cat: Category }[] = [
+  { label: "Papelaria", cat: "Papelaria" },
+  { label: "Utilidades", cat: "Utilidades" },
+  { label: "Brinquedos", cat: "Brinquedos" },
+  { label: "Informática e acessórios", cat: "Informática" },
+  { label: "Cosméticos", cat: "Cosméticos" },
+  { label: "Descartáveis", cat: "Descartáveis" },
 ];
 
 const campaigns: { tag: string; title: string; off: string; cta: string; tone: Tone }[] = [
@@ -405,11 +445,45 @@ export default function Home() {
   const univRef = useRef<HTMLDivElement>(null);
   const bestRef = useRef<HTMLDivElement>(null);
 
-  const [cart, setCart] = useState(0);
+  const [cartItems, setCartItems] = useState<{ id: string; qty: number }[]>([]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState(categories[0]);
+  const [activeCategory, setActiveCategory] = useState<Category | null>(null);
   const [email, setEmail] = useState("");
   const [newsletterMsg, setNewsletterMsg] = useState<string | null>(null);
+
+  /* Índice id -> produto, para montar o carrinho */
+  const productById = useMemo(
+    () => Object.fromEntries(bestsellers.map((p) => [p.id, p])) as Record<string, Product>,
+    []
+  );
+
+  /* Produtos visíveis: filtro por categoria + busca em tempo real */
+  const visibleProducts = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return bestsellers.filter(
+      (p) =>
+        (activeCategory ? p.category === activeCategory : true) &&
+        (q ? p.name.toLowerCase().includes(q) : true)
+    );
+  }, [search, activeCategory]);
+
+  const filterActive = activeCategory !== null || search.trim() !== "";
+
+  /* Carrinho detalhado e totais */
+  const cartDetailed = useMemo(
+    () =>
+      cartItems
+        .map((ci) => {
+          const p = productById[ci.id];
+          return p ? { ...p, qty: ci.qty } : null;
+        })
+        .filter((x): x is Product & { qty: number } => x !== null),
+    [cartItems, productById]
+  );
+  const cartCount = cartItems.reduce((s, i) => s + i.qty, 0);
+  const cartTotal = cartDetailed.reduce((s, it) => s + it.priceNum * it.qty, 0);
 
   /* Reveal on scroll */
   useEffect(() => {
@@ -452,16 +526,104 @@ export default function Home() {
 
   const scrollTop = useCallback(() => window.scrollTo({ top: 0, behavior: "smooth" }), []);
 
+  const scrollToProducts = useCallback(() => {
+    requestAnimationFrame(() =>
+      document.getElementById("produtos")?.scrollIntoView({ behavior: "smooth" })
+    );
+  }, []);
+
+  /* Seleciona/limpa o filtro de categoria e rola até a vitrine */
+  const selectCategory = useCallback(
+    (cat: Category | null) => {
+      setActiveCategory(cat);
+      setCategory(cat ?? categories[0]);
+      scrollToProducts();
+    },
+    [scrollToProducts]
+  );
+
+  const clearFilters = useCallback(() => {
+    setActiveCategory(null);
+    setCategory(categories[0]);
+    setSearch("");
+  }, []);
+
   const onSearch = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
-      const q = search.trim();
-      const target = document.getElementById("universos");
-      if (target) target.scrollIntoView({ behavior: "smooth" });
-      if (q) console.info(`Buscar "${q}" em ${category}`);
+      scrollToProducts();
     },
-    [search, category]
+    [scrollToProducts]
   );
+
+  /* Sincroniza o seletor de categoria da busca com o filtro ativo */
+  const onSelectChange = useCallback((value: string) => {
+    setCategory(value);
+    setActiveCategory(value === categories[0] ? null : (value as Category));
+  }, []);
+
+  /* ----------------------------- Carrinho ------------------------------ */
+  const addToCart = useCallback((id: string) => {
+    setCartItems((items) => {
+      const ex = items.find((i) => i.id === id);
+      if (ex) return items.map((i) => (i.id === id ? { ...i, qty: i.qty + 1 } : i));
+      return [...items, { id, qty: 1 }];
+    });
+  }, []);
+
+  const decItem = useCallback((id: string) => {
+    setCartItems((items) =>
+      items.flatMap((i) => (i.id !== id ? [i] : i.qty > 1 ? [{ ...i, qty: i.qty - 1 }] : []))
+    );
+  }, []);
+
+  const removeItem = useCallback((id: string) => {
+    setCartItems((items) => items.filter((i) => i.id !== id));
+  }, []);
+
+  const buyNow = useCallback(
+    (id: string) => {
+      addToCart(id);
+      setDrawerOpen(true);
+    },
+    [addToCart]
+  );
+
+  /* Finaliza o pedido abrindo o WhatsApp com o resumo */
+  const checkout = useCallback(() => {
+    if (cartDetailed.length === 0) return;
+    const linhas = cartDetailed
+      .map(
+        (it) =>
+          `• ${it.name}\n   ${it.qty} × ${formatBRL(it.priceNum)} = ${formatBRL(
+            it.priceNum * it.qty
+          )}`
+      )
+      .join("\n");
+    const msg = `Olá, gostaria de finalizar este pedido.\n\n${linhas}\n\nTotal: ${formatBRL(
+      cartTotal
+    )}`;
+    window.open(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,
+      "_blank",
+      "noopener"
+    );
+  }, [cartDetailed, cartTotal]);
+
+  /* Esc fecha o carrinho e trava o scroll do fundo quando aberto */
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDrawerOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [drawerOpen]);
 
   const onNewsletter = useCallback(
     (e: FormEvent) => {
@@ -476,8 +638,6 @@ export default function Home() {
     },
     [email]
   );
-
-  const addToCart = useCallback(() => setCart((c) => c + 1), []);
 
   return (
     <div className="px-root">
@@ -516,7 +676,7 @@ export default function Home() {
                 placeholder="O que você precisa hoje?"
               />
               <label htmlFor="px-cat" className="px-sr-only">Categoria</label>
-              <select id="px-cat" value={category} onChange={(e) => setCategory(e.target.value)}>
+              <select id="px-cat" value={category} onChange={(e) => onSelectChange(e.target.value)}>
                 {categories.map((c) => (
                   <option key={c}>{c}</option>
                 ))}
@@ -541,16 +701,23 @@ export default function Home() {
                   <span className="px-acct__sub">Lista de desejos</span>
                 </span>
               </a>
-              <a href="#carrinho" className="px-acct">
+              <button
+                type="button"
+                className="px-acct"
+                onClick={() => setDrawerOpen(true)}
+                aria-label={`Abrir carrinho, ${cartCount} ${cartCount === 1 ? "item" : "itens"}`}
+              >
                 <span className="px-acct__cart">
                   <Icon name="cart" size={23} />
-                  <span className="px-acct__badge" aria-hidden="true">{cart}</span>
+                  {cartCount > 0 && (
+                    <span className="px-acct__badge" aria-hidden="true">{cartCount}</span>
+                  )}
                 </span>
                 <span className="px-acct__txt">
                   <span className="px-acct__title">Carrinho</span>
-                  <span className="px-acct__sub">{cart} {cart === 1 ? "item" : "itens"}</span>
+                  <span className="px-acct__sub">{cartCount} {cartCount === 1 ? "item" : "itens"}</span>
                 </span>
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -558,13 +725,19 @@ export default function Home() {
         {/* 3 · MENU DE CATEGORIAS */}
         <nav className="px-menu" aria-label="Categorias">
           <div className="px-menu__in">
-            <span className="px-menu__all"><Icon name="menu" size={18} />Todas as categorias</span>
-            <a href="#universos" className="px-navlink">Papelaria</a>
-            <a href="#universos" className="px-navlink">Utilidades</a>
-            <a href="#universos" className="px-navlink">Brinquedos</a>
-            <a href="#universos" className="px-navlink">Informática e acessórios</a>
-            <a href="#universos" className="px-navlink">Cosméticos</a>
-            <a href="#universos" className="px-navlink">Descartáveis</a>
+            <button type="button" className="px-menu__all" onClick={() => selectCategory(null)}>
+              <Icon name="menu" size={18} />Todas as categorias
+            </button>
+            {menuCategories.map((m) => (
+              <a
+                key={m.cat}
+                href="#produtos"
+                className={`px-navlink${activeCategory === m.cat ? " px-navlink--active" : ""}`}
+                onClick={(e) => { e.preventDefault(); selectCategory(m.cat); }}
+              >
+                {m.label}
+              </a>
+            ))}
             <a href="#atacado" className="px-navlink px-menu__atac">Atacado</a>
             <a href="#ofertas" className="px-navlink px-menu__off">Ofertas</a>
           </div>
@@ -587,7 +760,7 @@ export default function Home() {
                 <a href="#ofertas" className="px-btn px-btn--primary">
                   Ver ofertas <Icon name="arrow" size={17} />
                 </a>
-                <a href="#whatsapp" className="px-btn px-btn--ghost">
+                <a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-btn px-btn--ghost">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366" aria-hidden="true">
                     <path d="M12 2a10 10 0 0 0-8.7 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2z" />
                   </svg>
@@ -634,7 +807,13 @@ export default function Home() {
           </div>
           <div className="px-scroll" ref={univRef}>
             {universos.map((u) => (
-              <a href="#universos" className="px-card px-univ" data-reveal key={u.name}>
+              <a
+                href="#produtos"
+                className="px-card px-univ"
+                data-reveal
+                key={u.name}
+                onClick={(e) => { e.preventDefault(); selectCategory(u.name as Category); }}
+              >
                 <div className="px-univ__img">
                   <Placeholder label={u.name} icon={u.icon} tone={u.tone} />
                 </div>
@@ -649,9 +828,11 @@ export default function Home() {
         </section>
 
         {/* 7 · MAIS VENDIDOS */}
-        <section className="px-section px-section--pad">
+        <section id="produtos" className="px-section px-section--pad">
           <div className="px-rowhead">
-            <h2 className="px-h2" data-reveal>Os mais vendidos</h2>
+            <h2 className="px-h2" data-reveal>
+              {activeCategory ? activeCategory : "Os mais vendidos"}
+            </h2>
             <div className="px-rowhead__nav">
               <a href="#ofertas" className="px-seeall" data-reveal>Ver todos os mais vendidos →</a>
               <div className="px-arrows">
@@ -664,31 +845,69 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="px-scroll" ref={bestRef}>
-            {bestsellers.map((p) => (
-              <article className="px-card px-prod" data-reveal key={p.id}>
-                <a href="#produto" className="px-prod__media">
-                  {p.badge && (
-                    <span className={`px-prod__badge px-prod__badge--${p.badgeTone}`}>{p.badge}</span>
-                  )}
-                  <Placeholder label={p.name} icon={p.icon} tone={p.tone} />
-                </a>
-                <h3 className="px-prod__name">
-                  <a href="#produto">{p.name}</a>
-                </h3>
-                <Stars n={p.n} reviews={p.reviews} />
-                <div className="px-prod__buy">
-                  <div className="px-prod__price">
-                    <span className="px-prod__amount">{p.price}</span>
-                    <span className="px-prod__install">{p.installment}</span>
+
+          {filterActive && (
+            <div className="px-filterbar">
+              <span className="px-filterbar__txt">
+                {search.trim()
+                  ? <>Resultados para “{search.trim()}”{activeCategory ? ` em ${activeCategory}` : ""}</>
+                  : <>Mostrando {activeCategory}</>}
+                {" · "}
+                {visibleProducts.length} {visibleProducts.length === 1 ? "produto" : "produtos"}
+              </span>
+              <button type="button" className="px-filterbar__clear" onClick={clearFilters}>
+                Ver todos os produtos
+              </button>
+            </div>
+          )}
+
+          {visibleProducts.length === 0 ? (
+            <div className="px-empty">
+              <p>Nenhum produto encontrado.</p>
+              <button type="button" className="px-btn px-btn--primary px-btn--sm" onClick={clearFilters}>
+                Ver todos os produtos
+              </button>
+            </div>
+          ) : (
+            <div className="px-scroll" ref={bestRef}>
+              {visibleProducts.map((p) => (
+                <article className="px-card px-prod" data-reveal key={p.id}>
+                  <a href="#produto" className="px-prod__media" onClick={(e) => e.preventDefault()}>
+                    {p.badge && (
+                      <span className={`px-prod__badge px-prod__badge--${p.badgeTone}`}>{p.badge}</span>
+                    )}
+                    <Placeholder label={p.name} icon={p.icon} tone={p.tone} />
+                  </a>
+                  <h3 className="px-prod__name">
+                    <a href="#produto" onClick={(e) => e.preventDefault()}>{p.name}</a>
+                  </h3>
+                  <Stars n={p.n} reviews={p.reviews} />
+                  <div className="px-prod__foot">
+                    <div className="px-prod__price">
+                      <span className="px-prod__amount">{p.price}</span>
+                      <span className="px-prod__install">{p.installment}</span>
+                    </div>
+                    <div className="px-prod__actions">
+                      <button
+                        className="px-prod__add"
+                        onClick={() => addToCart(p.id)}
+                        aria-label={`Adicionar ${p.name} ao carrinho`}
+                      >
+                        <Icon name="plus" size={16} /> Adicionar
+                      </button>
+                      <button
+                        className="px-prod__now"
+                        onClick={() => buyNow(p.id)}
+                        aria-label={`Comprar ${p.name} agora`}
+                      >
+                        Comprar
+                      </button>
+                    </div>
                   </div>
-                  <button className="px-prod__add" onClick={addToCart} aria-label={`Adicionar ${p.name} ao carrinho`}>
-                    <Icon name="plus" size={16} /> Adicionar
-                  </button>
-                </div>
-              </article>
-            ))}
-          </div>
+                </article>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* 8 · OFERTAS DA SEMANA */}
@@ -840,7 +1059,7 @@ export default function Home() {
               <h4>Atendimento</h4>
               <ul>
                 <li><a href="#ajuda" className="px-foot-link">Fale conosco</a></li>
-                <li><a href="#whatsapp" className="px-foot-link">WhatsApp</a></li>
+                <li><a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-foot-link">WhatsApp</a></li>
                 <li><a href="#entrega" className="px-foot-link">Entrega e retirada</a></li>
                 <li><a href="#trocas" className="px-foot-link">Trocas e devoluções</a></li>
                 <li><a href="#faq" className="px-foot-link">Perguntas frequentes</a></li>
@@ -858,7 +1077,7 @@ export default function Home() {
               <h4>Redes sociais</h4>
               <ul>
                 <li><a href="#instagram" className="px-foot-link px-foot-link--ic"><Icon name="instagram" size={15} />Instagram</a></li>
-                <li><a href="#whatsapp" className="px-foot-link px-foot-link--ic"><Icon name="whatsapp" size={15} />WhatsApp</a></li>
+                <li><a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-foot-link px-foot-link--ic"><Icon name="whatsapp" size={15} />WhatsApp</a></li>
                 <li><a href="#facebook" className="px-foot-link px-foot-link--ic"><Icon name="facebook" size={15} />Facebook</a></li>
               </ul>
             </div>
@@ -873,6 +1092,107 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* CARRINHO (drawer) */}
+      <div
+        className={`px-overlay${drawerOpen ? " px-overlay--on" : ""}`}
+        onClick={() => setDrawerOpen(false)}
+        aria-hidden="true"
+      />
+      <aside
+        className={`px-drawer${drawerOpen ? " px-drawer--open" : ""}`}
+        role="dialog"
+        aria-label="Carrinho de compras"
+        aria-modal="true"
+      >
+        <div className="px-drawer__head">
+          <h2 className="px-drawer__title">
+            <Icon name="cart" size={20} /> Seu carrinho
+            {cartCount > 0 && <span className="px-drawer__count">{cartCount}</span>}
+          </h2>
+          <button
+            type="button"
+            className="px-drawer__close"
+            onClick={() => setDrawerOpen(false)}
+            aria-label="Fechar carrinho"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+
+        {cartDetailed.length === 0 ? (
+          <div className="px-drawer__empty">
+            <span className="px-drawer__emptyicon"><Icon name="cart" size={34} /></span>
+            <p>Seu carrinho está vazio.</p>
+            <button
+              type="button"
+              className="px-btn px-btn--primary px-btn--sm"
+              onClick={() => setDrawerOpen(false)}
+            >
+              Continuar comprando
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="px-drawer__list">
+              {cartDetailed.map((it) => (
+                <div className="px-citem" key={it.id}>
+                  <div className="px-citem__media">
+                    <Placeholder label={it.name} icon={it.icon} tone={it.tone} />
+                  </div>
+                  <div className="px-citem__info">
+                    <p className="px-citem__name">{it.name}</p>
+                    <p className="px-citem__unit">{formatBRL(it.priceNum)}</p>
+                    <div className="px-citem__qty">
+                      <button type="button" onClick={() => decItem(it.id)} aria-label={`Diminuir quantidade de ${it.name}`}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" aria-hidden="true"><path d="M5 12h14" /></svg>
+                      </button>
+                      <span aria-live="polite">{it.qty}</span>
+                      <button type="button" onClick={() => addToCart(it.id)} aria-label={`Aumentar quantidade de ${it.name}`}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="px-citem__right">
+                    <button
+                      type="button"
+                      className="px-citem__rm"
+                      onClick={() => removeItem(it.id)}
+                      aria-label={`Remover ${it.name} do carrinho`}
+                    >
+                      <Icon name="trash" size={17} />
+                    </button>
+                    <span className="px-citem__line">{formatBRL(it.priceNum * it.qty)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="px-drawer__foot">
+              <div className="px-drawer__sum">
+                <span>Subtotal</span>
+                <span>{formatBRL(cartTotal)}</span>
+              </div>
+              <div className="px-drawer__sum px-drawer__sum--total">
+                <span>Total</span>
+                <span>{formatBRL(cartTotal)}</span>
+              </div>
+              <button type="button" className="px-drawer__checkout" onClick={checkout}>
+                <Icon name="whatsapp" size={18} /> Finalizar pedido
+              </button>
+              <button
+                type="button"
+                className="px-drawer__cont"
+                onClick={() => setDrawerOpen(false)}
+              >
+                Continuar comprando
+              </button>
+            </div>
+          </>
+        )}
+      </aside>
     </div>
   );
 }
