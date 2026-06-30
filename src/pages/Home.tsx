@@ -377,9 +377,8 @@ const bestsellers: Product[] = [
   { id: "px-b13", name: "Hidratante facial diário 50g", price: "R$ 39,90", priceNum: 39.9, installment: "em 2x sem juros", n: 5, reviews: "844", icon: "lipstick", tone: "red", category: "Cosméticos" },
 ];
 
-/* Número de WhatsApp da loja (formato internacional, só dígitos).
-   TODO: substituir pelo número real da Paulex. */
-const WHATSAPP_NUMBER = "5521970000000";
+/* Número de WhatsApp da loja (formato internacional, só dígitos): (21) 98757-8187 */
+const WHATSAPP_NUMBER = "5521987578187";
 
 const formatBRL = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -428,13 +427,13 @@ const categories = [
 
 function Logo({ variant = "light" }: { variant?: "light" | "muted" }) {
   return (
-    <span className={`px-logo px-logo--${variant}`} aria-label="Paulex">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <rect x="2" y="2" width="20" height="20" rx="6" fill="currentColor" opacity="0.16" />
-        <path d="M7 17V7h4.2a3.2 3.2 0 0 1 0 6.4H9.4" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-      <span className="px-logo__word">Paulex</span>
-    </span>
+    <img
+      src={`${import.meta.env.BASE_URL}img/paulex-logo.png`}
+      alt="Paulex"
+      className={`px-logo px-logo--${variant}`}
+      width={260}
+      height={154}
+    />
   );
 }
 
@@ -773,7 +772,13 @@ export default function Home() {
               </div>
             </div>
             <div className="px-hero__visual" data-reveal>
-              <Placeholder label="Produtos Paulex" icon="stack" tone="blue" className="px-hero__ph" />
+              <img
+                src={`${import.meta.env.BASE_URL}img/paulex-banner.jpg`}
+                alt="Variedade de produtos Paulex: papelaria, informática, utilidades e cosméticos"
+                className="px-hero__img"
+                width={1280}
+                height={853}
+              />
             </div>
           </div>
         </section>
@@ -927,7 +932,13 @@ export default function Home() {
               </a>
             </div>
             <div className="px-promo__media">
-              <Placeholder label="Composição de produtos: caderno, canetas, porta-canetas e planta" icon="pencil" tone="blue" />
+              <img
+                src={`${import.meta.env.BASE_URL}img/paulex-banner.jpg`}
+                alt="Produtos Paulex em oferta"
+                className="px-promo__img"
+                width={1280}
+                height={853}
+              />
             </div>
           </div>
         </section>

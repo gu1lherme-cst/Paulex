@@ -80,23 +80,16 @@
 /* ------------------------------- Logo ------------------------------------ */
 
 .px-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-}
-.px-logo__word {
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: -0.8px;
+  display: block;
+  width: auto;
+  object-fit: contain;
 }
 .px-logo--light {
-  color: #fff;
+  height: 50px;
 }
 .px-logo--muted {
-  color: rgba(255, 255, 255, 0.55);
-}
-.px-logo--muted .px-logo__word {
-  font-size: 19px;
+  height: 30px;
+  opacity: 0.7;
 }
 
 /* ------------------------------ Botões ----------------------------------- */
@@ -1748,4 +1741,21 @@ button.px-menu__all {
     width: 100%;
     max-width: 100%;
   }
+}
+
+/* Imagens reais: banner do hero e do bloco de ofertas */
+.px-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 24px;
+}
+.px-promo__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
