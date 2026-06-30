@@ -5,15 +5,16 @@ import { Stars } from "../components/Stars";
 import { ProductCard } from "../components/ProductCard";
 import { useCart } from "../lib/cart";
 import { useWishlist } from "../lib/wishlist";
+import { useProducts } from "../lib/products";
 import { href } from "../lib/router";
 import { formatBRL } from "../lib/format";
 import {
-  productById, relatedProducts, discountPercent, productDescription, categorySlug,
-  stockLevel, hasWholesale,
+  discountPercent, productDescription, categorySlug, stockLevel, hasWholesale,
 } from "../data/catalog";
 
 export function Product({ id }: { id: string }) {
-  const product = productById(id);
+  const { byId, related } = useProducts();
+  const product = byId(id);
   const { add, buyNow, fulfillment, setFulfillment } = useCart();
   const { has, toggle } = useWishlist();
   const [qty, setQty] = useState(1);
@@ -31,7 +32,7 @@ export function Product({ id }: { id: string }) {
   }
 
   const pct = discountPercent(product);
-  const related = relatedProducts(product, 4);
+  const relatedItems = related(product, 4);
   const level = stockLevel(product);
   const out = level === "out";
   const maxQty = Math.min(99, product.stock);
@@ -129,11 +130,11 @@ export function Product({ id }: { id: string }) {
         </div>
       </div>
 
-      {related.length > 0 && (
+      {relatedItems.length > 0 && (
         <section className="px-pdp__related">
           <h2 className="px-h2 px-h2--sm" data-reveal>Produtos relacionados</h2>
           <div className="px-grid">
-            {related.map((p) => <ProductCard key={p.id} p={p} />)}
+            {relatedItems.map((p) => <ProductCard key={p.id} p={p} />)}
           </div>
         </section>
       )}

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ProductsProvider, useProducts } from "./lib/products";
 import { CartProvider } from "./lib/cart";
 import { WishlistProvider } from "./lib/wishlist";
 import { useRoute, href, type Route } from "./lib/router";
@@ -11,7 +12,8 @@ import { Home } from "./pages/Home";
 import { Listing } from "./pages/Listing";
 import { Product } from "./pages/Product";
 import { Favorites } from "./pages/Favorites";
-import { categoryFromSlug, productById } from "./data/catalog";
+import { Admin } from "./pages/Admin";
+import { categoryFromSlug, type Product as TProduct } from "./data/catalog";
 import "./styles.css";
 
 const BRAND = "Paulex Armarinho";
@@ -29,7 +31,7 @@ function setMeta(name: string, content: string) {
 }
 
 /* SEO técnico por rota: title + meta description (Cap 51). */
-function applySEO(route: Route) {
+function applySEO(route: Route, byId: (id: string) => TProduct | undefined) {
   let title = `${BRAND} | Papelaria, utilidades e muito mais`;
   let desc = DEFAULT_DESC;
   switch (route.name) {
@@ -45,6 +47,10 @@ function applySEO(route: Route) {
       title = `Meus favoritos | ${BRAND}`;
       desc = "Seus produtos favoritos na Paulex Armarinho.";
       break;
+    case "admin":
+      title = `Painel administrativo | ${BRAND}`;
+      desc = "Gestão local do catálogo da Paulex Armarinho.";
+      break;
     case "categoria": {
       const c = categoryFromSlug(route.slug);
       title = `${c ?? "Categoria"} | ${BRAND}`;
@@ -56,7 +62,7 @@ function applySEO(route: Route) {
       desc = `Resultados da busca por "${route.query}" na Paulex Armarinho.`;
       break;
     case "produto": {
-      const p = productById(route.id);
+      const p = byId(route.id);
       if (p) {
         title = `${p.name} | ${BRAND}`;
         desc = `${p.name} por ${p.price} na Paulex Armarinho. ${p.category} com retirada na loja ou entrega para todo o Rio de Janeiro.`;
@@ -85,6 +91,7 @@ function Page({ route }: { route: Route }) {
     case "home": return <Home />;
     case "produto": return <Product id={route.id} />;
     case "favoritos": return <Favorites />;
+    case "admin": return <Admin />;
     case "produtos":
     case "ofertas":
     case "categoria":
@@ -94,28 +101,37 @@ function Page({ route }: { route: Route }) {
   }
 }
 
-export default function App() {
+function Shell() {
   const route = useRoute();
   const key = JSON.stringify(route);
+  const { byId } = useProducts();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    applySEO(route);
+    applySEO(route, byId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
   useReveal(key);
 
   return (
-    <WishlistProvider>
-      <CartProvider>
-        <div className="px-root">
-          <Header />
-          <Page route={route} />
-          <Footer />
-          <CartDrawer />
-        </div>
-      </CartProvider>
-    </WishlistProvider>
+    <div className="px-root">
+      <Header />
+      <Page route={route} />
+      <Footer />
+      <CartDrawer />
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ProductsProvider>
+      <WishlistProvider>
+        <CartProvider>
+          <Shell />
+        </CartProvider>
+      </WishlistProvider>
+    </ProductsProvider>
   );
 }

@@ -4,16 +4,17 @@ import { Placeholder } from "../components/Placeholder";
 import { ProductCard } from "../components/ProductCard";
 import { href } from "../lib/router";
 import { WHATSAPP_CONTACT } from "../lib/format";
+import { useProducts } from "../lib/products";
 import {
-  PRODUCTS, CATEGORY_CARDS, CAMPAIGNS, ATACADO_BENEFITS, BRANDS, BENEFITS,
-  offers, categorySlug,
+  CATEGORY_CARDS, CAMPAIGNS, ATACADO_BENEFITS, BRANDS, BENEFITS, categorySlug,
 } from "../data/catalog";
 
 const HERO_IMG = `${import.meta.env.BASE_URL}img/paulex-hero.jpg`;
-const bestSellers = PRODUCTS.slice(0, 10);
-const offerProducts = offers();
 
 export function Home() {
+  const { products, offers } = useProducts();
+  const bestSellers = products.slice(0, 10);
+  const offerProducts = offers();
   const bestRef = useRef<HTMLDivElement>(null);
   const offerRef = useRef<HTMLDivElement>(null);
   const [email, setEmail] = useState("");

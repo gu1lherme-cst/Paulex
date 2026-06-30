@@ -38,6 +38,7 @@ export function Header() {
           <div className="px-topbar__right">
             <a href={href("/produtos")} className="px-navlink"><Icon name="store" size={14} />Nossas lojas</a>
             <a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-navlink">Ajuda</a>
+            <a href={href("/admin")} className="px-navlink">Admin</a>
           </div>
         </div>
       </div>

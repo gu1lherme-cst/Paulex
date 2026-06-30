@@ -40,7 +40,7 @@ export type Product = {
 
 /* ------------------------------- Produtos -------------------------------- */
 
-export const PRODUCTS: Product[] = [
+export const DEFAULT_PRODUCTS: Product[] = [
   { id: "px-b1", sku: "PAP-001", name: "Caderno inteligente capa dura A5", price: "R$ 49,90", priceNum: 49.9, oldPrice: "R$ 58,90", oldPriceNum: 58.9, wholesalePrice: 44.9, wholesaleMin: 4, stock: 32, tags: ["escola", "caderno"], installment: "em 3x sem juros", n: 5, reviews: "1.245", icon: "pencil", tone: "blue", category: "Papelaria" },
   { id: "px-b2", sku: "INF-001", name: "Mouse sem fio silencioso USB-C", price: "R$ 89,90", priceNum: 89.9, oldPrice: "R$ 109,90", oldPriceNum: 109.9, wholesalePrice: 79.9, wholesaleMin: 3, stock: 18, tags: ["informática", "acessório"], installment: "em 6x sem juros", n: 4, reviews: "982", icon: "monitor", tone: "violet", category: "Informática" },
   { id: "px-b3", sku: "UTI-001", name: "Organizador modular de mesa", price: "R$ 64,90", priceNum: 64.9, oldPrice: "R$ 79,90", oldPriceNum: 79.9, wholesalePrice: 57.9, wholesaleMin: 4, stock: 25, tags: ["organização", "casa"], installment: "em 4x sem juros", n: 5, reviews: "1.103", icon: "cup", tone: "teal", category: "Utilidades" },
@@ -126,13 +126,7 @@ export const categorySlug = (c: string) => slugify(c);
 export const categoryFromSlug = (slug: string): Category | undefined =>
   CATEGORIES.find((c) => categorySlug(c) === slug);
 
-const byId = new Map(PRODUCTS.map((p) => [p.id, p]));
-export const productById = (id: string): Product | undefined => byId.get(id);
-
-export const productsByCategory = (c: Category) =>
-  PRODUCTS.filter((p) => p.category === c);
-
-export const offers = () => PRODUCTS.filter((p) => p.oldPriceNum);
+/* ----- Helpers puros sobre o produto (independentes do catálogo ativo) ---- */
 
 export const discountPercent = (p: Product) =>
   p.oldPriceNum ? Math.round((1 - p.priceNum / p.oldPriceNum) * 100) : 0;
@@ -149,21 +143,89 @@ export type StockLevel = "out" | "low" | "ok";
 export const stockLevel = (p: Product): StockLevel =>
   p.stock <= 0 ? "out" : p.stock <= 10 ? "low" : "ok";
 
-export const searchProducts = (query: string) => {
-  const q = norm(query);
-  if (!q) return [];
-  return PRODUCTS.filter(
-    (p) => norm(p.name).includes(q) || norm(p.category).includes(q)
-  );
-};
-
-export const relatedProducts = (p: Product, count = 4) => {
-  const same = PRODUCTS.filter((x) => x.id !== p.id && x.category === p.category);
-  const rest = PRODUCTS.filter((x) => x.id !== p.id && x.category !== p.category);
-  return [...same, ...rest].slice(0, count);
-};
-
-/* Descrição curta gerada (editável quando houver descrições reais) */
 export const productDescription = (p: Product) =>
   `${p.name} — produto da categoria ${p.category} disponível na Paulex Armarinho. ` +
   `Qualidade e preço justo, com retirada na loja ou entrega para todo o Rio de Janeiro.`;
+
+/* ----- Helpers puros sobre uma LISTA (o store passa o catálogo ativo) ----- */
+
+export const findById = (list: Product[], id: string): Product | undefined =>
+  list.find((p) => p.id === id);
+
+export const inCategory = (list: Product[], c: Category): Product[] =>
+  list.filter((p) => p.category === c);
+
+export const onlyOffers = (list: Product[]): Product[] =>
+  list.filter((p) => p.oldPriceNum);
+
+export const searchList = (list: Product[], query: string): Product[] => {
+  const q = norm(query);
+  if (!q) return [];
+  return list.filter((p) => norm(p.name).includes(q) || norm(p.category).includes(q));
+};
+
+export const relatedIn = (list: Product[], p: Product, count = 4): Product[] => {
+  const same = list.filter((x) => x.id !== p.id && x.category === p.category);
+  const rest = list.filter((x) => x.id !== p.id && x.category !== p.category);
+  return [...same, ...rest].slice(0, count);
+};
+
+/* ----- Normalização/validação (usado no admin e no carregamento) --------- */
+
+export const fmtBRL = (v: number) =>
+  v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+/** Garante que um objeto vindo do JSON/admin é um Product válido (ou null). */
+export function sanitizeProduct(raw: unknown): Product | null {
+  if (!raw || typeof raw !== "object") return null;
+  const r = raw as Record<string, unknown>;
+  const name = typeof r.name === "string" ? r.name.trim() : "";
+  const priceNum = Number(r.priceNum);
+  const category = r.category as Category;
+  if (!name || !Number.isFinite(priceNum) || priceNum <= 0 || !CATEGORIES.includes(category)) return null;
+
+  const id = typeof r.id === "string" && r.id ? r.id : `adm-${slugify(name)}-${Math.random().toString(36).slice(2, 6)}`;
+  const stock = Number.isFinite(Number(r.stock)) ? Math.max(0, Math.floor(Number(r.stock))) : 0;
+  const oldPriceNum = Number(r.oldPriceNum) > priceNum ? Number(r.oldPriceNum) : undefined;
+  const wholesalePrice = Number(r.wholesalePrice) > 0 && Number(r.wholesalePrice) < priceNum ? Number(r.wholesalePrice) : undefined;
+  const wholesaleMin = wholesalePrice && Number(r.wholesaleMin) >= 2 ? Math.floor(Number(r.wholesaleMin)) : undefined;
+  const icon = (PRODUCT_ICONS as readonly string[]).includes(r.icon as string) ? (r.icon as IconName) : "stack";
+  const tone = (TONES as readonly string[]).includes(r.tone as string) ? (r.tone as Tone) : "blue";
+
+  return {
+    id,
+    sku: typeof r.sku === "string" && r.sku ? r.sku : "—",
+    name,
+    priceNum,
+    price: fmtBRL(priceNum),
+    oldPriceNum,
+    oldPrice: oldPriceNum ? fmtBRL(oldPriceNum) : undefined,
+    wholesalePrice: wholesalePrice && wholesaleMin ? wholesalePrice : undefined,
+    wholesaleMin: wholesalePrice && wholesaleMin ? wholesaleMin : undefined,
+    stock,
+    tags: Array.isArray(r.tags) ? (r.tags as unknown[]).filter((t): t is string => typeof t === "string") : undefined,
+    installment: typeof r.installment === "string" && r.installment ? r.installment : "à vista",
+    n: Math.min(5, Math.max(1, Math.round(Number(r.n)) || 5)),
+    reviews: typeof r.reviews === "string" ? r.reviews : "0",
+    icon,
+    tone,
+    category,
+  };
+}
+
+export function sanitizeCatalog(list: unknown): Product[] {
+  if (!Array.isArray(list)) return [];
+  const seen = new Set<string>();
+  const out: Product[] = [];
+  for (const item of list) {
+    const p = sanitizeProduct(item);
+    if (p && !seen.has(p.id)) { seen.add(p.id); out.push(p); }
+  }
+  return out;
+}
+
+/* Ícones e tons disponíveis para escolher no painel admin */
+export const PRODUCT_ICONS: IconName[] = [
+  "pencil", "monitor", "cup", "lipstick", "users", "trash", "backpack", "pot", "stack", "box", "tag",
+];
+export const TONES: Tone[] = ["blue", "red", "soft", "violet", "teal", "amber"];

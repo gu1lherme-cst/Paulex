@@ -1,16 +1,16 @@
 import {
   createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode,
 } from "react";
-import { PRODUCTS, productById, type Product } from "../data/catalog";
+import type { Product } from "../data/catalog";
+import { useProducts } from "./products";
 
 const KEY = "paulex:favoritos";
-const validIds = new Set(PRODUCTS.map((p) => p.id));
 
 function load(): string[] {
   try {
     const raw = localStorage.getItem(KEY);
     const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed.filter((id) => typeof id === "string" && validIds.has(id)) : [];
+    return Array.isArray(parsed) ? parsed.filter((id) => typeof id === "string") : [];
   } catch {
     return [];
   }
@@ -27,6 +27,7 @@ type WishlistValue = {
 const WishlistContext = createContext<WishlistValue | null>(null);
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
+  const { byId } = useProducts();
   const [ids, setIds] = useState<string[]>(load);
 
   useEffect(() => {
@@ -35,17 +36,17 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
 
   const has = useCallback((id: string) => ids.includes(id), [ids]);
   const toggle = useCallback((id: string) => {
-    if (!validIds.has(id)) return;
     setIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   }, []);
 
+  /* Itens favoritos existentes no catálogo atual (ignora ids removidos). */
   const items = useMemo(
-    () => ids.map((id) => productById(id)).filter((p): p is Product => !!p),
-    [ids]
+    () => ids.map((id) => byId(id)).filter((p): p is Product => !!p),
+    [ids, byId]
   );
 
   const value = useMemo<WishlistValue>(
-    () => ({ ids, items, count: ids.length, has, toggle }),
+    () => ({ ids, items, count: items.length, has, toggle }),
     [ids, items, has, toggle]
   );
 

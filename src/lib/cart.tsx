@@ -7,9 +7,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import {
-  PRODUCTS, COUPONS, productById, unitPriceFor, type Product,
-} from "../data/catalog";
+import { COUPONS, unitPriceFor, type Product } from "../data/catalog";
+import { useProducts } from "./products";
 
 export type Fulfillment = "retirada" | "entrega";
 export type Customer = { name: string; phone: string };
@@ -25,7 +24,6 @@ const CART_KEY = "paulex:carrinho";
 const COUPON_KEY = "paulex:cupom";
 const CUSTOMER_KEY = "paulex:cliente";
 const MAX_QTY = 99;
-const validIds = new Set(PRODUCTS.map((p) => p.id));
 
 function load<T>(key: string, fallback: T): T {
   try {
@@ -36,23 +34,18 @@ function load<T>(key: string, fallback: T): T {
   }
 }
 
+/* Carrega o carrinho validando só o formato; ids que não existem mais no
+   catálogo são ignorados na montagem das linhas (productById → undefined). */
 function loadCart(): Line[] {
   const parsed = load<unknown>(CART_KEY, []);
   if (!Array.isArray(parsed)) return [];
   return parsed
     .filter(
       (x): x is Line =>
-        !!x && typeof (x as Line).id === "string" && validIds.has((x as Line).id) &&
+        !!x && typeof (x as Line).id === "string" &&
         Number.isFinite((x as Line).qty) && (x as Line).qty > 0
     )
     .map((x) => ({ id: x.id, qty: Math.min(MAX_QTY, Math.floor(x.qty)) }));
-}
-
-/** Quantidade permitida considerando o estoque do produto. */
-function capToStock(id: string, qty: number): number {
-  const p = productById(id);
-  const stock = p ? p.stock : 0;
-  return Math.max(0, Math.min(MAX_QTY, stock, qty));
 }
 
 type CartValue = {
@@ -83,6 +76,18 @@ type CartValue = {
 const CartContext = createContext<CartValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const { products, byId } = useProducts();
+  const validIds = useMemo(() => new Set(products.map((p) => p.id)), [products]);
+
+  /** Quantidade permitida considerando o estoque atual do produto. */
+  const capToStock = useCallback(
+    (id: string, qty: number) => {
+      const p = byId(id);
+      return Math.max(0, Math.min(MAX_QTY, p ? p.stock : 0, qty));
+    },
+    [byId]
+  );
+
   const [items, setItems] = useState<Line[]>(loadCart);
   const [isOpen, setIsOpen] = useState(false);
   const [fulfillment, setFulfillment] = useState<Fulfillment>("retirada");
@@ -114,7 +119,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (ex) return prev.map((i) => (i.id === id ? { ...i, qty: target } : i));
       return [...prev, { id, qty: target }];
     });
-  }, []);
+  }, [validIds, capToStock]);
 
   const inc = useCallback((id: string) => add(id, 1), [add]);
 
@@ -145,13 +150,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     () =>
       items
         .map((i) => {
-          const p = productById(i.id);
+          const p = byId(i.id);
           if (!p) return null;
-          const unit = unitPriceFor(p, i.qty);
-          return { ...p, qty: i.qty, unit, lineTotal: unit * i.qty, wholesaleApplied: unit < p.priceNum };
+          const safeQty = Math.min(i.qty, p.stock || i.qty);
+          const unit = unitPriceFor(p, safeQty);
+          return { ...p, qty: safeQty, unit, lineTotal: unit * safeQty, wholesaleApplied: unit < p.priceNum };
         })
         .filter((x): x is DetailedLine => x !== null),
-    [items]
+    [items, byId]
   );
 
   const count = useMemo(() => lines.reduce((s, l) => s + l.qty, 0), [lines]);
