@@ -17,7 +17,8 @@
       property="og:description"
       content="Papelaria, utilidades, descartáveis, brinquedos, cosméticos e informática em um só lugar. Há mais de 40 anos com você."
     />
-    <meta property="og:image" content="/Paulex/img/paulex-banner.jpg" />
+    <meta property="og:url" content="https://gu1lherme-cst.github.io/Paulex/" />
+    <meta property="og:image" content="https://gu1lherme-cst.github.io/Paulex/img/paulex-banner.jpg" />
     <meta property="og:locale" content="pt_BR" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Paulex Armarinho | Tudo para escola, casa e trabalho" />
@@ -25,8 +26,22 @@
       name="twitter:description"
       content="Papelaria, utilidades, descartáveis, brinquedos, cosméticos e informática em um só lugar. Há mais de 40 anos com você."
     />
-    <meta name="twitter:image" content="/Paulex/img/paulex-banner.jpg" />
+    <meta name="twitter:image" content="https://gu1lherme-cst.github.io/Paulex/img/paulex-banner.jpg" />
     <link rel="icon" type="image/png" href="/Paulex/img/favicon.png" />
+    <link rel="canonical" href="https://gu1lherme-cst.github.io/Paulex/" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Store",
+        "name": "Paulex Armarinho",
+        "description": "Loja de papelaria, utilidades, descartáveis, brinquedos, cosméticos, acessórios, informática e bazar.",
+        "url": "https://gu1lherme-cst.github.io/Paulex/",
+        "image": "https://gu1lherme-cst.github.io/Paulex/img/paulex-banner.jpg",
+        "logo": "https://gu1lherme-cst.github.io/Paulex/img/favicon.png",
+        "areaServed": "Rio de Janeiro",
+        "foundingDate": "1984"
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -37,12 +52,29 @@
   <body>
     <div id="root"></div>
     <script>
-      // Remove service workers antigos (do PWA descontinuado) para não servir cache velho.
-      if ("serviceWorker" in navigator) {
+      // Remove o Service Worker e os caches do PWA antigo (Px), que ainda
+      // serviam a página velha. Recarrega uma única vez para buscar a versão atual.
+      (function () {
+        if (!("serviceWorker" in navigator)) return;
         navigator.serviceWorker.getRegistrations().then(function (rs) {
-          rs.forEach(function (r) { r.unregister(); });
+          var hadSW = rs.length > 0;
+          Promise.all(rs.map(function (r) { return r.unregister(); }))
+            .then(function () {
+              if (window.caches && caches.keys) {
+                return caches.keys().then(function (keys) {
+                  return Promise.all(keys.map(function (k) { return caches.delete(k); }));
+                });
+              }
+            })
+            .then(function () {
+              if (hadSW && !sessionStorage.getItem("paulex-fresh")) {
+                sessionStorage.setItem("paulex-fresh", "1");
+                location.reload();
+              }
+            })
+            .catch(function () {});
         }).catch(function () {});
-      }
+      })();
     </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
