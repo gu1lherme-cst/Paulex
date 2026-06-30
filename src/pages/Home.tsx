@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
   type FormEvent,
+  type MouseEvent as ReactMouseEvent,
   type ReactNode,
 } from "react";
 import "./Home.css";
@@ -388,6 +389,30 @@ const WHATSAPP_CONTACT = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURICompo
   "Olá! Vim pelo site da Paulex e gostaria de atendimento."
 )}`;
 
+/* Persistência do carrinho */
+const CART_KEY = "paulex:carrinho";
+const validIds = new Set(bestsellers.map((p) => p.id));
+
+type CartLine = { id: string; qty: number };
+
+/* Lê o carrinho salvo, ignorando dados inválidos ou produtos que não existem mais */
+function loadCart(): CartLine[] {
+  try {
+    const raw = localStorage.getItem(CART_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter(
+        (x): x is CartLine =>
+          x && typeof x.id === "string" && validIds.has(x.id) && Number.isFinite(x.qty) && x.qty > 0
+      )
+      .map((x) => ({ id: x.id, qty: Math.min(99, Math.floor(x.qty)) }));
+  } catch {
+    return [];
+  }
+}
+
 /* Mapeia rótulos do menu para a categoria filtrável correspondente. */
 const menuCategories: { label: string; cat: Category }[] = [
   { label: "Papelaria", cat: "Papelaria" },
@@ -444,7 +469,7 @@ export default function Home() {
   const univRef = useRef<HTMLDivElement>(null);
   const bestRef = useRef<HTMLDivElement>(null);
 
-  const [cartItems, setCartItems] = useState<{ id: string; qty: number }[]>([]);
+  const [cartItems, setCartItems] = useState<CartLine[]>(loadCart);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState(categories[0]);
@@ -481,8 +506,17 @@ export default function Home() {
         .filter((x): x is Product & { qty: number } => x !== null),
     [cartItems, productById]
   );
-  const cartCount = cartItems.reduce((s, i) => s + i.qty, 0);
+  const cartCount = cartDetailed.reduce((s, it) => s + it.qty, 0);
   const cartTotal = cartDetailed.reduce((s, it) => s + it.priceNum * it.qty, 0);
+
+  /* Salva o carrinho no localStorage sempre que muda */
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
+    } catch {
+      /* localStorage indisponível (modo privado): ignora */
+    }
+  }, [cartItems]);
 
   /* Reveal on scroll */
   useEffect(() => {
@@ -524,6 +558,17 @@ export default function Home() {
   }, []);
 
   const scrollTop = useCallback(() => window.scrollTo({ top: 0, behavior: "smooth" }), []);
+
+  /* Impede que links de placeholder (âncoras sem destino) pulem para o topo.
+     Links reais (#produtos, #atacado…) e externos (wa.me) seguem normalmente. */
+  const onRootClick = useCallback((e: ReactMouseEvent) => {
+    const a = (e.target as HTMLElement).closest("a");
+    if (!a) return;
+    const href = a.getAttribute("href") || "";
+    if (href === "#" || (href.startsWith("#") && href.length > 1 && !document.getElementById(href.slice(1)))) {
+      e.preventDefault();
+    }
+  }, []);
 
   const scrollToProducts = useCallback(() => {
     requestAnimationFrame(() =>
@@ -643,7 +688,7 @@ export default function Home() {
   );
 
   return (
-    <div className="px-root">
+    <div className="px-root" onClick={onRootClick}>
       {/* 1 · TOP BAR */}
       <div className="px-topbar">
         <div className="px-topbar__in">
@@ -655,7 +700,7 @@ export default function Home() {
           </div>
           <div className="px-topbar__right">
             <a href="#lojas" className="px-navlink"><Icon name="store" size={14} />Nossas lojas</a>
-            <a href="#ajuda" className="px-navlink">Ajuda</a>
+            <a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-navlink">Ajuda</a>
           </div>
         </div>
       </div>
@@ -1073,7 +1118,7 @@ export default function Home() {
             <div>
               <h4>Atendimento</h4>
               <ul>
-                <li><a href="#ajuda" className="px-foot-link">Fale conosco</a></li>
+                <li><a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-foot-link">Fale conosco</a></li>
                 <li><a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-foot-link">WhatsApp</a></li>
                 <li><a href="#entrega" className="px-foot-link">Entrega e retirada</a></li>
                 <li><a href="#trocas" className="px-foot-link">Trocas e devoluções</a></li>
