@@ -54,7 +54,9 @@ type IconName =
   | "trash"
   | "list"
   | "calendar"
-  | "boxes";
+  | "boxes"
+  | "backpack"
+  | "pot";
 
 const iconPaths: Record<IconName, ReactNode> = {
   pin: (
@@ -244,6 +246,20 @@ const iconPaths: Record<IconName, ReactNode> = {
       <path d="M4 9l1 10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1l1-10" />
     </>
   ),
+  backpack: (
+    <>
+      <path d="M6 9a6 6 0 0 1 12 0v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2z" />
+      <path d="M9 9V7a3 3 0 0 1 6 0v2" />
+      <path d="M9 14h6" />
+    </>
+  ),
+  pot: (
+    <>
+      <path d="M4.5 9h15l-1.1 9a2 2 0 0 1-2 1.8H7.6A2 2 0 0 1 5.6 18z" />
+      <path d="M3 9h18" />
+      <path d="M8 9V7a4 4 0 0 1 8 0v2" />
+    </>
+  ),
 };
 
 const Icon = memo(function Icon({
@@ -326,8 +342,10 @@ const universos: { name: string; desc: string; icon: IconName; tone: Tone }[] = 
   { name: "Papelaria", desc: "Cadernos, canetas e material escolar", icon: "pencil", tone: "blue" },
   { name: "Utilidades", desc: "Organização, limpeza e muito mais", icon: "cup", tone: "teal" },
   { name: "Brinquedos", desc: "Diversão para todas as idades", icon: "users", tone: "amber" },
-  { name: "Informática", desc: "Tecnologia que simplifica o seu dia", icon: "monitor", tone: "violet" },
   { name: "Cosméticos", desc: "Cuidados diários com as melhores marcas", icon: "lipstick", tone: "red" },
+  { name: "Informática", desc: "Tecnologia que simplifica o seu dia", icon: "monitor", tone: "violet" },
+  { name: "Acessórios", desc: "Mochilas, estojos e mais", icon: "backpack", tone: "blue" },
+  { name: "Casa", desc: "Praticidade para o seu dia a dia", icon: "pot", tone: "teal" },
   { name: "Descartáveis", desc: "Soluções práticas para o dia a dia", icon: "trash", tone: "soft" },
 ];
 
@@ -345,6 +363,8 @@ type Category =
   | "Brinquedos"
   | "Informática"
   | "Cosméticos"
+  | "Acessórios"
+  | "Casa"
   | "Descartáveis";
 
 type Product = {
@@ -352,30 +372,34 @@ type Product = {
   name: string;
   price: string;
   priceNum: number;
+  oldPrice?: string;
+  oldPriceNum?: number;
   installment: string;
   n: number;
   reviews: string;
-  badge?: string;
-  badgeTone?: "blue" | "red";
   icon: IconName;
   tone: Tone;
   category: Category;
 };
 
 const bestsellers: Product[] = [
-  { id: "px-b1", name: "Caderno inteligente capa dura A5", price: "R$ 49,90", priceNum: 49.9, installment: "em 3x sem juros", n: 5, reviews: "1.245", badge: "Novo", badgeTone: "blue", icon: "pencil", tone: "blue", category: "Papelaria" },
-  { id: "px-b2", name: "Mouse sem fio silencioso USB-C", price: "R$ 89,90", priceNum: 89.9, installment: "em 6x sem juros", n: 4, reviews: "982", badge: "Oferta", badgeTone: "red", icon: "monitor", tone: "violet", category: "Informática" },
-  { id: "px-b3", name: "Organizador modular de mesa", price: "R$ 64,90", priceNum: 64.9, installment: "em 4x sem juros", n: 5, reviews: "1.103", icon: "cup", tone: "teal", category: "Utilidades" },
+  { id: "px-b1", name: "Caderno inteligente capa dura A5", price: "R$ 49,90", priceNum: 49.9, oldPrice: "R$ 58,90", oldPriceNum: 58.9, installment: "em 3x sem juros", n: 5, reviews: "1.245", icon: "pencil", tone: "blue", category: "Papelaria" },
+  { id: "px-b2", name: "Mouse sem fio silencioso USB-C", price: "R$ 89,90", priceNum: 89.9, oldPrice: "R$ 109,90", oldPriceNum: 109.9, installment: "em 6x sem juros", n: 4, reviews: "982", icon: "monitor", tone: "violet", category: "Informática" },
+  { id: "px-b3", name: "Organizador modular de mesa", price: "R$ 64,90", priceNum: 64.9, oldPrice: "R$ 79,90", oldPriceNum: 79.9, installment: "em 4x sem juros", n: 5, reviews: "1.103", icon: "cup", tone: "teal", category: "Utilidades" },
   { id: "px-b4", name: "Kit cuidados diários essencial", price: "R$ 79,90", priceNum: 79.9, installment: "em 4x sem juros", n: 4, reviews: "875", icon: "lipstick", tone: "red", category: "Cosméticos" },
-  { id: "px-b5", name: "Fone de ouvido Bluetooth", price: "R$ 129,90", priceNum: 129.9, installment: "em 6x sem juros", n: 5, reviews: "1.782", badge: "Novo", badgeTone: "blue", icon: "monitor", tone: "violet", category: "Informática" },
-  { id: "px-b6", name: "Impressora multifuncional Wi-Fi", price: "R$ 899,10", priceNum: 899.1, installment: "em 10x sem juros", n: 4, reviews: "967", badge: "Oferta", badgeTone: "red", icon: "monitor", tone: "soft", category: "Informática" },
+  { id: "px-b5", name: "Fone de ouvido Bluetooth", price: "R$ 129,90", priceNum: 129.9, oldPrice: "R$ 169,90", oldPriceNum: 169.9, installment: "em 6x sem juros", n: 5, reviews: "1.782", icon: "monitor", tone: "violet", category: "Informática" },
+  { id: "px-b6", name: "Impressora multifuncional Wi-Fi", price: "R$ 899,10", priceNum: 899.1, oldPrice: "R$ 1.099,00", oldPriceNum: 1099, installment: "em 10x sem juros", n: 4, reviews: "967", icon: "monitor", tone: "soft", category: "Informática" },
   { id: "px-b7", name: "Jogo de blocos de montar 120 peças", price: "R$ 59,90", priceNum: 59.9, installment: "em 3x sem juros", n: 5, reviews: "734", icon: "users", tone: "amber", category: "Brinquedos" },
-  { id: "px-b8", name: "Pelúcia urso macio 30cm", price: "R$ 44,90", priceNum: 44.9, installment: "em 2x sem juros", n: 4, reviews: "612", badge: "Novo", badgeTone: "blue", icon: "users", tone: "amber", category: "Brinquedos" },
+  { id: "px-b8", name: "Pelúcia urso macio 30cm", price: "R$ 44,90", priceNum: 44.9, oldPrice: "R$ 54,90", oldPriceNum: 54.9, installment: "em 2x sem juros", n: 4, reviews: "612", icon: "users", tone: "amber", category: "Brinquedos" },
   { id: "px-b9", name: "Copos descartáveis 200ml (100un)", price: "R$ 19,90", priceNum: 19.9, installment: "em 1x sem juros", n: 4, reviews: "498", icon: "trash", tone: "soft", category: "Descartáveis" },
-  { id: "px-b10", name: "Pratos descartáveis 18cm (50un)", price: "R$ 24,90", priceNum: 24.9, installment: "em 2x sem juros", n: 5, reviews: "356", icon: "trash", tone: "soft", category: "Descartáveis" },
-  { id: "px-b11", name: "Canetas gel coloridas (12 cores)", price: "R$ 34,90", priceNum: 34.9, installment: "em 2x sem juros", n: 5, reviews: "1.021", badge: "Oferta", badgeTone: "red", icon: "pencil", tone: "blue", category: "Papelaria" },
+  { id: "px-b10", name: "Pratos descartáveis 18cm (50un)", price: "R$ 24,90", priceNum: 24.9, oldPrice: "R$ 29,90", oldPriceNum: 29.9, installment: "em 2x sem juros", n: 5, reviews: "356", icon: "trash", tone: "soft", category: "Descartáveis" },
+  { id: "px-b11", name: "Canetas gel coloridas (12 cores)", price: "R$ 34,90", priceNum: 34.9, oldPrice: "R$ 44,90", oldPriceNum: 44.9, installment: "em 2x sem juros", n: 5, reviews: "1.021", icon: "pencil", tone: "blue", category: "Papelaria" },
   { id: "px-b12", name: "Pano multiuso de limpeza (5un)", price: "R$ 14,90", priceNum: 14.9, installment: "em 1x sem juros", n: 4, reviews: "289", icon: "cup", tone: "teal", category: "Utilidades" },
-  { id: "px-b13", name: "Hidratante facial diário 50g", price: "R$ 39,90", priceNum: 39.9, installment: "em 2x sem juros", n: 5, reviews: "844", icon: "lipstick", tone: "red", category: "Cosméticos" },
+  { id: "px-b13", name: "Hidratante facial diário 50g", price: "R$ 39,90", priceNum: 39.9, oldPrice: "R$ 49,90", oldPriceNum: 49.9, installment: "em 2x sem juros", n: 5, reviews: "844", icon: "lipstick", tone: "red", category: "Cosméticos" },
+  { id: "px-b14", name: "Mochila escolar reforçada 30L", price: "R$ 119,90", priceNum: 119.9, oldPrice: "R$ 149,90", oldPriceNum: 149.9, installment: "em 6x sem juros", n: 5, reviews: "528", icon: "backpack", tone: "blue", category: "Acessórios" },
+  { id: "px-b15", name: "Estojo escolar 3 divisórias", price: "R$ 29,90", priceNum: 29.9, installment: "em 2x sem juros", n: 4, reviews: "401", icon: "backpack", tone: "violet", category: "Acessórios" },
+  { id: "px-b16", name: "Jogo de panelas antiaderente 5 peças", price: "R$ 249,90", priceNum: 249.9, oldPrice: "R$ 319,90", oldPriceNum: 319.9, installment: "em 10x sem juros", n: 5, reviews: "612", icon: "pot", tone: "teal", category: "Casa" },
+  { id: "px-b17", name: "Pote hermético com tampa 1,5L", price: "R$ 22,90", priceNum: 22.9, installment: "em 1x sem juros", n: 4, reviews: "337", icon: "pot", tone: "teal", category: "Casa" },
 ];
 
 /* Número de WhatsApp da loja (formato internacional, só dígitos): (21) 98757-8187 */
@@ -413,16 +437,6 @@ function loadCart(): CartLine[] {
   }
 }
 
-/* Mapeia rótulos do menu para a categoria filtrável correspondente. */
-const menuCategories: { label: string; cat: Category }[] = [
-  { label: "Papelaria", cat: "Papelaria" },
-  { label: "Utilidades", cat: "Utilidades" },
-  { label: "Brinquedos", cat: "Brinquedos" },
-  { label: "Informática e acessórios", cat: "Informática" },
-  { label: "Cosméticos", cat: "Cosméticos" },
-  { label: "Descartáveis", cat: "Descartáveis" },
-];
-
 const campaigns: { tag: string; title: string; off: string; cta: string; tone: Tone }[] = [
   { tag: "Volta às aulas", title: "Tudo para um novo começo", off: "30%", cta: "Aproveitar ofertas", tone: "blue" },
   { tag: "Home office", title: "Mais produtividade no seu dia", off: "25%", cta: "Ver produtos", tone: "teal" },
@@ -445,7 +459,7 @@ const brands = [
 
 const categories = [
   "Todas as categorias", "Papelaria", "Utilidades", "Brinquedos",
-  "Informática", "Cosméticos", "Descartáveis",
+  "Informática", "Cosméticos", "Acessórios", "Casa", "Descartáveis",
 ];
 
 /* ------------------------------ Logo (SVG) ------------------------------- */
@@ -466,7 +480,6 @@ function Logo({ variant = "light" }: { variant?: "light" | "muted" }) {
 
 export default function Home() {
   const stickyRef = useRef<HTMLDivElement>(null);
-  const univRef = useRef<HTMLDivElement>(null);
   const bestRef = useRef<HTMLDivElement>(null);
 
   const [cartItems, setCartItems] = useState<CartLine[]>(loadCart);
@@ -705,7 +718,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* STICKY: HEADER + MENU */}
+      {/* STICKY: HEADER */}
       <div className="px-sticky" ref={stickyRef}>
         {/* 2 · HEADER */}
         <div className="px-header">
@@ -769,46 +782,25 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        {/* 3 · MENU DE CATEGORIAS */}
-        <nav className="px-menu" aria-label="Categorias">
-          <div className="px-menu__in">
-            <button type="button" className="px-menu__all" onClick={() => selectCategory(null)}>
-              <Icon name="menu" size={18} />Todas as categorias
-            </button>
-            {menuCategories.map((m) => (
-              <a
-                key={m.cat}
-                href="#produtos"
-                className={`px-navlink${activeCategory === m.cat ? " px-navlink--active" : ""}`}
-                onClick={(e) => { e.preventDefault(); selectCategory(m.cat); }}
-              >
-                {m.label}
-              </a>
-            ))}
-            <a href="#atacado" className="px-navlink px-menu__atac">Atacado</a>
-            <a href="#ofertas" className="px-navlink px-menu__off">Ofertas</a>
-          </div>
-        </nav>
       </div>
 
       <main id="topo">
-        {/* 4 · HERO */}
+        {/* 4 · BANNER */}
         <section className="px-section">
-          <div className="px-hero">
+          <div className="px-hero" data-reveal>
             <div className="px-hero__copy">
-              <p className="px-hero__eyebrow" data-reveal>Desde 1984, com você</p>
-              <h1 className="px-hero__title" data-reveal>
+              <p className="px-hero__eyebrow">Desde 1984, com você</p>
+              <h1 className="px-hero__title">
                 Tudo para escola, casa e <span className="px-hero__mark">trabalho</span>
               </h1>
-              <p className="px-hero__lead" data-reveal>
-                Papelaria, utilidades, descartáveis, brinquedos, cosméticos e acessórios em um só lugar.
+              <p className="px-hero__lead">
+                Papelaria, utilidades, cosméticos, brinquedos, informática e acessórios em um só lugar.
               </p>
-              <div className="px-hero__cta" data-reveal>
-                <a href="#ofertas" className="px-btn px-btn--primary">
+              <div className="px-hero__cta">
+                <a href="#ofertas" className="px-btn px-btn--red">
                   Ver ofertas <Icon name="arrow" size={17} />
                 </a>
-                <a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-btn px-btn--ghost">
+                <a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-btn px-btn--outline">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366" aria-hidden="true">
                     <path d="M12 2a10 10 0 0 0-8.7 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2z" />
                   </svg>
@@ -816,66 +808,42 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            <div className="px-hero__visual" data-reveal>
+            <div className="px-hero__visual">
               <img
-                src={`${import.meta.env.BASE_URL}img/paulex-banner.jpg`}
-                alt="Variedade de produtos Paulex: papelaria, informática, utilidades e cosméticos"
+                src={`${import.meta.env.BASE_URL}img/paulex-hero.jpg`}
+                alt="Composição de produtos Paulex: cadernos, lápis de cor, canetas e resma de papel A4"
                 className="px-hero__img"
-                width={1280}
-                height={853}
+                width={830}
+                height={298}
               />
             </div>
           </div>
         </section>
 
-        {/* 5 · BENEFÍCIOS RÁPIDOS */}
-        <section className="px-benefits-wrap">
-          <div className="px-benefits">
-            {benefits.map((b) => (
-              <div className="px-benefit" key={b.title}>
-                <span className="px-benefit__icon"><Icon name={b.icon} size={28} /></span>
-                <div>
-                  <div className="px-benefit__title">{b.title}</div>
-                  <div className="px-benefit__desc">{b.desc}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 6 · NOSSOS UNIVERSOS */}
-        <section id="universos" className="px-section px-section--pad">
+        {/* 5 · CATEGORIAS */}
+        <section id="categorias" className="px-section px-section--pad">
           <div className="px-rowhead">
-            <h2 className="px-h2" data-reveal>Nossos universos</h2>
-            <div className="px-rowhead__nav">
-              <a href="#universos" className="px-seeall" data-reveal>Ver todos os universos →</a>
-              <div className="px-arrows">
-                <button className="px-arrowbtn" aria-label="Universos anteriores" onClick={() => scrollRow(univRef.current, -1)}>
-                  <Icon name="chevronL" />
-                </button>
-                <button className="px-arrowbtn" aria-label="Próximos universos" onClick={() => scrollRow(univRef.current, 1)}>
-                  <Icon name="chevronR" />
-                </button>
-              </div>
-            </div>
+            <h2 className="px-h2" data-reveal>Compre por categoria</h2>
+            <button type="button" className="px-seeall px-seeall--btn" data-reveal onClick={() => selectCategory(null)}>
+              Ver todos os produtos →
+            </button>
           </div>
-          <div className="px-scroll" ref={univRef}>
+          <div className="px-cats">
             {universos.map((u) => (
               <a
                 href="#produtos"
-                className="px-card px-univ"
+                className="px-cat"
                 data-reveal
                 key={u.name}
                 onClick={(e) => { e.preventDefault(); selectCategory(u.name as Category); }}
               >
-                <div className="px-univ__img">
-                  <Placeholder label={u.name} icon={u.icon} tone={u.tone} />
-                </div>
-                <div className="px-univ__row">
-                  <h3 className="px-univ__name">{u.name}</h3>
-                  <span className="px-univ__arrow"><Icon name="arrow" size={17} /></span>
-                </div>
-                <p className="px-univ__desc">{u.desc}</p>
+                <span className={`px-cat__icon px-cat__icon--${u.tone}`}>
+                  <Icon name={u.icon} size={26} />
+                </span>
+                <span className="px-cat__text">
+                  <span className="px-cat__name">{u.name}</span>
+                  <span className="px-cat__link">Ver produtos <Icon name="arrow" size={13} /></span>
+                </span>
               </a>
             ))}
           </div>
@@ -927,8 +895,10 @@ export default function Home() {
               {visibleProducts.map((p) => (
                 <article className="px-card px-prod" data-reveal key={p.id}>
                   <a href="#produto" className="px-prod__media" onClick={(e) => e.preventDefault()}>
-                    {p.badge && (
-                      <span className={`px-prod__badge px-prod__badge--${p.badgeTone}`}>{p.badge}</span>
+                    {p.oldPriceNum && (
+                      <span className="px-prod__badge">
+                        -{Math.round((1 - p.priceNum / p.oldPriceNum) * 100)}%
+                      </span>
                     )}
                     <Placeholder label={p.name} icon={p.icon} tone={p.tone} />
                   </a>
@@ -938,6 +908,7 @@ export default function Home() {
                   <Stars n={p.n} reviews={p.reviews} />
                   <div className="px-prod__foot">
                     <div className="px-prod__price">
+                      {p.oldPrice && <span className="px-prod__old">{p.oldPrice}</span>}
                       <span className="px-prod__amount">{p.price}</span>
                       <span className="px-prod__install">{p.installment}</span>
                     </div>
@@ -947,14 +918,14 @@ export default function Home() {
                         onClick={() => addToCart(p.id)}
                         aria-label={`Adicionar ${p.name} ao carrinho`}
                       >
-                        <Icon name="plus" size={16} /> Adicionar
+                        <Icon name="cart" size={16} /> Adicionar ao carrinho
                       </button>
                       <button
                         className="px-prod__now"
                         onClick={() => buyNow(p.id)}
                         aria-label={`Comprar ${p.name} agora`}
                       >
-                        Comprar
+                        Comprar agora
                       </button>
                     </div>
                   </div>
@@ -978,11 +949,11 @@ export default function Home() {
             </div>
             <div className="px-promo__media">
               <img
-                src={`${import.meta.env.BASE_URL}img/paulex-banner.jpg`}
+                src={`${import.meta.env.BASE_URL}img/paulex-hero.jpg`}
                 alt="Produtos Paulex em oferta"
                 className="px-promo__img"
-                width={1280}
-                height={853}
+                width={830}
+                height={298}
               />
             </div>
           </div>
@@ -1081,6 +1052,21 @@ export default function Home() {
                 <p className="px-news__msg" role="status">{newsletterMsg}</p>
               )}
             </form>
+          </div>
+        </section>
+
+        {/* 13 · BENEFÍCIOS */}
+        <section className="px-benefits-wrap">
+          <div className="px-benefits">
+            {benefits.map((b) => (
+              <div className="px-benefit" key={b.title} data-reveal>
+                <span className="px-benefit__icon"><Icon name={b.icon} size={26} /></span>
+                <div>
+                  <div className="px-benefit__title">{b.title}</div>
+                  <div className="px-benefit__desc">{b.desc}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
       </main>
