@@ -8,12 +8,13 @@ import {
   offers, searchProducts, discountPercent, type Product, type Category,
 } from "../data/catalog";
 
-type Sort = "relevancia" | "menor" | "maior" | "desconto";
+type Sort = "relevancia" | "menor" | "maior" | "desconto" | "nome";
 const SORTS: { value: Sort; label: string }[] = [
   { value: "relevancia", label: "Mais relevantes" },
   { value: "menor", label: "Menor preço" },
   { value: "maior", label: "Maior preço" },
   { value: "desconto", label: "Maior desconto" },
+  { value: "nome", label: "Nome (A-Z)" },
 ];
 
 function resolve(route: Route): { title: string; crumb: string; products: Product[]; activeCat?: Category; notFound?: boolean } {
@@ -38,6 +39,7 @@ function sortProducts(list: Product[], sort: Sort): Product[] {
     case "menor": return arr.sort((a, b) => a.priceNum - b.priceNum);
     case "maior": return arr.sort((a, b) => b.priceNum - a.priceNum);
     case "desconto": return arr.sort((a, b) => discountPercent(b) - discountPercent(a));
+    case "nome": return arr.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
     default: return arr;
   }
 }

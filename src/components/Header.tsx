@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Icon } from "./Icon";
 import { Logo } from "./Logo";
 import { useCart } from "../lib/cart";
+import { useWishlist } from "../lib/wishlist";
 import { navigate, href } from "../lib/router";
 import { CATEGORIES, categorySlug } from "../data/catalog";
 import { WHATSAPP_CONTACT } from "../lib/format";
@@ -10,6 +11,7 @@ const ALL = "Todas as categorias";
 
 export function Header() {
   const { count, open } = useCart();
+  const { count: favCount } = useWishlist();
   const [q, setQ] = useState("");
 
   const onSearch = (e: FormEvent) => {
@@ -78,11 +80,14 @@ export function Header() {
                   <span className="px-acct__sub">Minha conta</span>
                 </span>
               </a>
-              <a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-acct">
-                <Icon name="heart" size={22} />
+              <a href={href("/favoritos")} className="px-acct">
+                <span className="px-acct__cart">
+                  <Icon name="heart" size={22} />
+                  {favCount > 0 && <span className="px-acct__badge" aria-hidden="true">{favCount}</span>}
+                </span>
                 <span className="px-acct__txt">
                   <span className="px-acct__title">Favoritos</span>
-                  <span className="px-acct__sub">Lista de desejos</span>
+                  <span className="px-acct__sub">{favCount} {favCount === 1 ? "item" : "itens"}</span>
                 </span>
               </a>
               <button

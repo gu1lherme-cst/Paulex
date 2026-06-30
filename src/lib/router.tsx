@@ -15,6 +15,7 @@ export type Route =
   | { name: "home" }
   | { name: "produtos" }
   | { name: "ofertas" }
+  | { name: "favoritos" }
   | { name: "categoria"; slug: string }
   | { name: "busca"; query: string }
   | { name: "produto"; id: string }
@@ -29,6 +30,8 @@ export function parseRoute(hash: string): Route {
       return { name: "produtos" };
     case "ofertas":
       return { name: "ofertas" };
+    case "favoritos":
+      return { name: "favoritos" };
     case "categoria":
       return seg[1] ? { name: "categoria", slug: decodeURIComponent(seg[1]) } : { name: "produtos" };
     case "busca":

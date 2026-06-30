@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { CartProvider } from "./lib/cart";
+import { WishlistProvider } from "./lib/wishlist";
 import { useRoute, href, type Route } from "./lib/router";
 import { useReveal } from "./lib/useReveal";
 import { Header } from "./components/Header";
@@ -9,6 +10,7 @@ import { Icon } from "./components/Icon";
 import { Home } from "./pages/Home";
 import { Listing } from "./pages/Listing";
 import { Product } from "./pages/Product";
+import { Favorites } from "./pages/Favorites";
 import { categoryFromSlug, productById } from "./data/catalog";
 import "./styles.css";
 
@@ -38,6 +40,10 @@ function applySEO(route: Route) {
     case "ofertas":
       title = `Ofertas | ${BRAND}`;
       desc = "Ofertas da semana na Paulex Armarinho: até 40% de desconto em papelaria, informática, utilidades e muito mais.";
+      break;
+    case "favoritos":
+      title = `Meus favoritos | ${BRAND}`;
+      desc = "Seus produtos favoritos na Paulex Armarinho.";
       break;
     case "categoria": {
       const c = categoryFromSlug(route.slug);
@@ -78,6 +84,7 @@ function Page({ route }: { route: Route }) {
   switch (route.name) {
     case "home": return <Home />;
     case "produto": return <Product id={route.id} />;
+    case "favoritos": return <Favorites />;
     case "produtos":
     case "ofertas":
     case "categoria":
@@ -100,13 +107,15 @@ export default function App() {
   useReveal(key);
 
   return (
-    <CartProvider>
-      <div className="px-root">
-        <Header />
-        <Page route={route} />
-        <Footer />
-        <CartDrawer />
-      </div>
-    </CartProvider>
+    <WishlistProvider>
+      <CartProvider>
+        <div className="px-root">
+          <Header />
+          <Page route={route} />
+          <Footer />
+          <CartDrawer />
+        </div>
+      </CartProvider>
+    </WishlistProvider>
   );
 }
