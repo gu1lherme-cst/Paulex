@@ -16,7 +16,7 @@
   font-family: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
   color: var(--ink);
   background: #fff;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .px-root *,
@@ -37,6 +37,10 @@
 }
 .px-section--pad {
   padding-top: 72px;
+}
+/* Compensa o cabeçalho fixo ao rolar para âncoras/filtros */
+.px-root [id] {
+  scroll-margin-top: 152px;
 }
 
 .px-sr-only {
@@ -1487,11 +1491,13 @@ button.px-menu__all {
   flex-direction: column;
   box-shadow: -20px 0 60px rgba(8, 16, 40, 0.22);
   transform: translateX(100%);
-  transition: transform 0.32s cubic-bezier(0.16, 0.84, 0.44, 1);
+  visibility: hidden;
+  transition: transform 0.32s cubic-bezier(0.16, 0.84, 0.44, 1), visibility 0.32s ease;
   font-family: inherit;
 }
 .px-drawer--open {
   transform: translateX(0);
+  visibility: visible;
 }
 .px-drawer__head {
   display: flex;
@@ -1634,8 +1640,12 @@ button.px-menu__all {
   cursor: pointer;
   transition: background 0.2s ease;
 }
-.px-citem__qty button:hover {
+.px-citem__qty button:hover:not(:disabled) {
   background: #f2f3f5;
+}
+.px-citem__qty button:disabled {
+  color: var(--border);
+  cursor: not-allowed;
 }
 .px-citem__qty span {
   min-width: 28px;

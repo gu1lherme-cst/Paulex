@@ -557,10 +557,14 @@ export default function Home() {
   );
 
   /* Sincroniza o seletor de categoria da busca com o filtro ativo */
-  const onSelectChange = useCallback((value: string) => {
-    setCategory(value);
-    setActiveCategory(value === categories[0] ? null : (value as Category));
-  }, []);
+  const onSelectChange = useCallback(
+    (value: string) => {
+      setCategory(value);
+      setActiveCategory(value === categories[0] ? null : (value as Category));
+      if (value !== categories[0]) scrollToProducts();
+    },
+    [scrollToProducts]
+  );
 
   /* ----------------------------- Carrinho ------------------------------ */
   const addToCart = useCallback((id: string) => {
@@ -573,7 +577,7 @@ export default function Home() {
 
   const decItem = useCallback((id: string) => {
     setCartItems((items) =>
-      items.flatMap((i) => (i.id !== id ? [i] : i.qty > 1 ? [{ ...i, qty: i.qty - 1 }] : []))
+      items.map((i) => (i.id === id ? { ...i, qty: Math.max(1, i.qty - 1) } : i))
     );
   }, []);
 
@@ -1104,6 +1108,7 @@ export default function Home() {
         role="dialog"
         aria-label="Carrinho de compras"
         aria-modal="true"
+        aria-hidden={!drawerOpen}
       >
         <div className="px-drawer__head">
           <h2 className="px-drawer__title">
@@ -1146,7 +1151,7 @@ export default function Home() {
                     <p className="px-citem__name">{it.name}</p>
                     <p className="px-citem__unit">{formatBRL(it.priceNum)}</p>
                     <div className="px-citem__qty">
-                      <button type="button" onClick={() => decItem(it.id)} aria-label={`Diminuir quantidade de ${it.name}`}>
+                      <button type="button" onClick={() => decItem(it.id)} disabled={it.qty <= 1} aria-label={`Diminuir quantidade de ${it.name}`}>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" aria-hidden="true"><path d="M5 12h14" /></svg>
                       </button>
                       <span aria-live="polite">{it.qty}</span>
