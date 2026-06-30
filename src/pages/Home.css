@@ -10,7 +10,8 @@
   --ink: #16181d;
   --text: #3a3d44;
   --muted: #6b7280;
-  --faint: #9aa0aa;
+  /* contraste AA em texto pequeno (≈4.6:1 sobre branco) */
+  --faint: #6e7580;
   --line: #f0f1f3;
   --border: #e2e4e8;
   font-family: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -139,10 +140,9 @@
   background: #f7f8fa;
 }
 .px-btn--outline {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
   border-color: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(2px);
 }
 .px-btn--outline:hover {
   background: rgba(255, 255, 255, 0.14);
@@ -511,7 +511,7 @@
 .px-benefit__desc {
   font-size: 12.5px;
   line-height: 1.45;
-  color: #7a818d;
+  color: #6e7580;
 }
 
 /* ============================ CABEÇALHO DE LINHA ======================== */
@@ -1026,7 +1026,7 @@
 .px-atac__ben p {
   font-size: 13px;
   line-height: 1.45;
-  color: #7a818d;
+  color: #6e7580;
   margin: 0;
 }
 .px-atac__media {

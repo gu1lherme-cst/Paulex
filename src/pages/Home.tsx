@@ -27,7 +27,6 @@ type IconName =
   | "shield"
   | "headset"
   | "store"
-  | "menu"
   | "user"
   | "heart"
   | "cart"
@@ -89,13 +88,6 @@ const iconPaths: Record<IconName, ReactNode> = {
       <path d="M3 21h18" />
       <path d="M5 21V8l7-4 7 4v13" />
       <path d="M9 21v-6h6v6" />
-    </>
-  ),
-  menu: (
-    <>
-      <path d="M4 7h16" />
-      <path d="M4 12h16" />
-      <path d="M4 17h16" />
     </>
   ),
   user: (
@@ -472,6 +464,8 @@ function Logo({ variant = "light" }: { variant?: "light" | "muted" }) {
       className={`px-logo px-logo--${variant}`}
       width={260}
       height={154}
+      loading={variant === "muted" ? "lazy" : "eager"}
+      decoding="async"
     />
   );
 }
@@ -479,8 +473,10 @@ function Logo({ variant = "light" }: { variant?: "light" | "muted" }) {
 /* --------------------------------- Page ---------------------------------- */
 
 export default function Home() {
-  const stickyRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLElement>(null);
   const bestRef = useRef<HTMLDivElement>(null);
+  const cartBtnRef = useRef<HTMLButtonElement>(null);
+  const cartCloseRef = useRef<HTMLButtonElement>(null);
 
   const [cartItems, setCartItems] = useState<CartLine[]>(loadCart);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -671,7 +667,8 @@ export default function Home() {
     );
   }, [cartDetailed, cartTotal]);
 
-  /* Esc fecha o carrinho e trava o scroll do fundo quando aberto */
+  /* Carrinho aberto: Esc fecha, trava o scroll do fundo e gerencia o foco
+     (move para o botão de fechar e devolve ao botão do carrinho ao sair). */
   useEffect(() => {
     if (!drawerOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -680,9 +677,11 @@ export default function Home() {
     document.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    cartCloseRef.current?.focus();
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
+      cartBtnRef.current?.focus();
     };
   }, [drawerOpen]);
 
@@ -719,7 +718,7 @@ export default function Home() {
       </div>
 
       {/* STICKY: HEADER */}
-      <div className="px-sticky" ref={stickyRef}>
+      <header className="px-sticky" ref={stickyRef}>
         {/* 2 · HEADER */}
         <div className="px-header">
           <div className="px-header__in">
@@ -765,6 +764,7 @@ export default function Home() {
               <button
                 type="button"
                 className="px-acct"
+                ref={cartBtnRef}
                 onClick={() => setDrawerOpen(true)}
                 aria-label={`Abrir carrinho, ${cartCount} ${cartCount === 1 ? "item" : "itens"}`}
               >
@@ -782,7 +782,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
       <main id="topo">
         {/* 4 · BANNER */}
@@ -815,6 +815,8 @@ export default function Home() {
                 className="px-hero__img"
                 width={830}
                 height={298}
+                fetchPriority="high"
+                decoding="async"
               />
             </div>
           </div>
@@ -954,6 +956,8 @@ export default function Home() {
                 className="px-promo__img"
                 width={830}
                 height={298}
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>
@@ -1160,6 +1164,7 @@ export default function Home() {
           <button
             type="button"
             className="px-drawer__close"
+            ref={cartCloseRef}
             onClick={() => setDrawerOpen(false)}
             aria-label="Fechar carrinho"
           >
