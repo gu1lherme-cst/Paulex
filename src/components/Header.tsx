@@ -3,8 +3,9 @@ import { Icon } from "./Icon";
 import { Logo } from "./Logo";
 import { useCart } from "../lib/cart";
 import { useWishlist } from "../lib/wishlist";
+import { useCategories } from "../lib/categories";
 import { navigate, href } from "../lib/router";
-import { CATEGORIES, categorySlug } from "../data/catalog";
+import { categorySlug } from "../data/catalog";
 import { WHATSAPP_CONTACT } from "../lib/format";
 
 const ALL = "Todas as categorias";
@@ -12,6 +13,7 @@ const ALL = "Todas as categorias";
 export function Header() {
   const { count, open } = useCart();
   const { count: favCount } = useWishlist();
+  const { names: categoryNames } = useCategories();
   const [q, setQ] = useState("");
 
   const onSearch = (e: FormEvent) => {
@@ -64,7 +66,7 @@ export function Header() {
               <label htmlFor="px-cat" className="px-sr-only">Categoria</label>
               <select id="px-cat" defaultValue={ALL} onChange={(e) => onCategory(e.target.value)}>
                 <option>{ALL}</option>
-                {CATEGORIES.map((c) => (
+                {categoryNames.map((c) => (
                   <option key={c}>{c}</option>
                 ))}
               </select>

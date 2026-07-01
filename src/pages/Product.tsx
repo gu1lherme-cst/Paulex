@@ -53,7 +53,7 @@ export function Product({ id }: { id: string }) {
       <div className="px-pdp__grid">
         <div className="px-pdp__gallery">
           {pct > 0 && <span className="px-pdp__badge">-{pct}%</span>}
-          <Placeholder label={product.name} icon={product.icon} tone={product.tone} />
+          <Placeholder label={product.name} icon={product.icon} tone={product.tone} imageUrl={product.imageUrl} />
         </div>
 
         <div className="px-pdp__info">

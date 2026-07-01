@@ -5,15 +5,18 @@ import { ProductCard } from "../components/ProductCard";
 import { href } from "../lib/router";
 import { WHATSAPP_CONTACT } from "../lib/format";
 import { useProducts } from "../lib/products";
+import { useCategories } from "../lib/categories";
 import {
-  CATEGORY_CARDS, CAMPAIGNS, ATACADO_BENEFITS, BRANDS, BENEFITS, categorySlug,
+  CAMPAIGNS, ATACADO_BENEFITS, BRANDS, BENEFITS,
 } from "../data/catalog";
 
 const HERO_IMG = `${import.meta.env.BASE_URL}img/paulex-hero.jpg`;
 
 export function Home() {
   const { products, offers } = useProducts();
-  const bestSellers = products.slice(0, 10);
+  const { categories } = useCategories();
+  const featured = products.filter((p) => p.isFeatured);
+  const bestSellers = (featured.length > 0 ? featured : products).slice(0, 10);
   const offerProducts = offers();
   const bestRef = useRef<HTMLDivElement>(null);
   const offerRef = useRef<HTMLDivElement>(null);
@@ -82,8 +85,8 @@ export function Home() {
           <a href={href("/produtos")} className="px-seeall" data-reveal>Ver todos os produtos →</a>
         </div>
         <div className="px-cats">
-          {CATEGORY_CARDS.map((u) => (
-            <a href={href(`/categoria/${categorySlug(u.name)}`)} className="px-cat" data-reveal key={u.name}>
+          {categories.map((u) => (
+            <a href={href(`/categoria/${u.slug}`)} className="px-cat" data-reveal key={u.slug}>
               <span className={`px-cat__icon px-cat__icon--${u.tone}`}>
                 <Icon name={u.icon} size={26} />
               </span>
@@ -149,7 +152,7 @@ export function Home() {
       <section className="px-section px-section--pad">
         <div className="px-camps">
           {CAMPAIGNS.map((c) => (
-            <a href={href(`/categoria/${categorySlug(c.category)}`)} className="px-camp" data-reveal key={c.tag}>
+            <a href={href(`/categoria/${c.categorySlug}`)} className="px-camp" data-reveal key={c.tag}>
               <Placeholder label={c.tag} icon="tag" tone={c.tone} className="px-camp__bg" />
               <div className="px-camp__veil" aria-hidden="true" />
               <div className="px-camp__body">

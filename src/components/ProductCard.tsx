@@ -29,7 +29,7 @@ export function ProductCard({ p }: { p: Product }) {
           <Icon name="heart" size={18} />
         </button>
         <a href={link} className="px-prod__medialink" aria-label={p.name}>
-          <Placeholder label={p.name} icon={p.icon} tone={p.tone} />
+          <Placeholder label={p.name} icon={p.icon} tone={p.tone} imageUrl={p.imageUrl} />
         </a>
         {out && <span className="px-prod__out">Esgotado</span>}
       </div>

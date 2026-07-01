@@ -1,15 +1,15 @@
 import { Icon } from "./Icon";
 import { Logo } from "./Logo";
 import { href } from "../lib/router";
-import { CATEGORIES, categorySlug } from "../data/catalog";
+import { useCategories } from "../lib/categories";
 import { WHATSAPP_CONTACT } from "../lib/format";
 
 /* Links institucionais/legais ainda sem página própria abrem o WhatsApp
    (canal real de atendimento). Ver "evolução futura" no relatório. */
 const SOON = WHATSAPP_CONTACT;
-const cat = (c: string) => href(`/categoria/${categorySlug(c)}`);
 
 export function Footer() {
+  const { categories } = useCategories();
   const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
@@ -33,8 +33,8 @@ export function Footer() {
           <div>
             <h4>Categorias</h4>
             <ul>
-              {CATEGORIES.map((c) => (
-                <li key={c}><a href={cat(c)} className="px-foot-link">{c}</a></li>
+              {categories.map((c) => (
+                <li key={c.slug}><a href={href(`/categoria/${c.slug}`)} className="px-foot-link">{c.name}</a></li>
               ))}
             </ul>
           </div>

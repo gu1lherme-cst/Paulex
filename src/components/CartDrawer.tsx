@@ -1,23 +1,32 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "./Icon";
 import { Placeholder } from "./Placeholder";
-import { useCart } from "../lib/cart";
+import { useCart, type PaymentMethod } from "../lib/cart";
 import { formatBRL, waLink } from "../lib/format";
+import { createOrder } from "../services/ordersService";
 
 const FULFILLMENT = {
   retirada: { label: "Retirar na loja", line: "Retirada na loja" },
   entrega: { label: "Entrega local", line: "Entrega local (combinar frete pelo WhatsApp)" },
 } as const;
 
+const PAYMENT: Record<PaymentMethod, { label: string; line: string }> = {
+  dinheiro: { label: "Dinheiro", line: "Dinheiro" },
+  pix: { label: "Pix", line: "Pix" },
+  cartao: { label: "Cartão", line: "Cartão" },
+  a_combinar: { label: "Combinar", line: "A combinar pelo WhatsApp" },
+};
+
 export function CartDrawer() {
   const {
     lines, count, subtotal, discount, total, isOpen, close, inc, dec, remove,
     fulfillment, setFulfillment, couponCode, couponLabel, applyCoupon, removeCoupon,
-    customer, setCustomer,
+    customer, setCustomer, paymentMethod, setPaymentMethod,
   } = useCart();
   const closeRef = useRef<HTMLButtonElement>(null);
   const [couponInput, setCouponInput] = useState("");
   const [couponMsg, setCouponMsg] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -39,8 +48,34 @@ export function CartDrawer() {
     if (ok) setCouponInput("");
   };
 
-  const checkout = () => {
-    if (lines.length === 0) return;
+  const checkout = async () => {
+    if (lines.length === 0 || sending) return;
+    setSending(true);
+
+    /* Best-effort: tenta registrar o pedido no banco, mas o cliente sempre
+       consegue finalizar pelo WhatsApp mesmo se o Supabase estiver fora do ar. */
+    try {
+      await createOrder({
+        customerName: customer.name.trim() || "Cliente do site",
+        customerPhone: customer.phone.trim() || "não informado",
+        customerAddress: fulfillment === "entrega" ? customer.address.trim() || undefined : undefined,
+        totalAmount: total,
+        paymentMethod,
+        notes: couponCode ? `Cupom aplicado: ${couponCode} (-${formatBRL(discount)})` : undefined,
+        items: lines.map((it) => ({
+          productId: it.id,
+          productName: it.name,
+          quantity: it.qty,
+          unitPrice: it.unit,
+          subtotal: it.lineTotal,
+        })),
+      });
+    } catch {
+      // segue para o WhatsApp mesmo sem conseguir salvar o pedido
+    } finally {
+      setSending(false);
+    }
+
     const itens = lines
       .map((it) => {
         const tag = it.wholesaleApplied ? " (atacado)" : "";
@@ -50,8 +85,10 @@ export function CartDrawer() {
     let msg = `Olá, gostaria de finalizar este pedido.\n\n${itens}\n\nSubtotal: ${formatBRL(subtotal)}`;
     if (couponCode) msg += `\nCupom ${couponCode}: -${formatBRL(discount)}`;
     msg += `\nTotal: ${formatBRL(total)}\n\nEntrega: ${FULFILLMENT[fulfillment].line}`;
+    msg += `\nPagamento: ${PAYMENT[paymentMethod].line}`;
     if (customer.name.trim()) msg += `\nNome: ${customer.name.trim()}`;
     if (customer.phone.trim()) msg += `\nTelefone: ${customer.phone.trim()}`;
+    if (fulfillment === "entrega" && customer.address.trim()) msg += `\nEndereço: ${customer.address.trim()}`;
     window.open(waLink(msg), "_blank", "noopener");
   };
 
@@ -86,7 +123,7 @@ export function CartDrawer() {
               {lines.map((it) => (
                 <div className="px-citem" key={it.id}>
                   <div className="px-citem__media">
-                    <Placeholder label={it.name} icon={it.icon} tone={it.tone} />
+                    <Placeholder label={it.name} icon={it.icon} tone={it.tone} imageUrl={it.imageUrl} />
                   </div>
                   <div className="px-citem__info">
                     <p className="px-citem__name">{it.name}</p>
@@ -129,6 +166,19 @@ export function CartDrawer() {
                 ))}
               </fieldset>
 
+              <fieldset className="px-fulfill">
+                <legend className="px-sr-only">Forma de pagamento</legend>
+                {(Object.keys(PAYMENT) as PaymentMethod[]).map((opt) => (
+                  <button
+                    key={opt} type="button"
+                    className={`px-fulfill__opt${paymentMethod === opt ? " px-fulfill__opt--on" : ""}`}
+                    aria-pressed={paymentMethod === opt} onClick={() => setPaymentMethod(opt)}
+                  >
+                    {PAYMENT[opt].label}
+                  </button>
+                ))}
+              </fieldset>
+
               {couponCode ? (
                 <div className="px-coupon px-coupon--on">
                   <span><Icon name="tag" size={15} /> Cupom <strong>{couponCode}</strong> — {couponLabel}</span>
@@ -154,14 +204,28 @@ export function CartDrawer() {
                 <input id="px-cust-phone" value={customer.phone} onChange={(e) => setCustomer({ phone: e.target.value })} placeholder="Telefone (opcional)" inputMode="tel" autoComplete="tel" />
               </div>
 
+              {fulfillment === "entrega" && (
+                <div className="px-customer">
+                  <label className="px-sr-only" htmlFor="px-cust-address">Endereço de entrega</label>
+                  <textarea
+                    id="px-cust-address"
+                    value={customer.address}
+                    onChange={(e) => setCustomer({ address: e.target.value })}
+                    placeholder="Endereço de entrega (rua, número, bairro)"
+                    rows={2}
+                    autoComplete="street-address"
+                  />
+                </div>
+              )}
+
               <div className="px-drawer__sum"><span>Subtotal</span><span>{formatBRL(subtotal)}</span></div>
               {discount > 0 && (
                 <div className="px-drawer__sum px-drawer__sum--disc"><span>Desconto</span><span>- {formatBRL(discount)}</span></div>
               )}
               <div className="px-drawer__sum px-drawer__sum--total"><span>Total</span><span>{formatBRL(total)}</span></div>
 
-              <button type="button" className="px-drawer__checkout" onClick={checkout}>
-                <Icon name="whatsapp" size={18} /> Finalizar pedido
+              <button type="button" className="px-drawer__checkout" onClick={checkout} disabled={sending}>
+                <Icon name="whatsapp" size={18} /> {sending ? "Enviando…" : "Finalizar pedido"}
               </button>
               <button type="button" className="px-drawer__cont" onClick={close}>Continuar comprando</button>
             </div>

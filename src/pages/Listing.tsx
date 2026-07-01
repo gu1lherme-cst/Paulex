@@ -4,9 +4,8 @@ import { ProductCard } from "../components/ProductCard";
 import { href } from "../lib/router";
 import type { Route } from "../lib/router";
 import { useProducts } from "../lib/products";
-import {
-  CATEGORIES, categorySlug, categoryFromSlug, discountPercent, type Product, type Category,
-} from "../data/catalog";
+import { useCategories, type CategoryCard } from "../lib/categories";
+import { discountPercent, type Product, type Category } from "../data/catalog";
 
 type Db = {
   products: Product[];
@@ -24,14 +23,18 @@ const SORTS: { value: Sort; label: string }[] = [
   { value: "nome", label: "Nome (A-Z)" },
 ];
 
-function resolve(route: Route, db: Db): { title: string; crumb: string; products: Product[]; activeCat?: Category; notFound?: boolean } {
+function resolve(
+  route: Route,
+  db: Db,
+  catBySlug: (slug: string) => CategoryCard | undefined
+): { title: string; crumb: string; products: Product[]; activeCat?: Category; notFound?: boolean } {
   switch (route.name) {
     case "ofertas":
       return { title: "Ofertas", crumb: "Ofertas", products: db.offers() };
     case "categoria": {
-      const cat = categoryFromSlug(route.slug);
+      const cat = catBySlug(route.slug);
       if (!cat) return { title: "Categoria não encontrada", crumb: "Categoria", products: [], notFound: true };
-      return { title: cat, crumb: cat, products: db.byCategory(cat), activeCat: cat };
+      return { title: cat.name, crumb: cat.name, products: db.byCategory(cat.name), activeCat: cat.name };
     }
     case "busca":
       return { title: `Resultados para "${route.query}"`, crumb: "Busca", products: db.search(route.query) };
@@ -52,11 +55,12 @@ function sortProducts(list: Product[], sort: Sort): Product[] {
 }
 
 export function Listing({ route }: { route: Route }) {
-  const { products: all, byCategory, offers, search } = useProducts();
+  const { products: all, byCategory, offers, search, loading } = useProducts();
+  const { categories, bySlug } = useCategories();
   const [sort, setSort] = useState<Sort>("relevancia");
   const { title, crumb, products, activeCat, notFound } = useMemo(
-    () => resolve(route, { products: all, byCategory, offers, search }),
-    [route, all, byCategory, offers, search]
+    () => resolve(route, { products: all, byCategory, offers, search }, bySlug),
+    [route, all, byCategory, offers, search, bySlug]
   );
   const sorted = useMemo(() => sortProducts(products, sort), [products, sort]);
 
@@ -89,14 +93,14 @@ export function Listing({ route }: { route: Route }) {
 
       <div className="px-chips" role="list">
         <a role="listitem" href={href("/produtos")} className={`px-chip${route.name === "produtos" ? " px-chip--on" : ""}`}>Todas</a>
-        {CATEGORIES.map((c) => (
+        {categories.map((c) => (
           <a
             role="listitem"
-            key={c}
-            href={href(`/categoria/${categorySlug(c)}`)}
-            className={`px-chip${activeCat === c ? " px-chip--on" : ""}`}
+            key={c.slug}
+            href={href(`/categoria/${c.slug}`)}
+            className={`px-chip${activeCat === c.name ? " px-chip--on" : ""}`}
           >
-            {c}
+            {c.name}
           </a>
         ))}
       </div>
@@ -104,8 +108,8 @@ export function Listing({ route }: { route: Route }) {
       {sorted.length === 0 ? (
         <div className="px-empty">
           <span className="px-empty__icon"><Icon name="search" size={30} /></span>
-          <p>{notFound ? "Categoria não encontrada." : "Nenhum produto encontrado."}</p>
-          <a href={href("/produtos")} className="px-btn px-btn--primary px-btn--sm">Ver todos os produtos</a>
+          <p>{loading ? "Carregando produtos…" : notFound ? "Categoria não encontrada." : "Nenhum produto encontrado."}</p>
+          {!loading && <a href={href("/produtos")} className="px-btn px-btn--primary px-btn--sm">Ver todos os produtos</a>}
         </div>
       ) : (
         <div className="px-grid">
