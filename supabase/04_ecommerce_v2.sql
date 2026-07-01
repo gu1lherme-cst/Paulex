@@ -312,3 +312,52 @@ drop trigger if exists orders_coupon on public.orders;
 create trigger orders_coupon
   after insert on public.orders
   for each row execute function public.handle_order_coupon();
+
+-- Devolve ao estoque os itens de um pedido quando ele é cancelado.
+-- Guardado pela transição de status (old != 'cancelado' → new = 'cancelado'),
+-- para nunca restaurar o estoque duas vezes se o pedido for salvo de novo.
+create or replace function public.handle_order_cancel_restock()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.status = 'cancelado' and old.status is distinct from 'cancelado' then
+    -- itens sem variação: devolve ao produto
+    update products p
+      set stock_quantity = p.stock_quantity + agg.qty
+      from (
+        select product_id, sum(quantity) as qty
+        from order_items
+        where order_id = new.id and product_id is not null and variant_id is null
+        group by product_id
+      ) agg
+      where p.id = agg.product_id;
+
+    -- itens com variação: devolve à variação
+    update product_variants v
+      set stock_quantity = v.stock_quantity + agg.qty
+      from (
+        select variant_id, sum(quantity) as qty
+        from order_items
+        where order_id = new.id and variant_id is not null
+        group by variant_id
+      ) agg
+      where v.id = agg.variant_id;
+
+    -- registra a entrada no log de estoque
+    insert into inventory_movements (product_id, variant_id, type, quantity, reason, created_by)
+    select product_id, variant_id, 'in', quantity,
+           'Cancelamento do pedido ' || new.id, coalesce(auth.jwt() ->> 'email', 'sistema')
+    from order_items
+    where order_id = new.id;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists orders_cancel_restock on public.orders;
+create trigger orders_cancel_restock
+  after update of status on public.orders
+  for each row execute function public.handle_order_cancel_restock();

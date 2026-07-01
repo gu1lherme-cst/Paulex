@@ -127,6 +127,8 @@ npm run dev
 6. Adicione o produto ao carrinho, finalize o pedido — confirme que ele
    aparece na aba **Pedidos** do painel, e que dá para mudar o status.
 7. Confira na aba **Estoque** que o pedido gerou uma baixa automática.
+   Ao mudar o status de um pedido para **Cancelado**, o estoque dos itens
+   é devolvido automaticamente (uma entrada aparece no log de estoque).
 
 ## Problemas comuns (troubleshooting)
 
