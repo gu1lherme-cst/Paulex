@@ -2,18 +2,19 @@ import { supabase } from "../lib/supabaseClient";
 import type { Fulfillment, OrderStatus, OrderWithItems, PaymentMethod } from "./types";
 
 /* ----------------------------------------------------------------------------
- * Acesso às tabelas `orders` / `order_items`. Qualquer visitante pode criar
- * um pedido (checkout sem login); listar/alterar exige sessão de admin
- * (ver supabase/02_policies.sql). A criação também vincula o pedido a um
- * cliente deduplicado por telefone via upsert_customer (SECURITY DEFINER).
+ * Pedidos. A CRIAÇÃO acontece SÓ pela função create_order (SECURITY DEFINER)
+ * no banco — o cliente não escreve direto em orders/order_items. A função
+ * valida tudo no servidor: produto ativo, preço real do banco, quantidade
+ * limitada ao estoque, cupom e frete. Assim o cliente não consegue forjar
+ * preços/totais nem drenar estoque. Listar/alterar exige sessão de admin
+ * (ver supabase/02_policies.sql e 06_secure_orders.sql).
  * ------------------------------------------------------------------------- */
 
+/* Só product_id e quantity são confiáveis: o resto (nome, preço, subtotal) é
+   recalculado no servidor a partir da tabela products. */
 export type NewOrderItem = {
-  productId: string | null;
-  productName: string;
+  productId: string;
   quantity: number;
-  unitPrice: number;
-  subtotal: number;
 };
 
 export type NewOrder = {
@@ -22,64 +23,30 @@ export type NewOrder = {
   customerEmail?: string;
   customerAddress?: string;
   fulfillment: Fulfillment;
-  subtotalAmount: number;
-  discountAmount: number;
-  shippingFee: number;
   couponCode?: string;
-  totalAmount: number;
   paymentMethod: PaymentMethod;
   notes?: string;
   items: NewOrderItem[];
 };
 
 export async function createOrder(order: NewOrder): Promise<string> {
-  /* Vincula/atualiza o cliente por telefone. Falha aqui não impede o pedido. */
-  let customerId: string | null = null;
-  try {
-    const { data } = await supabase.rpc("upsert_customer", {
-      p_name: order.customerName,
-      p_phone: order.customerPhone,
-      p_email: order.customerEmail ?? null,
-      p_address: order.customerAddress ?? null,
-    });
-    customerId = (data as string | null) ?? null;
-  } catch { /* segue sem vínculo de cliente */ }
+  const payload = {
+    customer_name: order.customerName,
+    customer_phone: order.customerPhone,
+    customer_email: order.customerEmail ?? null,
+    customer_address: order.customerAddress ?? null,
+    fulfillment: order.fulfillment,
+    payment_method: order.paymentMethod,
+    coupon_code: order.couponCode ?? null,
+    notes: order.notes ?? null,
+    items: order.items
+      .filter((it) => it.productId)
+      .map((it) => ({ product_id: it.productId, quantity: it.quantity })),
+  };
 
-  const { data: created, error: orderError } = await supabase
-    .from("orders")
-    .insert({
-      customer_id: customerId,
-      customer_name: order.customerName,
-      customer_phone: order.customerPhone,
-      customer_email: order.customerEmail || null,
-      customer_address: order.customerAddress || null,
-      fulfillment: order.fulfillment,
-      subtotal_amount: order.subtotalAmount,
-      discount_amount: order.discountAmount,
-      shipping_fee: order.shippingFee,
-      coupon_code: order.couponCode || null,
-      total_amount: order.totalAmount,
-      payment_method: order.paymentMethod,
-      notes: order.notes || null,
-    })
-    .select("id")
-    .single();
-  if (orderError) throw orderError;
-
-  const orderId = created.id as string;
-  const items = order.items.map((it) => ({
-    order_id: orderId,
-    product_id: it.productId,
-    product_name: it.productName,
-    quantity: it.quantity,
-    unit_price: it.unitPrice,
-    subtotal: it.subtotal,
-  }));
-
-  const { error: itemsError } = await supabase.from("order_items").insert(items);
-  if (itemsError) throw itemsError;
-
-  return orderId;
+  const { data, error } = await supabase.rpc("create_order", { payload });
+  if (error) throw error;
+  return data as string;
 }
 
 export async function listOrders(): Promise<OrderWithItems[]> {

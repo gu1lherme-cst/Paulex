@@ -71,6 +71,9 @@ const MOVEMENT_LABEL: Record<InventoryMovementType, string> = {
 
 const num = (s: string) => Number(s.replace(",", ".").trim());
 
+/* Aceita só URLs http(s) (espelha o CHECK do banco em 06_secure_orders.sql). */
+const isHttpUrl = (s: string) => /^https?:\/\//i.test(s.trim());
+
 export function Admin() {
   const { session, isAdmin, loading, login, logout } = useAuth();
 
@@ -260,6 +263,10 @@ function ProdutosTab({ onChanged }: { onChanged: () => void }) {
       setMsg("Preencha nome, categoria e um preço válido (maior que zero).");
       return;
     }
+    if (draft.imageUrl.trim() && !isHttpUrl(draft.imageUrl)) {
+      setMsg("A URL da foto deve começar com http:// ou https://.");
+      return;
+    }
     const input: ProductInput = {
       name: draft.name.trim(),
       slug: draft.slug.trim() || slugify(draft.name),
@@ -444,6 +451,7 @@ function ImagensDoProduto({ productId, onChanged }: { productId: string; onChang
   const onAdd = async (e: FormEvent) => {
     e.preventDefault();
     if (!url.trim()) return;
+    if (!isHttpUrl(url)) { setMsg("A URL da imagem deve começar com http:// ou https://."); return; }
     try {
       await addProductImage({
         product_id: productId,
@@ -659,6 +667,10 @@ function MarcasTab() {
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!draft.name.trim()) { setMsg("Preencha o nome da marca."); return; }
+    if (draft.logoUrl.trim() && !isHttpUrl(draft.logoUrl)) {
+      setMsg("A URL do logo deve começar com http:// ou https://.");
+      return;
+    }
     const input: BrandInput = {
       name: draft.name.trim(),
       slug: draft.slug.trim() || slugify(draft.name),

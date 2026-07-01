@@ -57,7 +57,12 @@ arquivo por vez, nesta ordem**:
 Depois de cada um, clique em **Run** e confira que apareceu "Success" (sem
 erro vermelho) antes de colar o próximo.
 
-> Já rodou 01–03 antes? Sem problema: basta rodar o 04 e o 05 — eles são
+6. `supabase/06_secure_orders.sql` — endurecimento de segurança: pedidos
+   passam a ser criados só pela função `create_order` (validação no
+   servidor), fecha o insert direto de pedidos por visitantes e adiciona
+   CHECKs de integridade. **Rode este por último.**
+
+> Já rodou 01–03 antes? Sem problema: basta rodar o 04, 05 e 06 — todos são
 > aditivos e não mexem nos dados existentes.
 
 ### 2b. Autorizar o endereço do site no login (obrigatório para o magic link)
@@ -65,9 +70,15 @@ erro vermelho) antes de colar o próximo.
 No Supabase, vá em **Authentication → URL Configuration**:
 
 1. **Site URL**: `https://gu1lherme-cst.github.io/Paulex/`
-2. **Redirect URLs** → Add URL: `https://gu1lherme-cst.github.io/Paulex/**`
-   (com os dois asteriscos no final)
-3. Se for testar no computador, adicione também `http://localhost:5173/**`.
+2. **Redirect URLs** → Add URL: **exatamente** `https://gu1lherme-cst.github.io/Paulex/**`
+   (com os dois asteriscos no final).
+
+> ⚠️ **Segurança:** use o caminho completo com `/Paulex/`. Um curinga mais
+> amplo como `https://gu1lherme-cst.github.io/**` autorizaria **qualquer
+> outro repositório seu** no GitHub Pages (mesma origem) a receber o link de
+> acesso. **Em produção, NÃO deixe `http://localhost` na lista de Redirect
+> URLs** — adicione só temporariamente se for testar no computador e remova
+> depois.
 
 Sem isso, o link do e-mail não devolve o administrador para o painel.
 

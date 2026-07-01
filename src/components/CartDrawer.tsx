@@ -63,25 +63,16 @@ export function CartDrawer() {
     /* Best-effort: tenta registrar o pedido no banco, mas o cliente sempre
        consegue finalizar pelo WhatsApp mesmo se o Supabase estiver fora do ar. */
     try {
+      /* O servidor (RPC create_order) recalcula preços, subtotais, desconto
+         e frete a partir do banco — aqui só enviamos a intenção do cliente. */
       await createOrder({
         customerName: customer.name.trim() || "Cliente do site",
         customerPhone: customer.phone.trim() || "não informado",
         customerAddress: fulfillment === "entrega" ? customer.address.trim() || undefined : undefined,
         fulfillment,
-        subtotalAmount: subtotal,
-        discountAmount: discount,
-        shippingFee: shipping,
         couponCode: couponCode || undefined,
-        totalAmount: total,
         paymentMethod,
-        notes: couponCode ? `Cupom aplicado: ${couponCode} (-${formatBRL(discount)})` : undefined,
-        items: lines.map((it) => ({
-          productId: it.id,
-          productName: it.name,
-          quantity: it.qty,
-          unitPrice: it.unit,
-          subtotal: it.lineTotal,
-        })),
+        items: lines.map((it) => ({ productId: it.id, quantity: it.qty })),
       });
     } catch {
       // segue para o WhatsApp mesmo sem conseguir salvar o pedido
