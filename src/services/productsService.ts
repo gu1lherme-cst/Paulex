@@ -1,14 +1,23 @@
 import { supabase } from "../lib/supabaseClient";
 import { fmtBRL, type IconName, type Product, type Tone } from "../data/catalog";
-import type { ProductRow } from "./types";
+import type { ProductImageRow, ProductRow } from "./types";
 
 /* ----------------------------------------------------------------------------
- * Acesso à tabela `products`. Leitura pública respeita RLS (só produtos
- * ativos para quem não é admin); escrita exige sessão de administrador
- * (ver supabase/02_policies.sql).
+ * Acesso às tabelas `products` e `product_images`. Leitura pública respeita
+ * RLS (só produtos ativos para quem não é admin); escrita exige sessão de
+ * administrador (ver supabase/02_policies.sql e 05_policies_v2.sql).
  * ------------------------------------------------------------------------- */
 
-const SELECT_WITH_CATEGORY = "*, categories ( name )";
+const SELECT_WITH_CATEGORY =
+  "*, categories ( name ), product_images ( id, product_id, image_url, alt_text, sort_order, is_main, created_at )";
+
+/* Foto de capa: products.image_url; se vazio, a imagem principal da galeria. */
+function coverImage(row: ProductRow): string | undefined {
+  if (row.image_url) return row.image_url;
+  const imgs = row.product_images ?? [];
+  const main = imgs.find((i) => i.is_main) ?? [...imgs].sort((a, b) => a.sort_order - b.sort_order)[0];
+  return main?.image_url;
+}
 
 /* Converte uma linha do banco para o `Product` que a loja já sabe renderizar. */
 export function rowToProduct(row: ProductRow): Product {
@@ -32,7 +41,7 @@ export function rowToProduct(row: ProductRow): Product {
     reviews: "Novo",
     icon: row.icon as IconName,
     tone: row.tone as Tone,
-    imageUrl: row.image_url ?? undefined,
+    imageUrl: coverImage(row),
     category: row.categories?.name ?? "Outros",
     isFeatured: row.is_featured,
   };
@@ -66,6 +75,7 @@ export type ProductInput = {
   price: number;
   promotional_price?: number | null;
   category_id: string;
+  brand_id?: string | null;
   image_url?: string | null;
   stock_quantity: number;
   sku?: string | null;
@@ -90,5 +100,44 @@ export async function updateProduct(id: string, input: Partial<ProductInput>): P
 
 export async function setProductActive(id: string, isActive: boolean): Promise<void> {
   const { error } = await supabase.from("products").update({ is_active: isActive }).eq("id", id);
+  if (error) throw error;
+}
+
+/* ------------------------- Galeria de imagens (admin) ---------------------- */
+
+export async function listProductImages(productId: string): Promise<ProductImageRow[]> {
+  const { data, error } = await supabase
+    .from("product_images")
+    .select("*")
+    .eq("product_id", productId)
+    .order("sort_order", { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function addProductImage(input: {
+  product_id: string;
+  image_url: string;
+  alt_text?: string | null;
+  sort_order?: number;
+  is_main?: boolean;
+}): Promise<void> {
+  const { error } = await supabase.from("product_images").insert(input);
+  if (error) throw error;
+}
+
+export async function deleteProductImage(id: string): Promise<void> {
+  const { error } = await supabase.from("product_images").delete().eq("id", id);
+  if (error) throw error;
+}
+
+/** Marca uma imagem como principal (desmarcando as demais do produto). */
+export async function setMainProductImage(productId: string, imageId: string): Promise<void> {
+  const { error: clearError } = await supabase
+    .from("product_images")
+    .update({ is_main: false })
+    .eq("product_id", productId);
+  if (clearError) throw clearError;
+  const { error } = await supabase.from("product_images").update({ is_main: true }).eq("id", imageId);
   if (error) throw error;
 }

@@ -1,10 +1,11 @@
 import { supabase } from "../lib/supabaseClient";
-import type { OrderStatus, OrderWithItems, PaymentMethod } from "./types";
+import type { Fulfillment, OrderStatus, OrderWithItems, PaymentMethod } from "./types";
 
 /* ----------------------------------------------------------------------------
  * Acesso às tabelas `orders` / `order_items`. Qualquer visitante pode criar
  * um pedido (checkout sem login); listar/alterar exige sessão de admin
- * (ver supabase/02_policies.sql).
+ * (ver supabase/02_policies.sql). A criação também vincula o pedido a um
+ * cliente deduplicado por telefone via upsert_customer (SECURITY DEFINER).
  * ------------------------------------------------------------------------- */
 
 export type NewOrderItem = {
@@ -20,6 +21,11 @@ export type NewOrder = {
   customerPhone: string;
   customerEmail?: string;
   customerAddress?: string;
+  fulfillment: Fulfillment;
+  subtotalAmount: number;
+  discountAmount: number;
+  shippingFee: number;
+  couponCode?: string;
   totalAmount: number;
   paymentMethod: PaymentMethod;
   notes?: string;
@@ -27,13 +33,31 @@ export type NewOrder = {
 };
 
 export async function createOrder(order: NewOrder): Promise<string> {
+  /* Vincula/atualiza o cliente por telefone. Falha aqui não impede o pedido. */
+  let customerId: string | null = null;
+  try {
+    const { data } = await supabase.rpc("upsert_customer", {
+      p_name: order.customerName,
+      p_phone: order.customerPhone,
+      p_email: order.customerEmail ?? null,
+      p_address: order.customerAddress ?? null,
+    });
+    customerId = (data as string | null) ?? null;
+  } catch { /* segue sem vínculo de cliente */ }
+
   const { data: created, error: orderError } = await supabase
     .from("orders")
     .insert({
+      customer_id: customerId,
       customer_name: order.customerName,
       customer_phone: order.customerPhone,
       customer_email: order.customerEmail || null,
       customer_address: order.customerAddress || null,
+      fulfillment: order.fulfillment,
+      subtotal_amount: order.subtotalAmount,
+      discount_amount: order.discountAmount,
+      shipping_fee: order.shippingFee,
+      coupon_code: order.couponCode || null,
       total_amount: order.totalAmount,
       payment_method: order.paymentMethod,
       notes: order.notes || null,

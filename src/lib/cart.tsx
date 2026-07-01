@@ -7,8 +7,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { COUPONS, unitPriceFor, type Product } from "../data/catalog";
+import { unitPriceFor, type Product } from "../data/catalog";
 import { useProducts } from "./products";
+import { couponDiscount, couponLabel, getValidCoupon } from "../services/couponsService";
+import { DEFAULT_SETTINGS, getStoreSettings } from "../services/settingsService";
+import type { StoreSettingsRow } from "../services/types";
 
 export type Fulfillment = "retirada" | "entrega";
 export type PaymentMethod = "dinheiro" | "pix" | "cartao" | "a_combinar";
@@ -19,6 +22,15 @@ export type DetailedLine = Product & {
   unit: number;
   lineTotal: number;
   wholesaleApplied: boolean;
+};
+
+/* Cupom validado contra a tabela `coupons` e guardado localmente. */
+export type AppliedCoupon = {
+  code: string;
+  type: "percentage" | "fixed";
+  value: number;
+  minOrderAmount: number;
+  label: string;
 };
 
 const CART_KEY = "paulex:carrinho";
@@ -51,12 +63,24 @@ function loadCart(): Line[] {
     .map((x) => ({ id: x.id, qty: Math.min(MAX_QTY, Math.floor(x.qty)) }));
 }
 
+/* Cupom salvo em versões antigas era uma string; agora é um objeto. */
+function loadCoupon(): AppliedCoupon | null {
+  const parsed = load<unknown>(COUPON_KEY, null);
+  if (!parsed || typeof parsed !== "object") return null;
+  const c = parsed as AppliedCoupon;
+  if (typeof c.code !== "string" || !Number.isFinite(c.value)) return null;
+  return c;
+}
+
 type CartValue = {
   lines: DetailedLine[];
   count: number;
   subtotal: number;
   discount: number;
+  shipping: number;
   total: number;
+  minOrderAmount: number;
+  whatsappNumber: string;
   isOpen: boolean;
   fulfillment: Fulfillment;
   couponCode: string;
@@ -72,7 +96,7 @@ type CartValue = {
   close: () => void;
   buyNow: (id: string, qty?: number) => void;
   setFulfillment: (f: Fulfillment) => void;
-  applyCoupon: (code: string) => boolean;
+  applyCoupon: (code: string) => Promise<{ ok: boolean; message: string }>;
   removeCoupon: () => void;
   setCustomer: (c: Partial<Customer>) => void;
   setPaymentMethod: (m: PaymentMethod) => void;
@@ -96,10 +120,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<Line[]>(loadCart);
   const [isOpen, setIsOpen] = useState(false);
   const [fulfillment, setFulfillment] = useState<Fulfillment>("retirada");
-  const [couponCode, setCouponCode] = useState<string>(() => {
-    const c = load<string>(COUPON_KEY, "");
-    return typeof c === "string" && COUPONS[c] ? c : "";
-  });
+  const [coupon, setCoupon] = useState<AppliedCoupon | null>(loadCoupon);
+  const [settings, setSettings] = useState<StoreSettingsRow>(DEFAULT_SETTINGS);
   const [customer, setCustomerState] = useState<Customer>(() => {
     const c = load<Customer>(CUSTOMER_KEY, { name: "", phone: "", address: "" });
     return { name: c?.name ?? "", phone: c?.phone ?? "", address: c?.address ?? "" };
@@ -109,12 +131,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return PAYMENT_METHODS.includes(m) ? m : "a_combinar";
   });
 
+  /* Configurações da loja (frete, pedido mínimo, WhatsApp) — uma busca só. */
+  useEffect(() => {
+    let cancelled = false;
+    getStoreSettings().then((s) => { if (!cancelled) setSettings(s); });
+    return () => { cancelled = true; };
+  }, []);
+
   useEffect(() => {
     try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch { /* modo privado */ }
   }, [items]);
   useEffect(() => {
-    try { localStorage.setItem(COUPON_KEY, JSON.stringify(couponCode)); } catch { /* modo privado */ }
-  }, [couponCode]);
+    try { localStorage.setItem(COUPON_KEY, JSON.stringify(coupon)); } catch { /* modo privado */ }
+  }, [coupon]);
   useEffect(() => {
     try { localStorage.setItem(CUSTOMER_KEY, JSON.stringify(customer)); } catch { /* modo privado */ }
   }, [customer]);
@@ -148,16 +177,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const close = useCallback(() => setIsOpen(false), []);
   const buyNow = useCallback((id: string, qty = 1) => { add(id, qty); setIsOpen(true); }, [add]);
 
-  const applyCoupon = useCallback((code: string) => {
-    const c = code.trim().toUpperCase();
-    if (COUPONS[c]) { setCouponCode(c); return true; }
-    return false;
-  }, []);
-  const removeCoupon = useCallback(() => setCouponCode(""), []);
-  const setCustomer = useCallback((c: Partial<Customer>) => {
-    setCustomerState((prev) => ({ ...prev, ...c }));
-  }, []);
-
   const lines = useMemo<DetailedLine[]>(
     () =>
       items
@@ -174,19 +193,48 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const count = useMemo(() => lines.reduce((s, l) => s + l.qty, 0), [lines]);
   const subtotal = useMemo(() => lines.reduce((s, l) => s + l.lineTotal, 0), [lines]);
-  const coupon = couponCode ? COUPONS[couponCode] : null;
-  const discount = coupon ? (subtotal * coupon.percent) / 100 : 0;
-  const total = Math.max(0, subtotal - discount);
+
+  const applyCoupon = useCallback(async (code: string): Promise<{ ok: boolean; message: string }> => {
+    const row = await getValidCoupon(code);
+    if (!row) return { ok: false, message: "Cupom inválido ou expirado." };
+    if (subtotal < row.min_order_amount) {
+      return { ok: false, message: `Este cupom vale para pedidos a partir de ${row.min_order_amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}.` };
+    }
+    setCoupon({
+      code: row.code,
+      type: row.type,
+      value: row.value,
+      minOrderAmount: row.min_order_amount,
+      label: couponLabel(row),
+    });
+    return { ok: true, message: "Cupom aplicado!" };
+  }, [subtotal]);
+
+  const removeCoupon = useCallback(() => setCoupon(null), []);
+  const setCustomer = useCallback((c: Partial<Customer>) => {
+    setCustomerState((prev) => ({ ...prev, ...c }));
+  }, []);
+
+  const discount = coupon
+    ? couponDiscount({ type: coupon.type, value: coupon.value, min_order_amount: coupon.minOrderAmount }, subtotal)
+    : 0;
+  const shipping = fulfillment === "entrega" && lines.length > 0 ? settings.delivery_fee : 0;
+  const total = Math.max(0, subtotal - discount) + shipping;
 
   const value = useMemo<CartValue>(
     () => ({
-      lines, count, subtotal, discount, total, isOpen, fulfillment,
-      couponCode, couponLabel: coupon?.label ?? null, customer, paymentMethod,
+      lines, count, subtotal, discount, shipping, total,
+      minOrderAmount: settings.min_order_amount,
+      whatsappNumber: settings.whatsapp_number,
+      isOpen, fulfillment,
+      couponCode: coupon?.code ?? "", couponLabel: coupon?.label ?? null,
+      customer, paymentMethod,
       add, inc, dec, remove, clear, open, close, buyNow,
       setFulfillment, applyCoupon, removeCoupon, setCustomer, setPaymentMethod,
     }),
-    [lines, count, subtotal, discount, total, isOpen, fulfillment, couponCode, coupon, customer, paymentMethod,
-      add, inc, dec, remove, clear, open, close, buyNow, applyCoupon, removeCoupon, setCustomer, setPaymentMethod]
+    [lines, count, subtotal, discount, shipping, total, settings, isOpen, fulfillment, coupon,
+      customer, paymentMethod, add, inc, dec, remove, clear, open, close, buyNow,
+      applyCoupon, removeCoupon, setCustomer, setPaymentMethod]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

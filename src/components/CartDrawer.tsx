@@ -19,14 +19,17 @@ const PAYMENT: Record<PaymentMethod, { label: string; line: string }> = {
 
 export function CartDrawer() {
   const {
-    lines, count, subtotal, discount, total, isOpen, close, inc, dec, remove,
+    lines, count, subtotal, discount, shipping, total, minOrderAmount, whatsappNumber,
+    isOpen, close, inc, dec, remove,
     fulfillment, setFulfillment, couponCode, couponLabel, applyCoupon, removeCoupon,
     customer, setCustomer, paymentMethod, setPaymentMethod,
   } = useCart();
   const closeRef = useRef<HTMLButtonElement>(null);
   const [couponInput, setCouponInput] = useState("");
   const [couponMsg, setCouponMsg] = useState<string | null>(null);
+  const [checkoutMsg, setCheckoutMsg] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const belowMinOrder = minOrderAmount > 0 && subtotal < minOrderAmount;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -42,14 +45,19 @@ export function CartDrawer() {
     };
   }, [isOpen, close]);
 
-  const onApplyCoupon = () => {
-    const ok = applyCoupon(couponInput);
-    setCouponMsg(ok ? "Cupom aplicado!" : "Cupom inválido.");
-    if (ok) setCouponInput("");
+  const onApplyCoupon = async () => {
+    const result = await applyCoupon(couponInput);
+    setCouponMsg(result.message);
+    if (result.ok) setCouponInput("");
   };
 
   const checkout = async () => {
     if (lines.length === 0 || sending) return;
+    if (belowMinOrder) {
+      setCheckoutMsg(`O pedido mínimo da loja é ${formatBRL(minOrderAmount)}.`);
+      return;
+    }
+    setCheckoutMsg(null);
     setSending(true);
 
     /* Best-effort: tenta registrar o pedido no banco, mas o cliente sempre
@@ -59,6 +67,11 @@ export function CartDrawer() {
         customerName: customer.name.trim() || "Cliente do site",
         customerPhone: customer.phone.trim() || "não informado",
         customerAddress: fulfillment === "entrega" ? customer.address.trim() || undefined : undefined,
+        fulfillment,
+        subtotalAmount: subtotal,
+        discountAmount: discount,
+        shippingFee: shipping,
+        couponCode: couponCode || undefined,
         totalAmount: total,
         paymentMethod,
         notes: couponCode ? `Cupom aplicado: ${couponCode} (-${formatBRL(discount)})` : undefined,
@@ -84,12 +97,13 @@ export function CartDrawer() {
       .join("\n");
     let msg = `Olá, gostaria de finalizar este pedido.\n\n${itens}\n\nSubtotal: ${formatBRL(subtotal)}`;
     if (couponCode) msg += `\nCupom ${couponCode}: -${formatBRL(discount)}`;
+    if (shipping > 0) msg += `\nFrete: ${formatBRL(shipping)}`;
     msg += `\nTotal: ${formatBRL(total)}\n\nEntrega: ${FULFILLMENT[fulfillment].line}`;
     msg += `\nPagamento: ${PAYMENT[paymentMethod].line}`;
     if (customer.name.trim()) msg += `\nNome: ${customer.name.trim()}`;
     if (customer.phone.trim()) msg += `\nTelefone: ${customer.phone.trim()}`;
     if (fulfillment === "entrega" && customer.address.trim()) msg += `\nEndereço: ${customer.address.trim()}`;
-    window.open(waLink(msg), "_blank", "noopener");
+    window.open(waLink(msg, whatsappNumber), "_blank", "noopener");
   };
 
   return (
@@ -222,8 +236,12 @@ export function CartDrawer() {
               {discount > 0 && (
                 <div className="px-drawer__sum px-drawer__sum--disc"><span>Desconto</span><span>- {formatBRL(discount)}</span></div>
               )}
+              {shipping > 0 && (
+                <div className="px-drawer__sum"><span>Frete</span><span>{formatBRL(shipping)}</span></div>
+              )}
               <div className="px-drawer__sum px-drawer__sum--total"><span>Total</span><span>{formatBRL(total)}</span></div>
 
+              {checkoutMsg && <p className="px-coupon__msg" role="status">{checkoutMsg}</p>}
               <button type="button" className="px-drawer__checkout" onClick={checkout} disabled={sending}>
                 <Icon name="whatsapp" size={18} /> {sending ? "Enviando…" : "Finalizar pedido"}
               </button>

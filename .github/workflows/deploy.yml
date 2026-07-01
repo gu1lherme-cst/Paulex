@@ -32,6 +32,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Falha cedo se os secrets do Supabase não existirem: sem eles o site
+      # seria publicado sem backend (e o login admin quebraria com "Load failed").
+      - name: Check Supabase secrets
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SUPABASE_ANON_KEY" ]; then
+            echo "::error::Secrets SUPABASE_URL e/ou SUPABASE_ANON_KEY ausentes. Crie em Settings > Secrets and variables > Actions e rode o deploy de novo."
+            exit 1
+          fi
+
       - name: Build
         run: npm run build
         env:
