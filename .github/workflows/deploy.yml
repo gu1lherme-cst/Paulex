@@ -34,6 +34,11 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          # Credenciais públicas do Supabase (protegidas por RLS, não por
+          # sigilo) — configure em Settings > Secrets and variables > Actions.
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

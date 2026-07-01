@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { ProductsProvider, useProducts } from "./lib/products";
+import { CategoriesProvider, useCategories, type CategoryCard } from "./lib/categories";
+import { AuthProvider } from "./lib/auth";
 import { CartProvider } from "./lib/cart";
 import { WishlistProvider } from "./lib/wishlist";
 import { useRoute, href, type Route } from "./lib/router";
@@ -13,7 +15,7 @@ import { Listing } from "./pages/Listing";
 import { Product } from "./pages/Product";
 import { Favorites } from "./pages/Favorites";
 import { Admin } from "./pages/Admin";
-import { categoryFromSlug, type Product as TProduct } from "./data/catalog";
+import type { Product as TProduct } from "./data/catalog";
 import "./styles.css";
 
 const BRAND = "Paulex Armarinho";
@@ -31,7 +33,11 @@ function setMeta(name: string, content: string) {
 }
 
 /* SEO técnico por rota: title + meta description (Cap 51). */
-function applySEO(route: Route, byId: (id: string) => TProduct | undefined) {
+function applySEO(
+  route: Route,
+  byId: (id: string) => TProduct | undefined,
+  catBySlug: (slug: string) => CategoryCard | undefined
+) {
   let title = `${BRAND} | Papelaria, utilidades e muito mais`;
   let desc = DEFAULT_DESC;
   switch (route.name) {
@@ -49,12 +55,12 @@ function applySEO(route: Route, byId: (id: string) => TProduct | undefined) {
       break;
     case "admin":
       title = `Painel administrativo | ${BRAND}`;
-      desc = "Gestão local do catálogo da Paulex Armarinho.";
+      desc = "Gestão do catálogo e dos pedidos da Paulex Armarinho.";
       break;
     case "categoria": {
-      const c = categoryFromSlug(route.slug);
-      title = `${c ?? "Categoria"} | ${BRAND}`;
-      desc = c ? `Produtos de ${c} na Paulex Armarinho, com preço justo e entrega para todo o Rio de Janeiro.` : DEFAULT_DESC;
+      const c = catBySlug(route.slug);
+      title = `${c?.name ?? "Categoria"} | ${BRAND}`;
+      desc = c ? `Produtos de ${c.name} na Paulex Armarinho, com preço justo e entrega para todo o Rio de Janeiro.` : DEFAULT_DESC;
       break;
     }
     case "busca":
@@ -105,10 +111,11 @@ function Shell() {
   const route = useRoute();
   const key = JSON.stringify(route);
   const { byId } = useProducts();
+  const { bySlug } = useCategories();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    applySEO(route, byId);
+    applySEO(route, byId, bySlug);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
@@ -126,12 +133,16 @@ function Shell() {
 
 export default function App() {
   return (
-    <ProductsProvider>
-      <WishlistProvider>
-        <CartProvider>
-          <Shell />
-        </CartProvider>
-      </WishlistProvider>
-    </ProductsProvider>
+    <AuthProvider>
+      <CategoriesProvider>
+        <ProductsProvider>
+          <WishlistProvider>
+            <CartProvider>
+              <Shell />
+            </CartProvider>
+          </WishlistProvider>
+        </ProductsProvider>
+      </CategoriesProvider>
+    </AuthProvider>
   );
 }

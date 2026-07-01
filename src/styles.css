@@ -200,6 +200,15 @@
 .px-ph--red {
   background: linear-gradient(135deg, #ffe7e8 0%, #ffd2d4 100%);
 }
+.px-ph--img {
+  background: #f4f6fd;
+  padding: 0;
+}
+.px-ph--img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* =============================== TOP BAR ================================= */
 
@@ -2358,17 +2367,20 @@ button.px-acct {
   gap: 8px;
   margin: 10px 0 14px;
 }
-.px-customer input {
+.px-customer input,
+.px-customer textarea {
   flex: 1;
   min-width: 0;
   height: 42px;
-  padding: 0 12px;
+  padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: 10px;
   font-size: 14px;
+  font-family: inherit;
   color: var(--ink);
   outline: none;
   background: #fff;
+  resize: vertical;
 }
 .px-drawer__sum--disc {
   color: #1c7a45;
@@ -2600,6 +2612,71 @@ button.px-acct {
     grid-column: span 2;
   }
 }
+/* Login / acesso negado */
+.px-admin__login {
+  max-width: 420px;
+  margin: 0 auto;
+  text-align: center;
+}
+.px-admin__login .px-field {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+/* Abas (reaproveita o visual dos chips de categoria) */
+.px-admin__tabs {
+  margin-bottom: 20px;
+}
+
+/* Pedidos */
+.px-admin__order {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+.px-admin__orderhead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.px-admin__orderitems {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  font-size: 13px;
+  color: var(--text);
+}
+.px-admin__orderitems li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 3px 0;
+}
+.px-admin__orderfoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+}
+.px-admin__orderfoot select {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #fff;
+  color: var(--ink);
+}
+
 @media (max-width: 480px) {
   .px-admin__grid {
     grid-template-columns: 1fr;

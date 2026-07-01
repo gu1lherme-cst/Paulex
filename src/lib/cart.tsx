@@ -11,7 +11,8 @@ import { COUPONS, unitPriceFor, type Product } from "../data/catalog";
 import { useProducts } from "./products";
 
 export type Fulfillment = "retirada" | "entrega";
-export type Customer = { name: string; phone: string };
+export type PaymentMethod = "dinheiro" | "pix" | "cartao" | "a_combinar";
+export type Customer = { name: string; phone: string; address: string };
 type Line = { id: string; qty: number };
 export type DetailedLine = Product & {
   qty: number;
@@ -23,7 +24,9 @@ export type DetailedLine = Product & {
 const CART_KEY = "paulex:carrinho";
 const COUPON_KEY = "paulex:cupom";
 const CUSTOMER_KEY = "paulex:cliente";
+const PAYMENT_KEY = "paulex:pagamento";
 const MAX_QTY = 99;
+const PAYMENT_METHODS: PaymentMethod[] = ["dinheiro", "pix", "cartao", "a_combinar"];
 
 function load<T>(key: string, fallback: T): T {
   try {
@@ -59,6 +62,7 @@ type CartValue = {
   couponCode: string;
   couponLabel: string | null;
   customer: Customer;
+  paymentMethod: PaymentMethod;
   add: (id: string, qty?: number) => void;
   inc: (id: string) => void;
   dec: (id: string) => void;
@@ -71,6 +75,7 @@ type CartValue = {
   applyCoupon: (code: string) => boolean;
   removeCoupon: () => void;
   setCustomer: (c: Partial<Customer>) => void;
+  setPaymentMethod: (m: PaymentMethod) => void;
 };
 
 const CartContext = createContext<CartValue | null>(null);
@@ -96,8 +101,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return typeof c === "string" && COUPONS[c] ? c : "";
   });
   const [customer, setCustomerState] = useState<Customer>(() => {
-    const c = load<Customer>(CUSTOMER_KEY, { name: "", phone: "" });
-    return { name: c?.name ?? "", phone: c?.phone ?? "" };
+    const c = load<Customer>(CUSTOMER_KEY, { name: "", phone: "", address: "" });
+    return { name: c?.name ?? "", phone: c?.phone ?? "", address: c?.address ?? "" };
+  });
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(() => {
+    const m = load<PaymentMethod>(PAYMENT_KEY, "a_combinar");
+    return PAYMENT_METHODS.includes(m) ? m : "a_combinar";
   });
 
   useEffect(() => {
@@ -109,6 +118,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try { localStorage.setItem(CUSTOMER_KEY, JSON.stringify(customer)); } catch { /* modo privado */ }
   }, [customer]);
+  useEffect(() => {
+    try { localStorage.setItem(PAYMENT_KEY, JSON.stringify(paymentMethod)); } catch { /* modo privado */ }
+  }, [paymentMethod]);
 
   const add = useCallback((id: string, qty = 1) => {
     if (!validIds.has(id)) return;
@@ -169,12 +181,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const value = useMemo<CartValue>(
     () => ({
       lines, count, subtotal, discount, total, isOpen, fulfillment,
-      couponCode, couponLabel: coupon?.label ?? null, customer,
+      couponCode, couponLabel: coupon?.label ?? null, customer, paymentMethod,
       add, inc, dec, remove, clear, open, close, buyNow,
-      setFulfillment, applyCoupon, removeCoupon, setCustomer,
+      setFulfillment, applyCoupon, removeCoupon, setCustomer, setPaymentMethod,
     }),
-    [lines, count, subtotal, discount, total, isOpen, fulfillment, couponCode, coupon, customer,
-      add, inc, dec, remove, clear, open, close, buyNow, applyCoupon, removeCoupon, setCustomer]
+    [lines, count, subtotal, discount, total, isOpen, fulfillment, couponCode, coupon, customer, paymentMethod,
+      add, inc, dec, remove, clear, open, close, buyNow, applyCoupon, removeCoupon, setCustomer, setPaymentMethod]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
