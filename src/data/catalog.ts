@@ -44,13 +44,6 @@ export type Product = {
   isFeatured: boolean;
 };
 
-/* Cupons de desconto (percentual). Recurso local do carrinho — não depende do banco. */
-export const COUPONS: Record<string, { percent: number; label: string }> = {
-  PAULEX10: { percent: 10, label: "10% de desconto" },
-  RETIRADA5: { percent: 5, label: "5% de desconto na retirada" },
-  ATACADO15: { percent: 15, label: "15% de desconto no atacado" },
-};
-
 /* --------------------------- Conteúdo da home ---------------------------- */
 /* Conteúdo institucional/estático — não faz parte do escopo de dados
    dinâmicos pedido (produtos, categorias, pedidos), por isso continua fixo. */

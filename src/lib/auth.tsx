@@ -2,7 +2,9 @@ import {
   createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode,
 } from "react";
 import type { Session } from "@supabase/supabase-js";
-import { checkIsAdmin, getSession, onAuthStateChange, sendMagicLink, signOut } from "../services/authService";
+import {
+  checkIsAdmin, cleanAuthParamsFromUrl, getSession, onAuthStateChange, sendMagicLink, signOut,
+} from "../services/authService";
 
 /* ----------------------------------------------------------------------------
  * Sessão de administrador (login por magic link). Usado só pela página
@@ -30,6 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const refresh = async (s: Session | null) => {
       setSession(s);
       if (!s) { setIsAdmin(false); return; }
+      cleanAuthParamsFromUrl();
       const admin = await checkIsAdmin();
       if (!cancelled) setIsAdmin(admin);
     };

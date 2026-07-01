@@ -44,14 +44,43 @@ usando só o navegador (Safari/Chrome) — sem precisar instalar nada.
 No menu lateral, abra **SQL Editor → New query**. Cole e rode, **um
 arquivo por vez, nesta ordem**:
 
-1. `supabase/01_schema.sql` — cria as tabelas.
+1. `supabase/01_schema.sql` — cria as tabelas básicas.
 2. `supabase/02_policies.sql` — ativa a segurança (RLS) e as regras de quem
    pode ler/escrever cada tabela.
 3. `supabase/03_seed_categories.sql` — cadastra as 8 categorias que a loja
    já usa hoje (Papelaria, Utilidades, Brinquedos, etc.).
+4. `supabase/04_ecommerce_v2.sql` — evolução v2: marcas, imagens de produto,
+   variações, clientes, movimentações de estoque, cupons, configurações da
+   loja e pedidos completos (frete, desconto, retirada/entrega).
+5. `supabase/05_policies_v2.sql` — RLS de todas as tabelas da v2.
 
 Depois de cada um, clique em **Run** e confira que apareceu "Success" (sem
 erro vermelho) antes de colar o próximo.
+
+6. `supabase/06_secure_orders.sql` — endurecimento de segurança: pedidos
+   passam a ser criados só pela função `create_order` (validação no
+   servidor), fecha o insert direto de pedidos por visitantes e adiciona
+   CHECKs de integridade. **Rode este por último.**
+
+> Já rodou 01–03 antes? Sem problema: basta rodar o 04, 05 e 06 — todos são
+> aditivos e não mexem nos dados existentes.
+
+### 2b. Autorizar o endereço do site no login (obrigatório para o magic link)
+
+No Supabase, vá em **Authentication → URL Configuration**:
+
+1. **Site URL**: `https://gu1lherme-cst.github.io/Paulex/`
+2. **Redirect URLs** → Add URL: **exatamente** `https://gu1lherme-cst.github.io/Paulex/**`
+   (com os dois asteriscos no final).
+
+> ⚠️ **Segurança:** use o caminho completo com `/Paulex/`. Um curinga mais
+> amplo como `https://gu1lherme-cst.github.io/**` autorizaria **qualquer
+> outro repositório seu** no GitHub Pages (mesma origem) a receber o link de
+> acesso. **Em produção, NÃO deixe `http://localhost` na lista de Redirect
+> URLs** — adicione só temporariamente se for testar no computador e remova
+> depois.
+
+Sem isso, o link do e-mail não devolve o administrador para o painel.
 
 ### 3. Cadastrar você como administrador
 
@@ -108,6 +137,35 @@ npm run dev
 5. Volte para a home/loja e confirme que o produto aparece.
 6. Adicione o produto ao carrinho, finalize o pedido — confirme que ele
    aparece na aba **Pedidos** do painel, e que dá para mudar o status.
+7. Confira na aba **Estoque** que o pedido gerou uma baixa automática.
+   Ao mudar o status de um pedido para **Cancelado**, o estoque dos itens
+   é devolvido automaticamente (uma entrada aparece no log de estoque).
+
+## Problemas comuns (troubleshooting)
+
+**"Load failed" ao entrar no admin (Safari/iPad)**
+É uma falha de conexão do navegador com o Supabase. Na prática, quase sempre
+é um destes três, nesta ordem de probabilidade:
+1. **Secrets ausentes no build.** Confira em GitHub → Settings → Secrets →
+   Actions se `SUPABASE_URL` e `SUPABASE_ANON_KEY` existem, com esses nomes
+   exatos. Importante: eles precisam existir **antes** do deploy — se você
+   os criou depois, vá em **Actions → Deploy to GitHub Pages → Re-run all
+   jobs** para republicar. (O workflow atual falha com uma mensagem clara
+   se os secrets estiverem faltando.)
+2. **Valores errados/incompletos.** A URL deve ser a "Project URL"
+   (`https://xxxxx.supabase.co`, sem barra no final) e a chave deve ser a
+   **anon public** (não a service_role). Copie de novo com atenção a
+   espaços extras.
+3. **Projeto Supabase pausado.** No plano gratuito, projetos sem uso por
+   ~1 semana são pausados. Abra o painel do Supabase e clique em "Restore".
+
+**Cliquei no link do e-mail e não entrei no painel**
+Confira o passo 2b (Redirect URLs). O link também só funciona no mesmo
+navegador em que você pediu o acesso (limitação do fluxo seguro PKCE) —
+peça o link no Safari e abra o e-mail no Safari, por exemplo.
+
+**Cadastrei produto e não aparece na loja**
+Veja se o produto está "Ativo na loja" e se a categoria dele está ativa.
 
 ## Adicionando produtos reais
 
@@ -123,14 +181,20 @@ merecem atenção:
 ## Checklist final
 
 **Segurança**
-- [x] RLS ativo em `categories`, `products`, `orders`, `order_items` e
-      `admin_users` (arquivo `02_policies.sql`).
-- [x] Visitantes só leem categorias/produtos ativos; só admins escrevem.
+- [x] RLS ativo em TODAS as tabelas: `categories`, `products`, `orders`,
+      `order_items`, `admin_users` (02) e `brands`, `product_images`,
+      `product_variants`, `customers`, `inventory_movements`, `coupons`,
+      `store_settings` (05).
+- [x] Visitantes só leem dados ativos (produtos, categorias, marcas,
+      variações, cupons válidos); só admins escrevem.
 - [x] Pedidos: qualquer visitante cria, só admin lê/altera.
+- [x] Dados de clientes (`customers`) são invisíveis para o público — o
+      checkout grava via função `upsert_customer`, que só devolve o id.
+- [x] `inventory_movements` é um log imutável (nem admin altera/apaga).
 - [x] Novos administradores só podem ser adicionados via SQL Editor
       (nenhum caminho de auto-promoção pelo app).
 - [x] `service_role key` nunca aparece no código; `.env` está no
-      `.gitignore`.
+      `.gitignore`; o deploy falha cedo se os secrets faltarem.
 
 **Performance**
 - [x] Índices em `slug`, `category_id`, `is_active`, `is_featured`,
