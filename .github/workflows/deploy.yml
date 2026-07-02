@@ -32,17 +32,40 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Falha cedo se os secrets do Supabase não existirem: sem eles o site
-      # seria publicado sem backend (e o login admin quebraria com "Load failed").
+      # Falha cedo se os secrets do Supabase estiverem ausentes OU malformados.
+      # Sem eles (ou com valor errado) o login admin quebra com "Load failed".
+      # O diagnóstico abaixo NÃO vaza segredo: imprime só tamanhos e formato —
+      # e a anon key/URL já são públicas no bundle publicado.
       - name: Check Supabase secrets
         env:
           VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
           if [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SUPABASE_ANON_KEY" ]; then
-            echo "::error::Secrets SUPABASE_URL e/ou SUPABASE_ANON_KEY ausentes. Crie em Settings > Secrets and variables > Actions e rode o deploy de novo."
+            echo "::error::Secrets SUPABASE_URL e/ou SUPABASE_ANON_KEY ausentes. Crie em Settings > Secrets and variables > Actions (aba Secrets, NÃO Variables) e rode o deploy de novo."
             exit 1
           fi
+          # A URL não pode ter espaços nem barra final; precisa ser a Project URL da API.
+          case "$VITE_SUPABASE_URL" in
+            *" "*|*$'\n'*|*$'\t'*)
+              echo "::error::VITE_SUPABASE_URL contém espaço/quebra de linha (${#VITE_SUPABASE_URL} chars). Recrie o secret colando só a URL, sem espaços."; exit 1;;
+            */)
+              echo "::error::VITE_SUPABASE_URL termina com '/'. Remova a barra final (ex.: https://xxxx.supabase.co)."; exit 1;;
+          esac
+          case "$VITE_SUPABASE_URL" in
+            https://*.supabase.co) echo "URL: formato OK (https://*.supabase.co, ${#VITE_SUPABASE_URL} chars).";;
+            https://*) echo "::warning::URL usa https mas não é *.supabase.co — confirme que é a Project URL da API (Project Settings > API), não a URL do painel do Supabase.";;
+            *) echo "::error::VITE_SUPABASE_URL não começa com https:// (${#VITE_SUPABASE_URL} chars). Cole a Project URL completa, ex.: https://xxxx.supabase.co"; exit 1;;
+          esac
+          # A anon key é um JWT longo (começa com 'eyJ'); valores curtos indicam cópia incompleta.
+          if [ "${#VITE_SUPABASE_ANON_KEY}" -lt 100 ]; then
+            echo "::error::A anon key parece incompleta (${#VITE_SUPABASE_ANON_KEY} chars; esperado ~200+). Copie a chave 'anon public' inteira em Project Settings > API."; exit 1
+          fi
+          case "$VITE_SUPABASE_ANON_KEY" in
+            *" "*|*$'\n'*|*$'\t'*) echo "::error::A anon key contém espaço/quebra de linha. Recrie o secret sem espaços."; exit 1;;
+            eyJ*) echo "anon key: formato OK (JWT, ${#VITE_SUPABASE_ANON_KEY} chars).";;
+            *) echo "::warning::A anon key não começa com 'eyJ' — confirme que copiou a chave 'anon public', não outro campo.";;
+          esac
 
       - name: Build
         run: npm run build
