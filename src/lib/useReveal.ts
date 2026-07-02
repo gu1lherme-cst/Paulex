@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 
 /* Anima elementos [data-reveal] ao entrarem na viewport. Reexecuta a cada
-   mudança de `key` (ex.: rota), pois cada página monta elementos novos. */
+   mudança de `key` (ex.: rota) e também observa elementos adicionados
+   DEPOIS (ex.: produtos que chegam do banco e substituem o skeleton). */
 export function useReveal(key?: unknown) {
   useEffect(() => {
-    const els = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-reveal]:not(.px-in)")
-    );
-    if (els.length === 0) return;
     if (!("IntersectionObserver" in window)) {
-      els.forEach((el) => el.classList.add("px-in"));
+      document
+        .querySelectorAll<HTMLElement>("[data-reveal]:not(.px-in)")
+        .forEach((el) => el.classList.add("px-in"));
       return;
     }
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -23,7 +23,29 @@ export function useReveal(key?: unknown) {
       },
       { threshold: 0.1, rootMargin: "0px 0px -6% 0px" }
     );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+
+    const observeAll = () => {
+      document
+        .querySelectorAll<HTMLElement>("[data-reveal]:not(.px-in):not([data-reveal-watched])")
+        .forEach((el) => {
+          el.setAttribute("data-reveal-watched", "");
+          io.observe(el);
+        });
+    };
+
+    observeAll();
+
+    /* Conteúdo assíncrono (Supabase) monta depois do primeiro passe. */
+    const mo = new MutationObserver(() => observeAll());
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      mo.disconnect();
+      io.disconnect();
+      /* permite reobservar na próxima rota */
+      document
+        .querySelectorAll<HTMLElement>("[data-reveal-watched]")
+        .forEach((el) => el.removeAttribute("data-reveal-watched"));
+    };
   }, [key]);
 }

@@ -48,13 +48,29 @@ export type Product = {
 /* Conteúdo institucional/estático — não faz parte do escopo de dados
    dinâmicos pedido (produtos, categorias, pedidos), por isso continua fixo. */
 
+/* Faixa de benefícios logo abaixo do hero (4 cards, ref. visual) */
 export const BENEFITS: { title: string; desc: string; icon: IconName }[] = [
-  { title: "Variedade completa", desc: "Para casa, escola e trabalho", icon: "stack" },
-  { title: "Preços justos", desc: "Condições que cabem no bolso", icon: "tag" },
-  { title: "Compra segura", desc: "Proteção dos seus dados", icon: "shield" },
   { title: "Entrega rápida", desc: "Para todo o Rio de Janeiro", icon: "truck" },
-  { title: "Atendimento humano", desc: "Equipe especializada", icon: "headset" },
+  { title: "Retire na loja", desc: "Retirada rápida e fácil", icon: "store" },
+  { title: "PIX com desconto", desc: "5% de desconto no PIX", icon: "tag" },
+  { title: "Desde 1984", desc: "Tradição e confiança", icon: "medal" },
 ];
+
+/* Faixa de confiança antes do rodapé */
+export const TRUST_ITEMS: { title: string; desc: string; icon: IconName }[] = [
+  { title: "Compra segura", desc: "Seus dados protegidos", icon: "shield" },
+  { title: "Parcele em até 10x", desc: "Sem juros no cartão", icon: "check" },
+  { title: "Troca fácil", desc: "Até 7 dias após o recebimento", icon: "box" },
+  { title: "Atendimento rápido", desc: "Pelo WhatsApp", icon: "headset" },
+];
+
+/* Desconto exibido para pagamento à vista no PIX (apenas apresentação:
+   o valor final é combinado no fechamento pelo WhatsApp/na loja).
+   Ajuste aqui — ou zere para ocultar a linha "no PIX" dos cards. */
+export const PIX_DISCOUNT_PERCENT = 5;
+
+export const pixPriceFor = (v: number): number =>
+  Math.round(v * (1 - PIX_DISCOUNT_PERCENT / 100) * 100) / 100;
 
 export const CAMPAIGNS: { tag: string; title: string; off: string; cta: string; tone: Tone; categorySlug: string }[] = [
   { tag: "Volta às aulas", title: "Tudo para um novo começo", off: "30%", cta: "Aproveitar ofertas", tone: "blue", categorySlug: "papelaria" },

@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Icon } from "./Icon";
 import { Logo } from "./Logo";
 import { useCart } from "../lib/cart";
@@ -13,8 +13,17 @@ const ALL = "Todas as categorias";
 export function Header() {
   const { count, open } = useCart();
   const { count: favCount } = useWishlist();
-  const { names: categoryNames } = useCategories();
+  const { categories, names: categoryNames } = useCategories();
   const [q, setQ] = useState("");
+  const [scrolled, setScrolled] = useState(false);
+
+  /* Blur/sombra suave no header fixo ao rolar (só visual). */
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const onSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -32,21 +41,18 @@ export function Header() {
       <div className="px-topbar">
         <div className="px-topbar__in">
           <div className="px-topbar__left">
-            <span><Icon name="pin" size={14} />Enviamos para todo o Rio de Janeiro</span>
-            <span><Icon name="medal" size={14} />Mais de 40 anos de tradição</span>
-            <span><Icon name="shield" size={14} />Compra 100% segura</span>
-            <span><Icon name="headset" size={14} />Atendimento humano</span>
+            <span><Icon name="pin" size={14} />Entregar em: Rio de Janeiro - RJ</span>
           </div>
           <div className="px-topbar__right">
-            <a href={href("/produtos")} className="px-navlink"><Icon name="store" size={14} />Nossas lojas</a>
-            <a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-navlink">Ajuda</a>
+            <a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-navlink"><Icon name="whatsapp" size={14} />Atendimento</a>
+            <a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-navlink">Acompanhar pedido</a>
             <a href={href("/admin")} className="px-navlink">Admin</a>
           </div>
         </div>
       </div>
 
-      {/* 2 · HEADER */}
-      <header className="px-sticky">
+      {/* 2 · HEADER + BARRA DE CATEGORIAS (fixos) */}
+      <header className={`px-sticky${scrolled ? " px-sticky--scrolled" : ""}`}>
         <div className="px-header">
           <div className="px-header__in">
             <a href={href("/")} className="px-header__logo" aria-label="Paulex — página inicial">
@@ -55,12 +61,11 @@ export function Header() {
 
             <form className="px-search" role="search" onSubmit={onSearch}>
               <label htmlFor="px-q" className="px-sr-only">O que você procura</label>
-              <span className="px-search__icon"><Icon name="search" size={19} /></span>
               <input
                 id="px-q"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="O que você precisa hoje?"
+                placeholder="O que você procura hoje?"
                 autoComplete="off"
               />
               <label htmlFor="px-cat" className="px-sr-only">Categoria</label>
@@ -70,8 +75,8 @@ export function Header() {
                   <option key={c}>{c}</option>
                 ))}
               </select>
-              <button type="submit">
-                Buscar <Icon name="search" size={16} />
+              <button type="submit" aria-label="Buscar">
+                <Icon name="search" size={20} />
               </button>
             </form>
 
@@ -79,8 +84,8 @@ export function Header() {
               <a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-acct">
                 <Icon name="user" size={22} />
                 <span className="px-acct__txt">
+                  <span className="px-acct__sub">Olá, faça seu</span>
                   <span className="px-acct__title">Entrar</span>
-                  <span className="px-acct__sub">Minha conta</span>
                 </span>
               </a>
               <a href={href("/favoritos")} className="px-acct">
@@ -90,7 +95,6 @@ export function Header() {
                 </span>
                 <span className="px-acct__txt">
                   <span className="px-acct__title">Favoritos</span>
-                  <span className="px-acct__sub">{favCount} {favCount === 1 ? "item" : "itens"}</span>
                 </span>
               </a>
               <button
@@ -106,12 +110,29 @@ export function Header() {
                 </span>
                 <span className="px-acct__txt">
                   <span className="px-acct__title">Carrinho</span>
-                  <span className="px-acct__sub">{count} {count === 1 ? "item" : "itens"}</span>
                 </span>
               </button>
             </div>
           </div>
         </div>
+
+        {/* 3 · BARRA DE CATEGORIAS */}
+        <nav className="px-catbar" aria-label="Categorias">
+          <div className="px-catbar__in">
+            <a href={href("/produtos")} className="px-catbar__all">
+              <Icon name="list" size={17} />
+              Todas as categorias
+            </a>
+            {categories.slice(0, 5).map((c) => (
+              <a key={c.slug} href={href(`/categoria/${c.slug}`)} className="px-catbar__link">
+                {c.name}
+              </a>
+            ))}
+            <span className="px-catbar__sep" aria-hidden="true" />
+            <a href={href("/ofertas")} className="px-catbar__link px-catbar__link--hot">Ofertas</a>
+            <a href={href("/produtos")} className="px-catbar__link">Novidades</a>
+          </div>
+        </nav>
       </header>
     </>
   );

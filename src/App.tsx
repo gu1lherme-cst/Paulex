@@ -6,6 +6,7 @@ import { CartProvider } from "./lib/cart";
 import { WishlistProvider } from "./lib/wishlist";
 import { useRoute, href, type Route } from "./lib/router";
 import { useReveal } from "./lib/useReveal";
+import { WHATSAPP_CONTACT } from "./lib/format";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { CartDrawer } from "./components/CartDrawer";
@@ -127,6 +128,16 @@ function Shell() {
       <Page route={route} />
       <Footer />
       <CartDrawer />
+      {/* Atendimento rápido — WhatsApp flutuante (apenas visual) */}
+      <a
+        href={WHATSAPP_CONTACT}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="px-wafab"
+        aria-label="Falar com a Paulex no WhatsApp"
+      >
+        <Icon name="whatsapp" size={28} />
+      </a>
     </div>
   );
 }
