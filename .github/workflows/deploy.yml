@@ -57,14 +57,22 @@ jobs:
             https://*) echo "::warning::URL usa https mas não é *.supabase.co — confirme que é a Project URL da API (Project Settings > API), não a URL do painel do Supabase.";;
             *) echo "::error::VITE_SUPABASE_URL não começa com https:// (${#VITE_SUPABASE_URL} chars). Cole a Project URL completa, ex.: https://xxxx.supabase.co"; exit 1;;
           esac
-          # A anon key é um JWT longo (começa com 'eyJ'); valores curtos indicam cópia incompleta.
-          if [ "${#VITE_SUPABASE_ANON_KEY}" -lt 100 ]; then
-            echo "::error::A anon key parece incompleta (${#VITE_SUPABASE_ANON_KEY} chars; esperado ~200+). Copie a chave 'anon public' inteira em Project Settings > API."; exit 1
+          # Aceita os dois formatos de chave PÚBLICA do Supabase:
+          #  - nova "Publishable key": sb_publishable_... (curta)
+          #  - legacy "anon public": JWT longo começando com eyJ...
+          # Rejeita só espaço/quebra de linha ou valor obviamente truncado.
+          case "$VITE_SUPABASE_ANON_KEY" in
+            *" "*|*$'\n'*|*$'\t'*)
+              echo "::error::A chave pública contém espaço/quebra de linha. Recrie o secret sem espaços."; exit 1;;
+          esac
+          if [ "${#VITE_SUPABASE_ANON_KEY}" -lt 20 ]; then
+            echo "::error::A chave pública parece truncada (${#VITE_SUPABASE_ANON_KEY} chars). Copie a chave inteira (sb_publishable_... ou a anon public eyJ...) em Project Settings > API."; exit 1
           fi
           case "$VITE_SUPABASE_ANON_KEY" in
-            *" "*|*$'\n'*|*$'\t'*) echo "::error::A anon key contém espaço/quebra de linha. Recrie o secret sem espaços."; exit 1;;
-            eyJ*) echo "anon key: formato OK (JWT, ${#VITE_SUPABASE_ANON_KEY} chars).";;
-            *) echo "::warning::A anon key não começa com 'eyJ' — confirme que copiou a chave 'anon public', não outro campo.";;
+            sb_publishable_*) echo "anon key: formato OK (Publishable key, ${#VITE_SUPABASE_ANON_KEY} chars).";;
+            eyJ*)             echo "anon key: formato OK (JWT legacy, ${#VITE_SUPABASE_ANON_KEY} chars).";;
+            sb_secret_*)      echo "::error::Isto é uma SECRET key (sb_secret_...), que NUNCA deve ir ao frontend. Use a Publishable key (sb_publishable_...)."; exit 1;;
+            *) echo "::warning::A chave pública não começa com 'sb_publishable_' nem 'eyJ' — confirme que copiou a Publishable key ou a anon public em Project Settings > API.";;
           esac
 
       - name: Build
