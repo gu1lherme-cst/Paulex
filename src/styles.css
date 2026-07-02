@@ -1,20 +1,25 @@
 /* ============================================================================
  * Paulex Armarinho — homepage styles
- * Paleta: azul #0A2C7C · vermelho #EC1C24 · tinta #16181D
+ * Identidade: azul-escuro #131921 · laranja #FF7A00 · cinza #F5F5F5 · texto #222
+ * (as variáveis --blue/--red mantêm o nome histórico para não quebrar as
+ *  ~centenas de usos existentes; os VALORES é que carregam a nova identidade)
  * ========================================================================= */
 
 .px-root {
-  --blue: #0a2c7c;
-  --blue-dark: #08245c;
-  --red: #ec1c24;
-  --ink: #16181d;
-  --text: #3a3d44;
+  --blue: #131921;
+  --blue-dark: #0b0f14;
+  --red: #ff7a00;
+  --orange: #ff7a00;
+  --orange-dark: #e56d00;
+  --ink: #131921;
+  --text: #222222;
   --muted: #6b7280;
   /* contraste AA em texto pequeno (≈4.6:1 sobre branco) */
   --faint: #6e7580;
   --line: #f0f1f3;
   --border: #e2e4e8;
-  font-family: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --surface: #f5f5f5;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   color: var(--ink);
   background: #fff;
   overflow-x: clip;
@@ -61,7 +66,7 @@
 .px-root button:focus-visible,
 .px-root input:focus-visible,
 .px-root select:focus-visible {
-  outline: 3px solid #4d7dff;
+  outline: 3px solid var(--orange);
   outline-offset: 2px;
   border-radius: 6px;
 }
@@ -118,7 +123,7 @@
 .px-btn--primary {
   background: var(--blue);
   color: #fff;
-  box-shadow: 0 10px 26px rgba(10, 44, 124, 0.24);
+  box-shadow: 0 10px 26px rgba(19, 25, 33, 0.22);
 }
 .px-btn--primary:hover {
   transform: translateY(-2px);
@@ -126,7 +131,7 @@
 .px-btn--red {
   background: var(--red);
   color: #fff;
-  box-shadow: 0 12px 26px rgba(236, 28, 36, 0.32);
+  box-shadow: 0 10px 24px rgba(255, 122, 0, 0.35);
 }
 .px-btn--red:hover {
   transform: translateY(-2px);
@@ -275,7 +280,14 @@
   top: 0;
   z-index: 50;
   background: var(--blue);
-  transition: box-shadow 0.25s ease;
+  transition: box-shadow 0.25s ease, background 0.25s ease;
+}
+/* Ao rolar: leve transparência + blur suave + sombra discreta */
+.px-sticky--scrolled {
+  background: rgba(19, 25, 33, 0.92);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.24);
 }
 
 /* ------------------------------- HEADER ---------------------------------- */
@@ -301,29 +313,27 @@
 
 .px-search {
   flex: 1;
-  max-width: 760px;
+  max-width: 780px;
   display: flex;
   align-items: center;
-  height: 56px;
+  height: 52px;
   background: #fff;
-  border-radius: 14px;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
-}
-.px-search__icon {
-  display: flex;
-  align-items: center;
-  padding: 0 18px;
-  color: var(--faint);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
 }
 .px-search input {
   flex: 1;
   min-width: 0;
   border: none;
   outline: none;
-  font-size: 15.5px;
+  font-size: 15px;
   color: var(--ink);
   background: transparent;
+  padding: 0 18px;
+}
+.px-search input::placeholder {
+  color: #8b919b;
 }
 .px-search select {
   border: none;
@@ -333,25 +343,23 @@
   color: #5b616b;
   font-size: 13.5px;
   padding: 0 12px;
-  height: 32px;
+  height: 30px;
   cursor: pointer;
 }
 .px-search button {
-  height: 56px;
-  padding: 0 26px;
-  background: var(--blue);
+  width: 58px;
+  height: 52px;
+  background: var(--orange);
   color: #fff;
   border: none;
-  font-size: 15px;
-  font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 .px-search button:hover {
-  background: var(--blue-dark);
+  background: var(--orange-dark);
 }
 
 .px-acctbar {
@@ -406,6 +414,75 @@
   justify-content: center;
 }
 
+/* ======================= BARRA DE CATEGORIAS ============================ */
+
+.px-catbar {
+  background: rgba(0, 0, 0, 0.28);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.px-catbar__in {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 28px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.px-catbar__in::-webkit-scrollbar {
+  display: none;
+}
+.px-catbar__all {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 46px;
+  padding: 0 16px;
+  margin-left: -16px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+.px-catbar__all:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.px-catbar__link {
+  display: inline-flex;
+  align-items: center;
+  height: 46px;
+  padding: 0 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.px-catbar__link:hover {
+  color: #fff;
+  border-bottom-color: var(--orange);
+}
+.px-catbar__link--hot {
+  color: var(--orange);
+  font-weight: 700;
+}
+.px-catbar__link--hot:hover {
+  color: var(--orange);
+}
+.px-catbar__sep {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.22);
+  margin: 0 6px;
+  flex-shrink: 0;
+}
+
 /* ================================ HERO ================================== */
 
 .px-hero {
@@ -414,12 +491,10 @@
   grid-template-columns: 1fr 1.12fr;
   gap: 28px;
   align-items: center;
-  margin: 28px 0 0;
-  padding: 52px 56px;
-  border-radius: 24px;
+  padding: 52px 64px;
   overflow: hidden;
-  background: radial-gradient(125% 130% at 82% 6%, #1b4486 0%, #0a2150 44%, #05122b 100%);
-  box-shadow: 0 26px 60px rgba(6, 16, 40, 0.3);
+  background: var(--surface);
+  min-height: 380px;
 }
 .px-hero__copy {
   position: relative;
@@ -430,17 +505,17 @@
   font-weight: 700;
   letter-spacing: 2.4px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--orange);
   margin: 0 0 18px;
 }
 .px-hero__title {
-  font-size: clamp(36px, 4.2vw, 56px);
-  line-height: 1.04;
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 1.06;
   letter-spacing: -1.6px;
   font-weight: 800;
-  color: #fff;
+  color: var(--ink);
   text-wrap: balance;
-  margin: 0 0 20px;
+  margin: 0 0 16px;
 }
 .px-hero__mark {
   position: relative;
@@ -453,15 +528,15 @@
   right: 0;
   bottom: -3px;
   height: 6px;
-  background: var(--red);
+  background: var(--orange);
   border-radius: 3px;
 }
 .px-hero__lead {
-  font-size: 16.5px;
+  font-size: 17px;
   line-height: 1.55;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--text);
   max-width: 420px;
-  margin: 0 0 30px;
+  margin: 0 0 28px;
   text-wrap: pretty;
 }
 .px-hero__cta {
@@ -480,6 +555,188 @@
   width: 100%;
   height: auto;
   display: block;
+  border-radius: 16px;
+}
+.px-hero__ph {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* ----------------------------- Hero slider ------------------------------ */
+
+.px-hs {
+  position: relative;
+  margin-top: 24px;
+}
+.px-hs__viewport {
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 16px 40px rgba(19, 25, 33, 0.08);
+}
+.px-hs__track {
+  display: flex;
+  transition: transform 0.55s cubic-bezier(0.16, 0.84, 0.44, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .px-hs__track {
+    transition: none;
+  }
+}
+.px-hs__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+.px-hs__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(19, 25, 33, 0.16);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.px-hs__arrow:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.px-hs__arrow--prev {
+  left: 18px;
+}
+.px-hs__arrow--next {
+  right: 18px;
+}
+.px-hs__dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  z-index: 2;
+}
+.px-hs__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: #d4d7dc;
+  cursor: pointer;
+  transition: width 0.25s ease, background 0.25s ease;
+}
+.px-hs__dot--on {
+  width: 22px;
+  background: var(--orange);
+}
+
+/* --------------------- Faixa de benefícios (cartão) ---------------------- */
+
+.px-perks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(19, 25, 33, 0.05);
+  margin-top: 24px;
+}
+.px-perk {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 26px;
+}
+.px-perk + .px-perk {
+  border-left: 1px solid var(--line);
+}
+.px-perk__icon {
+  flex-shrink: 0;
+  color: var(--ink);
+  display: flex;
+}
+.px-perk__title {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.px-perk__desc {
+  display: block;
+  font-size: 12.5px;
+  color: var(--faint);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+/* ----------------------- Skeleton loading (cards) ------------------------ */
+
+@keyframes px-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.px-skel {
+  width: 226px;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+.px-skel__block {
+  border-radius: 10px;
+  background: linear-gradient(90deg, #f0f1f3 25%, #f8f9fa 50%, #f0f1f3 75%);
+  background-size: 200% 100%;
+  animation: px-shimmer 1.4s linear infinite;
+}
+.px-skel__media {
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  margin-bottom: 14px;
+}
+.px-skel__line {
+  height: 13px;
+  margin-bottom: 9px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .px-skel__block {
+    animation: none;
+  }
+}
+
+/* ------------------------ WhatsApp flutuante ----------------------------- */
+
+.px-wafab {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 80;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.px-wafab:hover {
+  transform: scale(1.08);
+  box-shadow: 0 16px 36px rgba(37, 211, 102, 0.5);
 }
 
 /* ============================= BENEFÍCIOS =============================== */
@@ -737,7 +994,7 @@
   background: var(--red);
   border-radius: 8px;
   padding: 4px 9px;
-  box-shadow: 0 6px 14px rgba(236, 28, 36, 0.3);
+  box-shadow: 0 6px 14px rgba(255, 122, 0, 0.35);
 }
 .px-prod__name {
   font-size: 14px;
@@ -799,7 +1056,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: stretch;
-  box-shadow: 0 20px 50px rgba(10, 44, 124, 0.2);
+  box-shadow: 0 20px 50px rgba(19, 25, 33, 0.2);
 }
 .px-promo__glow {
   position: absolute;
@@ -855,7 +1112,7 @@
   min-height: 300px;
 }
 .px-promo__media .px-ph {
-  background: linear-gradient(135deg, #14377f 0%, #0a2c7c 100%);
+  background: linear-gradient(135deg, #1d2733 0%, #131921 100%);
 }
 .px-promo__media .px-ph__label {
   color: rgba(255, 255, 255, 0.78);
@@ -895,9 +1152,9 @@
   inset: 0;
   background: linear-gradient(
     105deg,
-    rgba(8, 20, 70, 0.85) 0%,
-    rgba(8, 20, 70, 0.5) 55%,
-    rgba(8, 20, 70, 0.18) 100%
+    rgba(11, 15, 20, 0.85) 0%,
+    rgba(11, 15, 20, 0.5) 55%,
+    rgba(11, 15, 20, 0.18) 100%
   );
 }
 .px-camp__body {
@@ -1047,7 +1304,7 @@
 .px-atac__veil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(8, 20, 70, 0.78), rgba(8, 20, 70, 0.15));
+  background: linear-gradient(to top, rgba(11, 15, 20, 0.78), rgba(11, 15, 20, 0.15));
 }
 .px-atac__caption {
   position: absolute;
@@ -1172,7 +1429,7 @@
 /* =============================== RODAPÉ ================================= */
 
 .px-footer {
-  background: #0e1e3d;
+  background: #131921;
   color: #fff;
   margin-top: 72px;
 }
@@ -1182,7 +1439,7 @@
   justify-content: center;
   width: 100%;
   height: 52px;
-  background: #1a3260;
+  background: #1d2733;
   border: none;
   color: rgba(255, 255, 255, 0.88);
   font-size: 14px;
@@ -1194,7 +1451,7 @@
   font-family: inherit;
 }
 .px-totop:hover {
-  background: #1f3d75;
+  background: #262f3d;
 }
 .px-footer__in {
   max-width: 1280px;
@@ -1259,13 +1516,26 @@
   .px-hero {
     grid-template-columns: 1fr;
     gap: 24px;
-    padding: 40px 36px;
+    padding: 36px 36px 52px;
+    min-height: 0;
   }
   .px-hero__visual {
     order: -1;
     max-width: 620px;
     margin: 0 auto;
     width: 100%;
+  }
+  .px-perks {
+    grid-template-columns: 1fr 1fr;
+  }
+  .px-perk:nth-child(3) {
+    border-left: none;
+  }
+  .px-perk {
+    border-top: 1px solid var(--line);
+  }
+  .px-perk:nth-child(-n + 2) {
+    border-top: none;
   }
   .px-hero__lead {
     max-width: none;
@@ -1336,10 +1606,33 @@
     text-align: center;
   }
   .px-hero {
-    padding: 32px 24px;
+    padding: 24px 20px 56px;
   }
   .px-hero__title {
-    font-size: 36px;
+    font-size: 32px;
+  }
+  /* no celular: navegação por toque (swipe) + indicadores */
+  .px-hs__arrow {
+    display: none;
+  }
+  .px-perks {
+    grid-template-columns: 1fr;
+  }
+  .px-perk {
+    border-top: 1px solid var(--line);
+    padding: 16px 20px;
+  }
+  .px-perk:first-child {
+    border-top: none;
+  }
+  .px-perk + .px-perk {
+    border-left: none;
+  }
+  .px-wafab {
+    width: 50px;
+    height: 50px;
+    right: 16px;
+    bottom: 16px;
   }
   .px-topbar__left span:nth-child(n + 3) {
     display: none;
@@ -1455,21 +1748,21 @@ button.px-acct {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 44px;
+  height: 42px;
   padding: 0 12px;
-  background: #eaf1ff;
-  color: var(--blue);
-  border: 1px solid #dbe6ff;
-  border-radius: 12px;
+  background: var(--orange);
+  color: #fff;
+  border: 1px solid var(--orange);
+  border-radius: 9px;
   font-size: 13.5px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 }
 .px-prod__add:hover {
-  background: #dbe6ff;
-  border-color: #c7d8ff;
+  background: var(--orange-dark);
+  border-color: var(--orange-dark);
 }
 .px-prod__add:active {
   transform: scale(0.98);
@@ -1487,8 +1780,24 @@ button.px-acct {
   transition: color 0.2s ease, background 0.2s ease;
 }
 .px-prod__now:hover {
-  color: var(--blue);
-  background: #f4f7fc;
+  color: var(--ink);
+  background: #f4f5f7;
+}
+
+/* Preço no PIX (desconto à vista) */
+.px-prod__pix {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #c25e00; /* laranja AA para texto pequeno */
+  margin-top: 2px;
+}
+.px-pdp__pix {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #c25e00;
+  margin-top: 4px;
 }
 
 /* Overlay do drawer */
@@ -1966,7 +2275,7 @@ button.px-acct {
   background: var(--red);
   border-radius: 9px;
   padding: 5px 11px;
-  box-shadow: 0 6px 16px rgba(236, 28, 36, 0.3);
+  box-shadow: 0 6px 16px rgba(255, 122, 0, 0.35);
 }
 .px-pdp__info {
   padding-top: 4px;
@@ -2525,7 +2834,7 @@ button.px-acct {
 }
 .px-field input:focus,
 .px-field select:focus {
-  border-color: #4d7dff;
+  border-color: var(--orange);
 }
 .px-admin__formactions {
   display: flex;

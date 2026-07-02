@@ -10,6 +10,7 @@ import { href } from "../lib/router";
 import { formatBRL } from "../lib/format";
 import {
   discountPercent, productDescription, categorySlug, stockLevel, hasWholesale,
+  pixPriceFor, PIX_DISCOUNT_PERCENT,
 } from "../data/catalog";
 
 export function Product({ id }: { id: string }) {
@@ -75,6 +76,9 @@ export function Product({ id }: { id: string }) {
           <div className="px-pdp__pricing">
             {product.oldPrice && <span className="px-pdp__old">{product.oldPrice}</span>}
             <span className="px-pdp__price">{product.price}</span>
+            {PIX_DISCOUNT_PERCENT > 0 && (
+              <span className="px-pdp__pix">{formatBRL(pixPriceFor(product.priceNum))} no PIX</span>
+            )}
             <span className="px-pdp__install">{product.installment}</span>
           </div>
 

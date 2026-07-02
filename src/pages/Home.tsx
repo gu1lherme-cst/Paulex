@@ -1,32 +1,108 @@
-import { useCallback, useRef, useState, type FormEvent } from "react";
+import { useCallback, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Icon } from "../components/Icon";
 import { Placeholder } from "../components/Placeholder";
 import { ProductCard } from "../components/ProductCard";
+import { HeroSlider } from "../components/HeroSlider";
 import { href } from "../lib/router";
 import { WHATSAPP_CONTACT } from "../lib/format";
 import { useProducts } from "../lib/products";
 import { useCategories } from "../lib/categories";
 import {
-  CAMPAIGNS, ATACADO_BENEFITS, BRANDS, BENEFITS,
+  ATACADO_BENEFITS, BRANDS, BENEFITS, TRUST_ITEMS, type IconName, type Product,
 } from "../data/catalog";
 
-const HERO_IMG = `${import.meta.env.BASE_URL}img/paulex-hero.jpg`;
+/* Ordem preferida das seções de categoria na home (ref. visual);
+   categorias ativas fora desta lista entram em seguida, na ordem do banco. */
+const PREFERRED_SECTIONS = ["Papelaria", "Utilidades", "Informática", "Brinquedos"];
 
-export function Home() {
-  const { products, offers } = useProducts();
-  const { categories } = useCategories();
-  const featured = products.filter((p) => p.isFeatured);
-  const bestSellers = (featured.length > 0 ? featured : products).slice(0, 10);
-  const offerProducts = offers();
-  const bestRef = useRef<HTMLDivElement>(null);
-  const offerRef = useRef<HTMLDivElement>(null);
-  const [email, setEmail] = useState("");
-  const [newsletterMsg, setNewsletterMsg] = useState<string | null>(null);
+/* Faixa de benefícios/confiança (cartão branco com 4 itens) */
+function Perks({ items }: { items: { title: string; desc: string; icon: IconName }[] }) {
+  return (
+    <div className="px-perks" data-reveal>
+      {items.map((b) => (
+        <div className="px-perk" key={b.title}>
+          <span className="px-perk__icon"><Icon name={b.icon} size={26} /></span>
+          <span>
+            <span className="px-perk__title">{b.title}</span>
+            <span className="px-perk__desc">{b.desc}</span>
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-  const scrollRow = useCallback((el: HTMLDivElement | null, dir: number) => {
+/* Carrossel horizontal de produtos com cabeçalho, setas e skeleton */
+function ProductRow({
+  title,
+  seeAllHref,
+  seeAllLabel,
+  products,
+  loading,
+  titleExtra,
+}: {
+  title: string;
+  seeAllHref: string;
+  seeAllLabel: string;
+  products: Product[];
+  loading: boolean;
+  titleExtra?: ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const scrollRow = useCallback((dir: number) => {
+    const el = ref.current;
     if (!el) return;
     el.scrollBy({ left: dir * Math.min(el.clientWidth * 0.85, 700), behavior: "smooth" });
   }, []);
+
+  if (!loading && products.length === 0) return null;
+
+  return (
+    <section className="px-section px-section--pad">
+      <div className="px-rowhead">
+        <h2 className="px-h2 px-h2--sm" data-reveal>{titleExtra}{title}</h2>
+        <div className="px-rowhead__nav">
+          <a href={seeAllHref} className="px-seeall" data-reveal>{seeAllLabel} →</a>
+          <div className="px-arrows">
+            <button className="px-arrowbtn" aria-label={`${title}: anteriores`} onClick={() => scrollRow(-1)}><Icon name="chevronL" /></button>
+            <button className="px-arrowbtn" aria-label={`${title}: próximos`} onClick={() => scrollRow(1)}><Icon name="chevronR" /></button>
+          </div>
+        </div>
+      </div>
+      <div className="px-scroll" ref={ref}>
+        {loading
+          ? Array.from({ length: 5 }).map((_, i) => (
+              <div className="px-card px-skel" key={i} aria-hidden="true">
+                <div className="px-skel__block px-skel__media" />
+                <div className="px-skel__block px-skel__line" style={{ width: "85%" }} />
+                <div className="px-skel__block px-skel__line" style={{ width: "55%" }} />
+                <div className="px-skel__block px-skel__line" style={{ width: "70%", height: 20 }} />
+              </div>
+            ))
+          : products.map((p) => <ProductCard key={p.id} p={p} />)}
+      </div>
+    </section>
+  );
+}
+
+export function Home() {
+  const { products, offers, byCategory, loading } = useProducts();
+  const { categories } = useCategories();
+  const [email, setEmail] = useState("");
+  const [newsletterMsg, setNewsletterMsg] = useState<string | null>(null);
+
+  const offerProducts = offers();
+  /* fallback: sem ofertas cadastradas, a vitrine mostra os destaques/novidades */
+  const featured = products.filter((p) => p.isFeatured);
+  const dailyOffers = offerProducts.length > 0 ? offerProducts : (featured.length > 0 ? featured : products).slice(0, 10);
+
+  /* Seções por categoria: ordem preferida primeiro, demais ativas depois */
+  const orderedCategories = [
+    ...PREFERRED_SECTIONS.map((name) => categories.find((c) => c.name === name)).filter(
+      (c): c is NonNullable<typeof c> => !!c
+    ),
+    ...categories.filter((c) => !PREFERRED_SECTIONS.includes(c.name)),
+  ];
 
   const onNewsletter = useCallback((e: FormEvent) => {
     e.preventDefault();
@@ -41,134 +117,49 @@ export function Home() {
 
   return (
     <main id="topo">
-      {/* 1 · BANNER */}
+      {/* 1 · HERO (slider) */}
       <section className="px-section">
-        <div className="px-hero" data-reveal>
-          <div className="px-hero__copy">
-            <p className="px-hero__eyebrow">Desde 1984, com você</p>
-            <h1 className="px-hero__title">
-              Tudo para escola, casa e <span className="px-hero__mark">trabalho</span>
-            </h1>
-            <p className="px-hero__lead">
-              Papelaria, utilidades, cosméticos, brinquedos, informática e acessórios em um só lugar.
-            </p>
-            <div className="px-hero__cta">
-              <a href={href("/ofertas")} className="px-btn px-btn--red">
-                Ver ofertas <Icon name="arrow" size={17} />
-              </a>
-              <a href={WHATSAPP_CONTACT} target="_blank" rel="noopener noreferrer" className="px-btn px-btn--outline">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366" aria-hidden="true">
-                  <path d="M12 2a10 10 0 0 0-8.7 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2z" />
-                </svg>
-                Falar no WhatsApp
-              </a>
-            </div>
-          </div>
-          <div className="px-hero__visual">
-            <img
-              src={HERO_IMG}
-              alt="Composição de produtos Paulex: cadernos, lápis de cor, canetas e resma de papel A4"
-              className="px-hero__img"
-              width={830}
-              height={298}
-              fetchPriority="high"
-              decoding="async"
-            />
-          </div>
-        </div>
+        <HeroSlider />
       </section>
 
-      {/* 2 · CATEGORIAS */}
-      <section id="categorias" className="px-section px-section--pad">
-        <div className="px-rowhead">
-          <h2 className="px-h2" data-reveal>Compre por categoria</h2>
-          <a href={href("/produtos")} className="px-seeall" data-reveal>Ver todos os produtos →</a>
-        </div>
-        <div className="px-cats">
-          {categories.map((u) => (
-            <a href={href(`/categoria/${u.slug}`)} className="px-cat" data-reveal key={u.slug}>
-              <span className={`px-cat__icon px-cat__icon--${u.tone}`}>
-                <Icon name={u.icon} size={26} />
-              </span>
-              <span className="px-cat__text">
-                <span className="px-cat__name">{u.name}</span>
-                <span className="px-cat__link">Ver produtos <Icon name="arrow" size={13} /></span>
-              </span>
-            </a>
-          ))}
-        </div>
+      {/* 2 · BENEFÍCIOS */}
+      <section className="px-section">
+        <Perks items={BENEFITS} />
       </section>
 
-      {/* 3 · MAIS VENDIDOS */}
-      <section className="px-section px-section--pad">
-        <div className="px-rowhead">
-          <h2 className="px-h2" data-reveal>Os mais vendidos</h2>
-          <div className="px-rowhead__nav">
-            <a href={href("/produtos")} className="px-seeall" data-reveal>Ver todos os produtos →</a>
-            <div className="px-arrows">
-              <button className="px-arrowbtn" aria-label="Produtos anteriores" onClick={() => scrollRow(bestRef.current, -1)}><Icon name="chevronL" /></button>
-              <button className="px-arrowbtn" aria-label="Próximos produtos" onClick={() => scrollRow(bestRef.current, 1)}><Icon name="chevronR" /></button>
-            </div>
-          </div>
-        </div>
-        <div className="px-scroll" ref={bestRef}>
-          {bestSellers.map((p) => <ProductCard key={p.id} p={p} />)}
-        </div>
-      </section>
+      {/* 3 · OFERTAS DO DIA */}
+      <ProductRow
+        title="Ofertas do Dia"
+        titleExtra={<span aria-hidden="true" style={{ marginRight: 10 }}>🔥</span>}
+        seeAllHref={href("/ofertas")}
+        seeAllLabel="Ver todas as ofertas"
+        products={dailyOffers}
+        loading={loading}
+      />
 
-      {/* 4 · OFERTAS DA SEMANA */}
-      <section id="ofertas" className="px-section px-section--pad">
-        <div className="px-promo" data-reveal>
-          <div className="px-promo__glow" aria-hidden="true" />
-          <div className="px-promo__copy">
-            <span className="px-promo__tag">Ofertas da semana</span>
-            <h2 className="px-promo__title">Até 40% de desconto</h2>
-            <p className="px-promo__lead">Em papelaria, informática e utilidades.</p>
-            <a href={href("/ofertas")} className="px-btn px-btn--red px-promo__btn">
-              Ver ofertas <Icon name="arrow" size={17} />
-            </a>
-          </div>
-          <div className="px-promo__media">
-            <img src={HERO_IMG} alt="Produtos Paulex em oferta" className="px-promo__img" width={830} height={298} loading="lazy" decoding="async" />
-          </div>
-        </div>
+      {/* 4 · SEÇÕES POR CATEGORIA */}
+      {loading && orderedCategories.length === 0 ? (
+        <ProductRow
+          title="Carregando a loja…"
+          seeAllHref={href("/produtos")}
+          seeAllLabel="Ver todos os produtos"
+          products={[]}
+          loading
+        />
+      ) : (
+        orderedCategories.map((c) => (
+          <ProductRow
+            key={c.slug}
+            title={c.name}
+            seeAllHref={href(`/categoria/${c.slug}`)}
+            seeAllLabel="Ver todos"
+            products={byCategory(c.name)}
+            loading={loading}
+          />
+        ))
+      )}
 
-        <div className="px-rowhead px-rowhead--sub">
-          <h3 className="px-h2 px-h2--sm" data-reveal>Aproveite as ofertas</h3>
-          <div className="px-rowhead__nav">
-            <a href={href("/ofertas")} className="px-seeall" data-reveal>Ver todas as ofertas →</a>
-            <div className="px-arrows">
-              <button className="px-arrowbtn" aria-label="Ofertas anteriores" onClick={() => scrollRow(offerRef.current, -1)}><Icon name="chevronL" /></button>
-              <button className="px-arrowbtn" aria-label="Próximas ofertas" onClick={() => scrollRow(offerRef.current, 1)}><Icon name="chevronR" /></button>
-            </div>
-          </div>
-        </div>
-        <div className="px-scroll" ref={offerRef}>
-          {offerProducts.map((p) => <ProductCard key={p.id} p={p} />)}
-        </div>
-      </section>
-
-      {/* 5 · CAMPANHAS */}
-      <section className="px-section px-section--pad">
-        <div className="px-camps">
-          {CAMPAIGNS.map((c) => (
-            <a href={href(`/categoria/${c.categorySlug}`)} className="px-camp" data-reveal key={c.tag}>
-              <Placeholder label={c.tag} icon="tag" tone={c.tone} className="px-camp__bg" />
-              <div className="px-camp__veil" aria-hidden="true" />
-              <div className="px-camp__body">
-                <div>
-                  <p className="px-camp__tag">{c.tag}</p>
-                  <h3 className="px-camp__title">{c.title}</h3>
-                  <p className="px-camp__off"><span>até </span>{c.off}<span> OFF</span></p>
-                </div>
-                <span className="px-camp__cta">{c.cta} <Icon name="arrow" size={15} /></span>
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      {/* 6 · ATACADO */}
+      {/* 5 · ATACADO */}
       <section id="atacado" className="px-section px-section--pad">
         <div className="px-atac-card" data-reveal>
           <div className="px-atac">
@@ -203,7 +194,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* 7 · MARCAS */}
+      {/* 6 · MARCAS */}
       <section className="px-section px-section--pad">
         <div className="px-rowhead px-rowhead--brands">
           <h2 className="px-h2 px-h2--sm" data-reveal>As melhores marcas você encontra aqui</h2>
@@ -214,7 +205,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* 8 · NEWSLETTER */}
+      {/* 7 · NEWSLETTER */}
       <section className="px-section px-section--pad">
         <div className="px-news" data-reveal>
           <div className="px-news__intro">
@@ -233,19 +224,9 @@ export function Home() {
         </div>
       </section>
 
-      {/* 9 · BENEFÍCIOS */}
-      <section className="px-benefits-wrap">
-        <div className="px-benefits">
-          {BENEFITS.map((b) => (
-            <div className="px-benefit" key={b.title} data-reveal>
-              <span className="px-benefit__icon"><Icon name={b.icon} size={26} /></span>
-              <div>
-                <div className="px-benefit__title">{b.title}</div>
-                <div className="px-benefit__desc">{b.desc}</div>
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* 8 · CONFIANÇA */}
+      <section className="px-section px-section--pad" style={{ paddingBottom: 8 }}>
+        <Perks items={TRUST_ITEMS} />
       </section>
     </main>
   );

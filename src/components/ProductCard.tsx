@@ -4,7 +4,9 @@ import { Stars } from "./Stars";
 import { useCart } from "../lib/cart";
 import { useWishlist } from "../lib/wishlist";
 import { href } from "../lib/router";
-import { discountPercent, stockLevel, type Product } from "../data/catalog";
+import {
+  discountPercent, stockLevel, fmtBRL, pixPriceFor, PIX_DISCOUNT_PERCENT, type Product,
+} from "../data/catalog";
 
 export function ProductCard({ p }: { p: Product }) {
   const { add, buyNow } = useCart();
@@ -42,6 +44,9 @@ export function ProductCard({ p }: { p: Product }) {
         <div className="px-prod__price">
           {p.oldPrice && <span className="px-prod__old">{p.oldPrice}</span>}
           <span className="px-prod__amount">{p.price}</span>
+          {PIX_DISCOUNT_PERCENT > 0 && (
+            <span className="px-prod__pix">{fmtBRL(pixPriceFor(p.priceNum))} no PIX</span>
+          )}
           <span className="px-prod__install">{p.installment}</span>
         </div>
         <div className="px-prod__actions">
